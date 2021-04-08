@@ -15,11 +15,11 @@ const FacturaSchema = new Schema({
         subTotal: number,
         ArtManufact: {
             type: Schema.Types.ObjectId,
-            references: 'ArtManuFact'
+            ref: 'ArtManuFact'
         },
         ArticuloIsumo: {
             type: Schema.Types.ObjectId,
-            references: 'ArtInsumo'
+            ref: 'ArtInsumo'
         }
     }
 });

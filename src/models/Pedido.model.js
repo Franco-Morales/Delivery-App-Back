@@ -23,17 +23,17 @@ const PedidoSchema = new Schema({
             subTotal: number,
             ArtManufact: {
                 type: Schema.Types.ObjectId,
-                references: 'ArtManuFact'
+                ref: 'ArtManuFact'
             },
             ArticuloIsumo: {
                 type: Schema.Types.ObjectId,
-                references: 'ArtInsumo'
+                ref: 'ArtInsumo'
             }
         } 
     ],
     Factura: {
         type: Schema.Types.ObjectId,
-        references: 'Factura'
+        ref: 'Factura'
     }
 });
 

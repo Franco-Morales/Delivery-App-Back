@@ -16,7 +16,7 @@ const ArtManufactSchema = new Schema({
             // ArticuloInsumo
             ArtInsumo: {
                 type: Schema.Types.ObjectId,
-                references: 'ArtInsumo'
+                ref: 'ArtInsumo'
             }
         }
     ],
