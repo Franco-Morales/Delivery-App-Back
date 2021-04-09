@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-
+import { MercadoPago } from "./MercadoPago.model";
 
 const PedidoSchema = new Schema({
     fecha: Date,
@@ -34,6 +34,9 @@ const PedidoSchema = new Schema({
     Factura: {
         type: Schema.Types.ObjectId,
         ref: 'Factura'
+    },
+    MercPago: {
+        type: MercadoPago
     }
 });
 

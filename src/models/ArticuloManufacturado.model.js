@@ -1,7 +1,8 @@
 import { Schema, model } from "mongoose";
+import { RubroGeneral } from "./RubroGeneral.model";
 
 /**
- * Model ArticuloManufacturado
+ * Modelo ArticuloManufacturado
  */
 const ArtManufactSchema = new Schema({
     tiempoEstimado: Date,
@@ -21,7 +22,7 @@ const ArtManufactSchema = new Schema({
         }
     ],
     RubroGeneral: {
-        denominacion: string
+        type: RubroGeneral
     }
 });
 

@@ -1,6 +1,9 @@
 import { Schema, model } from "mongoose";
 
 
+/**
+ * ArticuloInsumo
+ */
 const ArtInsumoSchema = new Schema({
     denominacion: String,
     precioCompra: number,
@@ -9,10 +12,10 @@ const ArtInsumoSchema = new Schema({
     stcokMinimo: number,
     unidadMedida: String,
     esInsumo: Schema.Types.Boolean,
-    //
-    RubroArticulo: {
-        denominacion: string
-    } 
+    //RubroInsumo
+    RubArt: {
+        type: RubroInsumo
+    }
 });
 
 
