@@ -4,7 +4,7 @@ import { Schema, model } from "mongoose";
  * Modelo RubroGeneral
  */
 const RubGrlSchema = new Schema({
-    denominancion: String
+    denominacion: String
 });
 
 
