@@ -3,16 +3,16 @@ import { Schema, model } from "mongoose";
 
 const FacturaSchema = new Schema({
     fecha: Date,
-    numero: number,
-    descuento: number,
+    numero: Number,
+    descuento: Number,
     formaPago: String,
     nroTarjeta: String,
-    totalVenta: number,
-    totalCosto: number,
-    // 
+    totalVenta: Number,
+    totalCosto: Number,
+    //
     DetalleFactura:  {
-        cantidad: number,
-        subTotal: number,
+        cantidad: Number,
+        subTotal: Number,
         ArtManufact: {
             type: Schema.Types.ObjectId,
             ref: 'ArtManuFact'
@@ -21,7 +21,12 @@ const FacturaSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref: 'ArtInsumo'
         }
-    }
+    },
+    active: Boolean,
+    delete: {type:{
+      user_uid: String,
+      deletedAt: Date
+    },default: null}
 });
 
 

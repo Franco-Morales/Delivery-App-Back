@@ -1,12 +1,12 @@
 import { Schema, model } from "mongoose";
-import { MercadoPago } from "./MercadoPago.model";
+import { MercadoPagoSchema } from "./MercadoPago.model";
 
 const PedidoSchema = new Schema({
     fecha: Date,
     estado: String,
     horaEstimadaFin: Date,
-    tipoEnvio: number,
-    total: number,
+    tipoEnvio: Number,
+    total: Number,
     // Cliente
     Cliente: {
         id : String,
@@ -16,11 +16,11 @@ const PedidoSchema = new Schema({
             localidad: String
         }
     },
-    // 
-    DetallePedido: [ 
+    //
+    DetallePedido: [
         {
-            cantidad: number,
-            subTotal: number,
+            cantidad: Number,
+            subTotal: Number,
             ArtManufact: {
                 type: Schema.Types.ObjectId,
                 ref: 'ArtManuFact'
@@ -29,15 +29,20 @@ const PedidoSchema = new Schema({
                 type: Schema.Types.ObjectId,
                 ref: 'ArtInsumo'
             }
-        } 
+        }
     ],
     Factura: {
         type: Schema.Types.ObjectId,
         ref: 'Factura'
     },
-    MercPago: {
-        type: MercadoPago
-    }
+    // MercPago: {
+    //     type: MercadoPagoSchema
+    // },
+    active: Boolean,
+    delete: {type:{
+      user_uid: String,
+      deletedAt: Date
+    },default: null}
 });
 
 

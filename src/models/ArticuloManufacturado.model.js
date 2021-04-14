@@ -7,13 +7,13 @@ import { RubroGeneral } from "./RubroGeneral.model";
 const ArtManufactSchema = new Schema({
     tiempoEstimado: Date,
     denominacion: String,
-    precioVenta: number,
+    precioVenta: Number,
     img: String,
     // ArticuloManufacturadoDetalle
     ArtManufactDet: [
         {
-            cantidad: number,
-            unidadMedida: string,
+            cantidad: Number,
+            unidadMedida: String,
             // ArticuloInsumo
             ArtInsumo: {
                 type: Schema.Types.ObjectId,
@@ -21,9 +21,14 @@ const ArtManufactSchema = new Schema({
             }
         }
     ],
-    RubroGeneral: {
-        type: RubroGeneral
-    }
+    // RubroGeneral: {
+    //     type: RubroGeneral
+    // },
+    active: Boolean,
+    delete: {type:{
+      user_uid: String,
+      deletedAt: Date
+    },default: null}
 });
 
 

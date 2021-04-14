@@ -4,8 +4,13 @@ import { Schema, model } from "mongoose";
  * Modelo RubroArticulo
  */
 const RubArtSchema = new Schema({
-    denominancion: String
+    denominancion: String,
+    active: Boolean,
+    delete: {type:{
+      user_uid: String,
+      deletedAt: Date
+    },default: null}
 });
 
 
-export default model('RubroGeneral',RubArtSchema);
+export default model('RubroArticulo',RubArtSchema);
