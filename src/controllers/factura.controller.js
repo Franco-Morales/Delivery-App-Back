@@ -1,9 +1,9 @@
-import FacturaSvc from "../services/Factura.service";
+import FacturaSvc from "../services/factura.service";
 
 
 let getAll = async (req,res) => {
   try {
-    let facturas = await FacturaSvc.findAllMFactura();
+    let facturas = await FacturaSvc.findAllFactura();
     if (facturas.length != 0) {
       res.status(200).json(facturas);
     } else {

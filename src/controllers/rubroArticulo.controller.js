@@ -1,14 +1,15 @@
-import RubArtSvc from '../services/RubroArticulo.service';
+import RubArtSvc from '../services/rubroArticulo.service';
 
 let getAll = async (req,res) => {
   try {
-    let rubArticulos = await RubArtSvc.findAllRubArticulo();
+    let rubArticulos = await RubArtSvc.findAllRubroArticulo();
     if (rubArticulos.length != 0) {
       res.status(200).json(rubArticulos);
     } else {
       res.status(204).json({"msg":"Empty"})
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({"error":error});
   }
 }

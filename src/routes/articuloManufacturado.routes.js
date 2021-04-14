@@ -11,4 +11,5 @@ router.get('/artmanu/:id',ArticuloManufacturadoCtrl.getOne);
 router.put('/artmanu/:id',ArticuloManufacturadoCtrl.updateOne);
 router.delete('/artmanu/:id',ArticuloManufacturadoCtrl.deleteOne);
 
+
 export default router;

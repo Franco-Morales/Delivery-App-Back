@@ -1,4 +1,4 @@
-import Factura from "../models/Factura.model";
+import Factura from "../models/factura.model";
 
 //Find All Factura
 let findAllFactura = async() => {
@@ -23,7 +23,7 @@ let findOneFactura = async(facturaReq) => {
 //Save Factura
 let saveFactura = async (facturaReq) => {
     try {
-      let { fecha, numero, descuento, formaPago, nroTarjeta, totalVenta, totalCosto, detalle_factura} = facturaReq;
+      let { fecha, numero, descuento, formaPago, nroTarjeta, totalVenta, totalCosto, detalle_factura} = facturaReq.body;
       let factura = Factura({fecha, numero, descuento, formaPago, nroTarjeta, totalVenta, totalCosto, detalle_factura,active:true});
       let facturaSaved = await factura.save();
       return facturaSaved;
@@ -45,9 +45,19 @@ let updateFactura = async (facturaReq) =>{
 //Delete (Soft Delete)
 let deleteFactura = async (facturaReq) =>  {
     try {
-        let { user_uid } = facturaReq.body
-        let deleteOptions = {user_uid:user_uid,deletedAt:new Date()}
-        let facturaDeleted = await Factura.findOneAndUpdate({_id: facturaReq.params.id},{$set:{active:false,delete:deleteOptions}},{upsert:true})
+        let { user_uid } = facturaReq.body;
+        let deleteOptions = {
+            user_uid,
+            deletedAt: new Date()
+        };
+        let facturaDeleted = await Factura.findOneAndUpdate(
+            {_id: facturaReq.params.id },
+            {
+              $set:{
+                active: false,
+                delete: deleteOptions
+              }
+          },{ upsert: true });
         return facturaDeleted;
     } catch (error) {
         throw new Error(error);
@@ -58,6 +68,6 @@ let deleteFactura = async (facturaReq) =>  {
 /**
  * Pedido Service
  */
-const FacturaSvc = {findAllFactura, findOneFactura, saveFactura, updateFactura, deleteFactura};
+const FacturaSvc = { findAllFactura, findOneFactura, saveFactura, updateFactura, deleteFactura };
 
 export default FacturaSvc;

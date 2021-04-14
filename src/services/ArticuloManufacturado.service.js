@@ -1,19 +1,20 @@
-import ArticuloManufacturado from "../models/ArticuloManufacturado.model";
+import ArtManufactModel from "../models/articuloManufacturado.model";
 
 //Find All ArticuloManufacturado
 let findAllArticuloManufacturado = async() => {
     try {
-        let artManFacs = await ArticuloManufacturado.find({ delete: null }).select(['-delete']);
+        let artManFacs = await ArtManufactModel.find({ delete: null }).select(['-delete']);
         return artManFacs;
     } catch (error) {
-        throw new Error(error);
+        console.error(error);
+        // throw new Error(error);
     }
 }
 
 //Find One ArticuloManufacturado
 let findOneArticuloManufacturado = async(artManFacsReq) => {
     try {
-      let artManFac = await ArticuloManufacturado.findById(artManFacsReq.params.id).select(['-delete']);
+      let artManFac = await ArtManufactModel.findById(artManFacsReq.params.id).select(['-delete']);
       return artManFac;
     } catch (e) {
       throw new Error(error);
@@ -23,9 +24,8 @@ let findOneArticuloManufacturado = async(artManFacsReq) => {
 //Save ArticuloManufacturado
 let saveArticuloManufacturado = async (artManFacsReq) => {
     try {
-      //let { tiempoEstimado, denominacion , precioVenta ,img ,ArtManufactDet, RubroGeneral} = artManFacsReq;
-      let { tiempoEstimado, denominacion , precioVenta ,img ,ArtManufactDet} = artManFacsReq;
-      let artManFac = ArticuloManufacturado({tiempoEstimado, denominacion , precioVenta ,img ,ArtManufactDet,active:true});
+      let { tiempoEstimado, denominacion , precioVenta ,img ,ArtManufactDet, RubroGeneral } = artManFacsReq.body;
+      let artManFac = ArtManufactModel({tiempoEstimado, denominacion , precioVenta ,img ,ArtManufactDet, RubroGeneral, active:true});
       let artManFacSaved = await artManFac.save();
       return artManFacSaved;
     } catch (error) {
@@ -36,7 +36,7 @@ let saveArticuloManufacturado = async (artManFacsReq) => {
 //Update ArticuloManufacturado
 let updateArticuloManufacturado = async (artManFacsReq) =>{
     try {
-        let artManFacUpdated = await ArticuloManufacturado.findOneAndUpdate({_id: artManFacsReq.params.id},artManFacsReq.body);
+        let artManFacUpdated = await ArtManufactModel.findOneAndUpdate({_id: artManFacsReq.params.id},artManFacsReq.body);
         return artManFacUpdated;
     } catch (error) {
         throw new Error(error);
@@ -46,9 +46,20 @@ let updateArticuloManufacturado = async (artManFacsReq) =>{
 //Delete (Soft Delete)
 let deleteArticuloManufacturado = async (artManFacsReq) =>  {
     try {
-        let { user_uid } = facturaReq.body
-        let deleteOptions = {user_uid:user_uid,deletedAt:new Date()}
-        let facturaDeleted = await ArticuloManufacturado.findOneAndUpdate({_id: artManFacsReq.params.id},{$set:{active:false,delete:deleteOptions}},{upsert:true})
+        let { user_uid } = facturaReq.body;
+        let deleteOptions = {
+            user_uid,
+            deletedAt: new Date()
+        };
+
+        let facturaDeleted = await ArtManufactModel.findOneAndUpdate(
+            {_id: artManFacsReq.params.id },
+            {
+              $set:{
+                active: false,
+                delete: deleteOptions
+              }
+          },{ upsert: true });
         return facturaDeleted;
     } catch (error) {
         throw new Error(error);
@@ -59,6 +70,6 @@ let deleteArticuloManufacturado = async (artManFacsReq) =>  {
 /**
  * ArticuloManufacturado Service
  */
-const ArticuloManufacturadoSvc = {findAllArticuloManufacturado, findOneArticuloManufacturado, saveArticuloManufacturado, updateArticuloManufacturado, deleteArticuloManufacturado};
+const ArticuloManufacturadoSvc = { findAllArticuloManufacturado, findOneArticuloManufacturado, saveArticuloManufacturado, updateArticuloManufacturado, deleteArticuloManufacturado };
 
 export default ArticuloManufacturadoSvc;

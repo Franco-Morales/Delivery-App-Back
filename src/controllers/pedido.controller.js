@@ -1,4 +1,4 @@
-import PedidoSvc from "../services/Pedido.service";
+import PedidoSvc from "../services/pedido.service";
 
 
 let getAll = async (req,res) => {

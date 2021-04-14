@@ -1,4 +1,4 @@
-import Pedido from "../models/Pedido.model";
+import Pedido from "../models/pedido.model";
 
 //Find All Pedido
 let findAllPedido = async() => {
@@ -24,7 +24,7 @@ let findOnePedido = async(pedidoReq) => {
 let savePedido = async (pedidoReq) => {
     try {
       //let { fecha, estado, horaEstimadaFin, tipoEnvio, total, cliente, detalle, factura, mercado} = pedidoReq;
-      let { fecha, estado, horaEstimadaFin, tipoEnvio, total, cliente, detalle, factura} = pedidoReq;
+      let { fecha, estado, horaEstimadaFin, tipoEnvio, total, cliente, detalle, factura} = pedidoReq.body;
       let pedido = Pedido({fecha, estado, horaEstimadaFin, tipoEnvio, total, cliente, detalle, factura,active:true});
       let pedidoSaved = await pedido.save();
       return pedidoSaved;
@@ -46,9 +46,20 @@ let updatePedido = async (pedidoReq) =>{
 //Delete (Soft Delete)
 let deletePedido = async (pedidoReq) =>  {
     try {
-        let { user_uid } = pedidoReq.body
-        let deleteOptions = {user_uid:user_uid,deletedAt:new Date()}
-        let pedidoDeleted = await Pedido.findOneAndUpdate({_id: pedidoReq.params.id},{$set:{active:false,delete:deleteOptions}},{upsert:true})
+        let { user_uid } = pedidoReq.body;
+        let deleteOptions = {
+            user_uid,
+            deletedAt: new Date()
+        };
+        
+        let pedidoDeleted = await Pedido.findOneAndUpdate(
+            {_id: pedidoReq.params.id },
+            {
+              $set:{
+                active: false,
+                delete: deleteOptions
+              }
+          },{ upsert: true });
         return pedidoDeleted;
     } catch (error) {
         throw new Error(error);

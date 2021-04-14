@@ -1,7 +1,7 @@
-import RubroArticulo from "../models/RubroArticulo.model";
+import { RubroArticulo } from "../models/rubroArticulo.model";
 
 //Find All Rubro Articulo
-let findAllRubArticulo = async() => {
+let findAllRubroArticulo = async() => {
   try {
     let rubArticulos = await RubroArticulo.find({ delete: null }).select(['-delete']);
     return rubArticulos;
@@ -23,7 +23,7 @@ let findOneRubroArticulo = async(rubArtReq) => {
 //Save Rubro Articulo
 let saveRubroArticulo = async (rubArtReq) => {
   try {
-    let { denominacion } = rubArtReq;
+    let { denominacion } = rubArtReq.body;
     let rubArticulo = RubroArticulo({denominacion,active:true});
     let rubArtSaved = await rubArticulo.save();
     return rubArtSaved;
@@ -46,8 +46,19 @@ let updateRubroArticulo = async (rubArtReq) =>{
 let deleteRubroArticulo = async (rubArtReq) =>  {
   try {
     let { user_uid } = req.body
-    let deleteOptions = {user_uid:user_uid,deletedAt:new Date()}
-    let rubroArtDeleted = await RubroArticulo.findOneAndUpdate({_id: rubArtReq.params.id},{$set:{active:false,delete:deleteOptions}},{upsert:true})
+    let deleteOptions = {
+      user_uid,
+      deletedAt: new Date()
+  };
+    
+    let rubroArtDeleted = await RubroArticulo.findOneAndUpdate(
+      {_id: rubArtReq.params.id },
+      {
+        $set:{
+          active: false,
+          delete: deleteOptions
+        }
+    },{ upsert: true });
     return rubroArtDeleted;
   } catch (error) {
     throw new Error(error);
@@ -58,6 +69,6 @@ let deleteRubroArticulo = async (rubArtReq) =>  {
 /**
 * Rubro Arituclo Service
 */
-const RubArtSvc = {findAllRubArticulo, findOneRubroArticulo, saveRubroArticulo, updateRubroArticulo, deleteRubroArticulo};
+const RubArtSvc = {findAllRubroArticulo, findOneRubroArticulo, saveRubroArticulo, updateRubroArticulo, deleteRubroArticulo};
 
 export default RubArtSvc;

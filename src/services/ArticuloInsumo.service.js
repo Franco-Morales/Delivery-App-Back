@@ -1,4 +1,4 @@
-import ArticuloInsumo from "../models/ArticuloInsumo.model";
+import ArticuloInsumo from "../models/articuloInsumo.model";
 
 //Find All ArticuloInsumo
 let findAllArticuloInsumo = async() => {
@@ -23,11 +23,12 @@ let findOneArticuloInsumo = async(artInReq) => {
 //Save ArticuloInsumo
 let saveArticuloInsumo = async (artInReq) => {
     try {
-      let { denominacion, precioCompra, precioVenta, stcokActual, stcokMinimo, unidadMedida, esInsumo } = artInReq;
-      let artIn = ArticuloInsumo({denominacion, precioCompra, precioVenta, stcokActual, stcokMinimo, unidadMedida, esInsumos,active:true});
+      let { denominacion, precioCompra, precioVenta, stockActual, stockMinimo, unidadMedida, esInsumo, RubArt } = artInReq.body;
+      let artIn = ArticuloInsumo({denominacion, precioCompra, precioVenta, stockActual, stockMinimo, unidadMedida, esInsumo, RubArt, active:true});
       let artInSaved = await artIn.save();
-      return artIn;
+      return artInSaved;
     } catch (error) {
+        console.log(error);
         throw new Error(error);
     }
 }
@@ -35,7 +36,7 @@ let saveArticuloInsumo = async (artInReq) => {
 //Update ArticuloInsumo
 let updateArticuloInsumo = async (artInReq) =>{
     try {
-        let artInUpdated = await ArticuloInsumo.findOneAndUpdate({_id: artInReq.params.id},artInReq.body);
+        let artInUpdated = await ArticuloInsumo.findOneAndUpdate({_id: artInReq.params.id}, artInReq.body);
         return artInUpdated;
     } catch (error) {
         throw new Error(error);
@@ -45,9 +46,20 @@ let updateArticuloInsumo = async (artInReq) =>{
 //Delete (Soft Delete)
 let deleteArticuloInsumo = async (artInReq) =>  {
     try {
-        let { user_uid } = artInReq.body
-        let deleteOptions = {user_uid:user_uid,deletedAt:new Date()}
-        let artInDeleted = await ArticuloInsumo.findOneAndUpdate({_id: artInReq.params.id},{$set:{active:false,delete:deleteOptions}},{upsert:true})
+        let { user_uid } = artInReq.body;
+        let deleteOptions = {
+            user_uid,
+            deletedAt: new Date()
+        };
+
+        let artInDeleted = await ArticuloInsumo.findOneAndUpdate(
+            {_id: artInReq.params.id },
+            {
+              $set:{
+                active: false,
+                delete: deleteOptions
+              }
+          },{ upsert: true });
         return artInDeleted;
     } catch (error) {
         throw new Error(error);

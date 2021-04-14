@@ -1,9 +1,9 @@
-import ArticuloManufacturadoSvc from "../services/ArticuloManufacturado.service";
+import ArticuloManufacturadoSvc from "../services/articuloManufacturado.service";
 
 
 let getAll = async (req,res) => {
   try {
-    let artManFacs = await ArticuloManufacturadoSvc.findAllMArticuloManufacturado();
+    let artManFacs = await ArticuloManufacturadoSvc.findAllArticuloManufacturado();
     if (artManFacs.length != 0) {
       res.status(200).json(artManFacs);
     } else {

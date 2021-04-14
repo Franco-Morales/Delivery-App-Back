@@ -1,7 +1,7 @@
-import RubroGeneral from "../models/RubroGeneral.model";
+import { RubroGeneral } from "../models/rubroGeneral.model";
 
 //Find All Rubro General
-let findAllRubGeneral = async() => {
+let findAllRubroGeneral = async() => {
   try {
     let rubGenerales = await RubroGeneral.find({ delete: null }).select(['-delete']);
     return rubGenerales;
@@ -23,7 +23,7 @@ let findOneRubroGeneral = async(rubGnlReq) => {
 //Save Rubro General
 let saveRubroGeneral = async (rubGnlReq) => {
   try {
-    let { denominacion } = rubGnlReq;
+    let { denominacion } = rubGnlReq.body;
     let auxRubGnl = RubroGeneral({denominacion,active: true});
     let rubGnlSaved = await auxRubGnl.save();
     return rubGnlSaved;
@@ -45,9 +45,20 @@ let updateRubroGeneral= async (rubGnlReq) =>{
 //Delete Rubro General
 let deleteRubroGeneral = async (rubGnlReq) => {
   try {
-    let { user_uid } = rubGnlReq.body
-    let deleteOptions = {user_uid:user_uid,deletedAt:new Date()}
-    let rubroGralDeleted = await RubroGeneral.findOneAndUpdate({_id: rubGnlReq.params.id},{$set:{active:false,delete:deleteOptions}},{upsert:true})
+    let { user_uid } = rubGnlReq.body;
+    let deleteOptions = {
+      user_uid,
+      deletedAt: new Date()
+  };
+
+    let rubroGralDeleted = await RubroGeneral.findOneAndUpdate(
+      {_id: rubGnlReq.params.id },
+      {
+        $set:{
+          active: false,
+          delete: deleteOptions
+        }
+    },{ upsert: true });
     return rubroGralDeleted;
   }   catch (error) {
     throw new Error(error);
@@ -57,6 +68,6 @@ let deleteRubroGeneral = async (rubGnlReq) => {
 /**
 * Rubro General Service
 */
-const RubGnlSvc = { findAllRubGeneral, saveRubroGeneral, deleteRubroGeneral, updateRubroGeneral };
+const RubGnlSvc = { findAllRubroGeneral, findOneRubroGeneral, saveRubroGeneral, deleteRubroGeneral, updateRubroGeneral };
 
 export default RubGnlSvc;

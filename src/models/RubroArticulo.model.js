@@ -4,7 +4,7 @@ import { Schema, model } from "mongoose";
  * Modelo RubroArticulo
  */
 const RubArtSchema = new Schema({
-    denominancion: String,
+    denominacion: String,
     active: Boolean,
     delete: {
       type:{

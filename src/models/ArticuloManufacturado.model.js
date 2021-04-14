@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { RubGrlSchema, RubroGeneral } from "./RubroGeneral.model";
+import { RubGrlSchema } from "./rubroGeneral.model";
 
 /**
  * Modelo ArticuloManufacturado
@@ -35,4 +35,6 @@ const ArtManufactSchema = new Schema({
 });
 
 
-export default model('ArtManufact',ArtManufactSchema);
+const ArtManufactModel = model('ArtManufact',ArtManufactSchema);
+
+export default ArtManufactModel;

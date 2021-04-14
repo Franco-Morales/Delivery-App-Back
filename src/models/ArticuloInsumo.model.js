@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { RubArtSchema } from "./RubroArticulo.model";
+import { RubArtSchema } from "./rubroArticulo.model";
 
 /**
  * ArticuloInsumo

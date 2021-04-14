@@ -1,9 +1,9 @@
-import ArticuloInsumoSvc from "../services/ArticuloInsumo.service";
+import ArticuloInsumoSvc from "../services/articuloInsumo.service";
 
 
 let getAll = async (req,res) => {
   try {
-    let artIns = await ArticuloInsumoSvc.findAllMArticuloManufacturado();
+    let artIns = await ArticuloInsumoSvc.findAllArticuloInsumo();
     if (artIns.length != 0) {
       res.status(200).json(artIns);
     } else {
@@ -29,7 +29,7 @@ let getOne = async (req,res) => {
 
 let updateOne = async (req,res) => {
   try {
-    let artInUpdated = await ArticuloInsumoSvc.updateArticuloManufacturado(req)
+    let artInUpdated = await ArticuloInsumoSvc.updateArticuloInsumo(req)
     if(artInUpdated){
       res.status(200).json(artInUpdated)
     }else{
@@ -42,7 +42,7 @@ let updateOne = async (req,res) => {
 
 let postOne = async (req,res) => {
   try {
-    let artInSaved = await ArticuloInsumoSvc.saveArticuloManufacturado(req);
+    let artInSaved = await ArticuloInsumoSvc.saveArticuloInsumo(req);
     res.status(200).json(artInSaved);
   } catch (error) {
     res.status(500).json({"error":error});
@@ -51,7 +51,7 @@ let postOne = async (req,res) => {
 
 let deleteOne = async (req,res) => {
   try {
-    let artInDeleted = await ArticuloInsumoSvc.deleteArticuloManufacturado(req);
+    let artInDeleted = await ArticuloInsumoSvc.deleteArticuloInsumo(req);
     res.status(200).json(artInDeleted);
   } catch (error) {
     res.status(500).json({"error":error});

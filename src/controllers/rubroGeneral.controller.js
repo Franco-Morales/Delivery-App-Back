@@ -1,9 +1,9 @@
-import RubGnlSvc from "../services/RubroGeneral.service";
+import RubGnlSvc from "../services/rubroGeneral.service";
 
 
 let getAll = async (req,res) => {
   try {
-    let rubGenerales = await RubGnlSvc.findAllRubGeneral();
+    let rubGenerales = await RubGnlSvc.findAllRubroGeneral();
     if (rubGenerales.length != 0) {
       res.status(200).json(rubGenerales);
     } else {
@@ -38,7 +38,7 @@ let updateOne = async (req,res) => {
 
 let postOne = async (req,res) => {
   try {
-    let rubGnl = await RubGnlSvc.saveRubroGeneral(req.body);
+    let rubGnl = await RubGnlSvc.saveRubroGeneral(req);
     res.status(200).json(rubGnl);
   } catch (error) {
     res.status(500).json({"error":error});
