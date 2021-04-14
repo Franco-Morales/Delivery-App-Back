@@ -10,11 +10,14 @@ const MercadoPagoSchema = new Schema({
     nroTarjeta: String,
     estado: String,
     active: Boolean,
-    delete: {type:{
-      user_uid: String,
-      deletedAt: Date
-    },default: null}
+    delete: {
+      type:{
+          user_uid: String,
+          deletedAt: Date
+      },
+      default: null
+  }
 });
 
-
-export default model('MercadoPago',MercadoPagoSchema);
+const MercadoPago = model('MercadoPago',MercadoPagoSchema);
+export { MercadoPagoSchema, MercadoPago};

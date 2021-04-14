@@ -6,11 +6,16 @@ import { Schema, model } from "mongoose";
 const RubArtSchema = new Schema({
     denominancion: String,
     active: Boolean,
-    delete: {type:{
-      user_uid: String,
-      deletedAt: Date
-    },default: null}
+    delete: {
+      type:{
+          user_uid: String,
+          deletedAt: Date
+      },
+      default: null
+  }
 });
 
+const RubroArticulo = model('RubroArticulo',RubArtSchema);
 
-export default model('RubroArticulo',RubArtSchema);
+
+export { RubArtSchema, RubroArticulo};

@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { RubroGeneral } from "./RubroGeneral.model";
+import { RubGrlSchema, RubroGeneral } from "./RubroGeneral.model";
 
 /**
  * Modelo ArticuloManufacturado
@@ -21,14 +21,17 @@ const ArtManufactSchema = new Schema({
             }
         }
     ],
-    // RubroGeneral: {
-    //     type: RubroGeneral
-    // },
+    RubroGeneral: {
+        type: RubGrlSchema
+    },
     active: Boolean,
-    delete: {type:{
-      user_uid: String,
-      deletedAt: Date
-    },default: null}
+    delete: {
+        type:{
+            user_uid: String,
+            deletedAt: Date
+        },
+        default: null
+    }
 });
 
 

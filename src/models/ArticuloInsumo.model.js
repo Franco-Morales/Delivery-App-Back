@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-
+import { RubArtSchema } from "./RubroArticulo.model";
 
 /**
  * ArticuloInsumo
@@ -13,14 +13,17 @@ const ArtInsumoSchema = new Schema({
     unidadMedida: String,
     esInsumo: Schema.Types.Boolean,
     //RubroInsumo
-    // RubArt: {
-    //     type: RubroInsumo
-    // },
+    RubArt: {
+        type: RubArtSchema
+    },
     active: Boolean,
-    delete: {type:{
-      user_uid: String,
-      deletedAt: Date
-    },default: null}
+    delete: {
+      type:{
+          user_uid: String,
+          deletedAt: Date
+      },
+      default: null
+  }
 });
 
 

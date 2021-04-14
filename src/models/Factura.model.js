@@ -23,10 +23,13 @@ const FacturaSchema = new Schema({
         }
     },
     active: Boolean,
-    delete: {type:{
-      user_uid: String,
-      deletedAt: Date
-    },default: null}
+    delete: {
+        type:{
+            user_uid: String,
+            deletedAt: Date
+        },
+        default: null
+    }
 });
 
 

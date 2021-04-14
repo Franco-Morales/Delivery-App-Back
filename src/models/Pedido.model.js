@@ -35,14 +35,17 @@ const PedidoSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Factura'
     },
-    // MercPago: {
-    //     type: MercadoPagoSchema
-    // },
-    active: Boolean,
-    delete: {type:{
-      user_uid: String,
-      deletedAt: Date
-    },default: null}
+    MercPago: {
+        type: MercadoPagoSchema
+    },
+    active: Schema.Types.Boolean,
+    delete: {
+        type:{
+            user_uid: String,
+            deletedAt: Date
+        },
+        default: null
+    }
 });
 
 
