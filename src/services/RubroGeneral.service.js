@@ -3,7 +3,8 @@ import { RubroGeneral } from "../models/rubroGeneral.model";
 //Find All Rubro General
 let findAllRubroGeneral = async() => {
   try {
-    let rubGenerales = await RubroGeneral.find({ delete: null }).select(['-delete']);
+    // let rubGenerales = await RubroGeneral.find({ active: true }).select(['-delete']);
+    let rubGenerales = await RubroGeneral.find({ active: true });
     return rubGenerales;
   } catch (error) {
     throw new Error(error);
@@ -13,7 +14,7 @@ let findAllRubroGeneral = async() => {
 //Find One Rubro General
 let findOneRubroGeneral = async(rubGnlReq) => {
   try {
-    let rubGeneral = await RubroGeneral.findById(rubGnlReq.params.id).select(['-delete']);
+    let rubGeneral = await RubroGeneral.findById(rubGnlReq.params.id);
     return rubGeneral;
   } catch (e) {
     throw new Error(error);
@@ -45,11 +46,23 @@ let updateRubroGeneral= async (rubGnlReq) =>{
 //Delete Rubro General
 let deleteRubroGeneral = async (rubGnlReq) => {
   try {
+    if(rubGnlReq.body.restore) {
+      let rubroGralRestored = await RubroGeneral.findOneAndUpdate(
+        {_id: rubGnlReq.params.id },
+        {
+          $set:{
+            active: true,
+            delete: {}
+          }
+      });
+      return rubroGralRestored;
+    }
+
     let { user_uid } = rubGnlReq.body;
     let deleteOptions = {
       user_uid,
       deletedAt: new Date()
-  };
+    };
 
     let rubroGralDeleted = await RubroGeneral.findOneAndUpdate(
       {_id: rubGnlReq.params.id },
@@ -58,16 +71,37 @@ let deleteRubroGeneral = async (rubGnlReq) => {
           active: false,
           delete: deleteOptions
         }
-    },{ upsert: true });
+    });
     return rubroGralDeleted;
   }   catch (error) {
     throw new Error(error);
   }
 }
 
+let activeRubroGeneral = async (rubGnlReq) =>{
+  try {
+    let { active } = rubGnlReq.body;
+
+    let rubGeneral = await RubroGeneral.findOneAndUpdate(
+      { _id: rubGnlReq.params.id },
+      { $set: { active } }
+    );
+    return rubGeneral
+  } catch (error) {
+    console.log('Error : ',error);
+  }
+}
+
 /**
 * Rubro General Service
 */
-const RubGnlSvc = { findAllRubroGeneral, findOneRubroGeneral, saveRubroGeneral, deleteRubroGeneral, updateRubroGeneral };
+const RubGnlSvc = { 
+  findAllRubroGeneral, 
+  findOneRubroGeneral, 
+  saveRubroGeneral, 
+  deleteRubroGeneral, 
+  updateRubroGeneral, 
+  activeRubroGeneral
+};
 
 export default RubGnlSvc;

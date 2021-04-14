@@ -47,8 +47,17 @@ let postOne = async (req,res) => {
 
 let deleteOne = async (req,res) => {
   try {
-    let rubGeneralDeleted = await RubGnlSvc.deleteRubroGeneral(req)
+    let rubGeneralDeleted = await RubGnlSvc.deleteRubroGeneral(req);
     res.status(200).json(rubGeneralDeleted);
+  } catch (error) {
+    res.status(500).json({"error":error});
+  }
+}
+
+let active = async (req,res) => {
+  try {
+    let rubGeneralActived = await RubGnlSvc.activeRubroGeneral(req);
+    res.status(202).json(rubGeneralActived);
   } catch (error) {
     res.status(500).json({"error":error});
   }
@@ -57,6 +66,6 @@ let deleteOne = async (req,res) => {
 /**
 * Rubro General Controller
 */
-const RubGnlCtrl = { getAll, getOne, postOne, updateOne, deleteOne };
+const RubGnlCtrl = { getAll, getOne, postOne, updateOne, deleteOne, active };
 
 export default RubGnlCtrl;

@@ -11,7 +11,7 @@ const RubGrlSchema = new Schema({
           user_uid: String,
           deletedAt: Date
       },
-      default: null
+      default: {}
   }
 });
 
