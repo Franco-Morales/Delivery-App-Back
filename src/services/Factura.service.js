@@ -3,7 +3,7 @@ import Factura from "../models/factura.model";
 //Find All Factura
 let findAllFactura = async() => {
     try {
-        let facturas = await Factura.find({ delete: null }).select(['-delete']);
+        let facturas = await Factura.find({active:true});
         return facturas;
     } catch (error) {
         throw new Error(error);
@@ -13,7 +13,7 @@ let findAllFactura = async() => {
 //Find One Factura
 let findOneFactura = async(facturaReq) => {
     try {
-      let factura = await Factura.findById(facturaReq.params.id).select(['-delete']);
+      let factura = await Factura.findById(facturaReq.params.id)
       return factura;
     } catch (e) {
       throw new Error(error);
@@ -23,7 +23,7 @@ let findOneFactura = async(facturaReq) => {
 //Save Factura
 let saveFactura = async (facturaReq) => {
     try {
-      let { fecha, numero, descuento, formaPago, nroTarjeta, totalVenta, totalCosto, detalle_factura} = facturaReq.body;
+      let { fecha, numero, descuento, formaPago, nroTarjeta, totalVenta, totalCosto, DetalleFactura} = facturaReq.body;
       let factura = Factura({fecha, numero, descuento, formaPago, nroTarjeta, totalVenta, totalCosto, detalle_factura,active:true});
       let facturaSaved = await factura.save();
       return facturaSaved;
@@ -35,7 +35,7 @@ let saveFactura = async (facturaReq) => {
 //Update Factura
 let updateFactura = async (facturaReq) =>{
     try {
-        let facturaUpdated = await Factura.findOneAndUpdate({_id: facturaReq.params.id},facturaReq.body);
+        let facturaUpdated = await Factura.findOneAndUpdate({_id: facturaReq.params.id},facturaReq.body,{new:true});
         return facturaUpdated;
     } catch (error) {
         throw new Error(error);
@@ -57,17 +57,33 @@ let deleteFactura = async (facturaReq) =>  {
                 active: false,
                 delete: deleteOptions
               }
-          },{ upsert: true });
+          },{ new: true });
         return facturaDeleted;
     } catch (error) {
         throw new Error(error);
     }
 }
 
+//Active Factura
+let activeFactura = async (facturaReq) =>{
+  try {
+    let { active } = facturaReq.body;
+
+    let factura = await Factura.findOneAndUpdate(
+      { _id: facturaReq.params.id },
+      { $set: { active } },
+      {new:true}
+    );
+    return factura;
+  } catch (error) {
+    console.log('Error : ',error);
+  }
+}
+
 
 /**
- * Pedido Service
+ * Factura Service
  */
-const FacturaSvc = { findAllFactura, findOneFactura, saveFactura, updateFactura, deleteFactura };
+const FacturaSvc = { findAllFactura, findOneFactura, saveFactura, updateFactura, deleteFactura, activeFactura};
 
 export default FacturaSvc;

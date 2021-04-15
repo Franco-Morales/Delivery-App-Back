@@ -10,5 +10,6 @@ router.post('/factura',FacturaCtrl.postOne);
 router.get('/factura/:id',FacturaCtrl.getOne);
 router.put('/factura/:id',FacturaCtrl.updateOne);
 router.delete('/factura/:id',FacturaCtrl.deleteOne);
+router.patch('/factura/:id', FacturaCtrl.active);
 
 export default router;

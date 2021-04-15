@@ -13,7 +13,7 @@ let getAll = async (req,res) => {
       res.status(500).json({"error":error});
     }
   }
-  
+
   let getOne = async (req,res) => {
     try {
       let mdoPago = await MercadoPagoSvc.findOneMercadoPago(req)
@@ -26,7 +26,7 @@ let getAll = async (req,res) => {
       res.status(500).json({"error":error});
     }
   }
-  
+
   let updateOne = async (req,res) => {
     try {
       let mdoPagoUpdated = await MercadoPagoSvc.updateMercadoPago(req)
@@ -39,7 +39,7 @@ let getAll = async (req,res) => {
       res.status(500).json({"error":error});
     }
   }
-  
+
   let postOne = async (req,res) => {
     try {
       let mdoPago = await MercadoPagoSvc.saveMercadoPago(req);
@@ -48,7 +48,7 @@ let getAll = async (req,res) => {
       res.status(500).json({"error":error});
     }
   }
-  
+
   let deleteOne = async (req,res) => {
     try {
       let mdoPagoDeleted = await MercadoPagoSvc.deleteMercadoPago(req);
@@ -57,10 +57,20 @@ let getAll = async (req,res) => {
       res.status(500).json({"error":error});
     }
   }
-  
+
+  let active = async (req,res) => {
+    try {
+      let mdoPagoActived = await MercadoPagoSvc.activeMercadoPago(req);
+      res.status(202).json(mdoPagoActived);
+    } catch (error) {
+      res.status(500).json({"error":error});
+    }
+  }
+
+
   /**
   * Mercado Pago Controller
   */
-  const MercadoPagoCtrl = { getAll, getOne, postOne, updateOne, deleteOne };
-  
+  const MercadoPagoCtrl = { getAll, getOne, postOne, updateOne, deleteOne, active };
+
   export default MercadoPagoCtrl;

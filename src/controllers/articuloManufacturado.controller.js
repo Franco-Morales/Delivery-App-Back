@@ -58,9 +58,18 @@ let deleteOne = async (req,res) => {
   }
 }
 
+let active = async (req,res) => {
+  try {
+    let artManActived = await ArticuloManufacturadoSvc.activeArticuloManufacturado(req);
+    res.status(202).json(artManActived);
+  } catch (error) {
+    res.status(500).json({"error":error});
+  }
+}
+
 /**
 * Articulo Manufacturado Controller
 */
-const ArticuloManufacturadoCtrl = { getAll, getOne, postOne, updateOne, deleteOne };
+const ArticuloManufacturadoCtrl = { getAll, getOne, postOne, updateOne, deleteOne, active };
 
 export default ArticuloManufacturadoCtrl;

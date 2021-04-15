@@ -58,9 +58,18 @@ let deleteOne = async (req,res) => {
   }
 }
 
+let active = async (req,res) => {
+  try {
+    let rubArtActived = await RubArtSvc.activeRubroArticulo(req);
+    res.status(202).json(rubArtActived);
+  } catch (error) {
+    res.status(500).json({"error":error});
+  }
+}
+
 /**
 * Rubro Articulo Controller
 */
-const RubArtCtrl = { getAll, getOne, postOne, updateOne, deleteOne };
+const RubArtCtrl = { getAll, getOne, postOne, updateOne, deleteOne, active };
 
 export default RubArtCtrl;

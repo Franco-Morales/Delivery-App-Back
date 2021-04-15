@@ -8,6 +8,7 @@ import mdoPagoRoutes from "./routes/mercadoPago.routes";
 import facturaRoutes from "./routes/factura.routes";
 import artManuRoutes from "./routes/articuloManufacturado.routes";
 import artInsRoutes from "./routes/articuloInsumo.routes";
+import configRoutes from "./routes/config.routes";
 
 const server = Express();
 
@@ -28,5 +29,6 @@ server.use('/api/v1',mdoPagoRoutes);
 server.use('/api/v1',facturaRoutes);
 server.use('/api/v1',artManuRoutes);
 server.use('/api/v1',artInsRoutes);
+server.use('/api/v1',configRoutes)
 
 export default server;

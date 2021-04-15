@@ -58,9 +58,18 @@ let deleteOne = async (req,res) => {
   }
 }
 
+let active = async (req,res) => {
+  try {
+    let artManActived = await ArticuloInsumoSvc.activeArticuloInsumo(req);
+    res.status(202).json(artManActived);
+  } catch (error) {
+    res.status(500).json({"error":error});
+  }
+}
+
 /**
 * Articulo Insumo Controller
 */
-const ArticuloInsumoCtrl = { getAll, getOne, postOne, updateOne, deleteOne };
+const ArticuloInsumoCtrl = { getAll, getOne, postOne, updateOne, deleteOne, active };
 
 export default ArticuloInsumoCtrl;

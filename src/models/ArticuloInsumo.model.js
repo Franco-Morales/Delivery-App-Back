@@ -8,8 +8,8 @@ const ArtInsumoSchema = new Schema({
     denominacion: String,
     precioCompra: Number,
     precioVenta: Number,
-    stcokActual: Number,
-    stcokMinimo: Number,
+    stockActual: Number,
+    stockMinimo: Number,
     unidadMedida: String,
     esInsumo: Schema.Types.Boolean,
     //RubroInsumo
@@ -22,7 +22,7 @@ const ArtInsumoSchema = new Schema({
           user_uid: String,
           deletedAt: Date
       },
-      default: null
+      default: {}
   }
 });
 

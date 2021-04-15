@@ -58,9 +58,19 @@ let deleteOne = async (req,res) => {
   }
 }
 
+let active = async (req,res) => {
+  try {
+    let pedidoActived = await PedidoSvc.activePedido(req);
+    res.status(202).json(pedidoActived);
+  } catch (error) {
+    res.status(500).json({"error":error});
+  }
+}
+
+
 /**
 * Pedido Controller
 */
-const PedidoCtrl = { getAll, getOne, postOne, updateOne, deleteOne };
+const PedidoCtrl = { getAll, getOne, postOne, updateOne, deleteOne, active };
 
 export default PedidoCtrl;

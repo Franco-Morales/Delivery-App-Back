@@ -10,5 +10,6 @@ router.post('/rubroarticulo',RubArtCtrl.postOne);
 router.get('/rubroarticulo/:id',RubArtCtrl.getOne);
 router.put('/rubroarticulo/:id',RubArtCtrl.updateOne);
 router.delete('/rubroarticulo/:id',RubArtCtrl.deleteOne);
+router.patch('/rubroarticulo/:id', RubArtCtrl.active);
 
 export default router;

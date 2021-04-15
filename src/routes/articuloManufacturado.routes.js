@@ -10,6 +10,7 @@ router.post('/artmanu',ArticuloManufacturadoCtrl.postOne);
 router.get('/artmanu/:id',ArticuloManufacturadoCtrl.getOne);
 router.put('/artmanu/:id',ArticuloManufacturadoCtrl.updateOne);
 router.delete('/artmanu/:id',ArticuloManufacturadoCtrl.deleteOne);
+router.patch('/artmanu/:id', ArticuloManufacturadoCtrl.active);
 
 
 export default router;

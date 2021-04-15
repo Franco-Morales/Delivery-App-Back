@@ -3,7 +3,7 @@ import ArtManufactModel from "../models/articuloManufacturado.model";
 //Find All ArticuloManufacturado
 let findAllArticuloManufacturado = async() => {
     try {
-        let artManFacs = await ArtManufactModel.find({ delete: null }).select(['-delete']);
+        let artManFacs = await ArtManufactModel.find({active:true});
         return artManFacs;
     } catch (error) {
         console.error(error);
@@ -14,7 +14,7 @@ let findAllArticuloManufacturado = async() => {
 //Find One ArticuloManufacturado
 let findOneArticuloManufacturado = async(artManFacsReq) => {
     try {
-      let artManFac = await ArtManufactModel.findById(artManFacsReq.params.id).select(['-delete']);
+      let artManFac = await ArtManufactModel.findById(artManFacsReq.params.id);
       return artManFac;
     } catch (e) {
       throw new Error(error);
@@ -36,7 +36,7 @@ let saveArticuloManufacturado = async (artManFacsReq) => {
 //Update ArticuloManufacturado
 let updateArticuloManufacturado = async (artManFacsReq) =>{
     try {
-        let artManFacUpdated = await ArtManufactModel.findOneAndUpdate({_id: artManFacsReq.params.id},artManFacsReq.body);
+        let artManFacUpdated = await ArtManufactModel.findOneAndUpdate({_id: artManFacsReq.params.id},artManFacsReq.body,{new:true});
         return artManFacUpdated;
     } catch (error) {
         throw new Error(error);
@@ -46,7 +46,7 @@ let updateArticuloManufacturado = async (artManFacsReq) =>{
 //Delete (Soft Delete)
 let deleteArticuloManufacturado = async (artManFacsReq) =>  {
     try {
-        let { user_uid } = facturaReq.body;
+        let { user_uid } = artManFacsReq.body;
         let deleteOptions = {
             user_uid,
             deletedAt: new Date()
@@ -59,17 +59,39 @@ let deleteArticuloManufacturado = async (artManFacsReq) =>  {
                 active: false,
                 delete: deleteOptions
               }
-          },{ upsert: true });
+          },{ new: true });
         return facturaDeleted;
     } catch (error) {
         throw new Error(error);
     }
 }
 
+//Active Articulo Manufacturado
+let activeArticuloManufacturado= async (artManFacsReq) =>{
+  try {
+    let { active } = artManFacsReq.body;
+
+    let artManFac = await ArtManufactModel.findOneAndUpdate(
+      { _id: artManFacsReq.params.id },
+      { $set: { active } },
+      {new:true}
+    );
+    return artManFac;
+  } catch (error) {
+    console.log('Error : ',error);
+  }
+}
+
 
 /**
  * ArticuloManufacturado Service
  */
-const ArticuloManufacturadoSvc = { findAllArticuloManufacturado, findOneArticuloManufacturado, saveArticuloManufacturado, updateArticuloManufacturado, deleteArticuloManufacturado };
+const ArticuloManufacturadoSvc = {
+  findAllArticuloManufacturado,
+  findOneArticuloManufacturado,
+  saveArticuloManufacturado,
+  updateArticuloManufacturado,
+  deleteArticuloManufacturado,
+  activeArticuloManufacturado };
 
 export default ArticuloManufacturadoSvc;

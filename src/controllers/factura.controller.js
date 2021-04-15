@@ -1,4 +1,4 @@
-import FacturaSvc from "../services/factura.service";
+import FacturaSvc from "../services/Factura.service";
 
 
 let getAll = async (req,res) => {
@@ -58,9 +58,18 @@ let deleteOne = async (req,res) => {
   }
 }
 
+let active = async (req,res) => {
+  try {
+    let facturaActived = await FacturaSvc.activeFactura(req);
+    res.status(202).json(facturaActived);
+  } catch (error) {
+    res.status(500).json({"error":error});
+  }
+}
+
 /**
 * Mercado Pago Controller
 */
-const FacturaCtrl = { getAll, getOne, postOne, updateOne, deleteOne };
+const FacturaCtrl = { getAll, getOne, postOne, updateOne, deleteOne, active };
 
 export default FacturaCtrl;

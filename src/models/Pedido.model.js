@@ -25,7 +25,7 @@ const PedidoSchema = new Schema({
                 type: Schema.Types.ObjectId,
                 ref: 'ArtManuFact'
             },
-            ArticuloIsumo: {
+            ArticuloInsumo: {
                 type: Schema.Types.ObjectId,
                 ref: 'ArtInsumo'
             }
@@ -45,7 +45,7 @@ const PedidoSchema = new Schema({
             user_uid: String,
             deletedAt: Date
         },
-        default: null
+        default: {}
     }
 });
 

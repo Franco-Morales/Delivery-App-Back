@@ -11,5 +11,6 @@ router.post('/pedido',PedidoCtrl.postOne);
 router.get('/pedido/:id',PedidoCtrl.getOne);
 router.put('/pedido/:id',PedidoCtrl.updateOne);
 router.delete('/pedido/:id',PedidoCtrl.deleteOne);
+router.patch('/pedido/:id', PedidoCtrl.active);
 
 export default router;
