@@ -18,9 +18,9 @@ let getOne = async (req,res) => {
   try {
     let factura = await FacturaSvc.findOneFactura(req)
     if(factura){
-      res.status(200).json(factura)
+      res.status(200).json(factura);
     }else{
-      res.status(204).json({"msg":"Empty"})
+      res.status(204).json({"msg":"Empty"});
     }
   } catch (error) {
     res.status(500).json({"error":error});

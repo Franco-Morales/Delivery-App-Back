@@ -15,7 +15,5 @@ const RubArtSchema = new Schema({
   }
 });
 
-const RubroArticulo = model('RubroArticulo',RubArtSchema);
 
-
-export { RubArtSchema, RubroArticulo};
+export default model('RubroArticulo',RubArtSchema);

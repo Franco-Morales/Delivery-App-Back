@@ -1,4 +1,4 @@
-import { RubroGeneral } from "../models/rubroGeneral.model";
+import RubroGeneral from "../models/rubroGeneral.model";
 
 //Find All Rubro General
 let findAllRubroGeneral = async() => {
@@ -6,7 +6,7 @@ let findAllRubroGeneral = async() => {
     let rubGenerales = await RubroGeneral.find({ active: true });
     return rubGenerales;
   } catch (error) {
-    throw new Error(error);
+    throw new Error(error.message);
   }
 }
 
@@ -15,7 +15,7 @@ let findOneRubroGeneral = async(rubGnlReq) => {
   try {
     let rubGeneral = await RubroGeneral.findById(rubGnlReq.params.id);
     return rubGeneral;
-  } catch (e) {
+  } catch (error) {
     throw new Error(error);
   }
 }

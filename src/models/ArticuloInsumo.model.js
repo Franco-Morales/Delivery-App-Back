@@ -1,5 +1,4 @@
 import { Schema, model } from "mongoose";
-import { RubArtSchema } from "./rubroArticulo.model";
 
 /**
  * ArticuloInsumo
@@ -14,7 +13,8 @@ const ArtInsumoSchema = new Schema({
     esInsumo: Schema.Types.Boolean,
     //RubroInsumo
     RubArt: {
-        type: RubArtSchema
+        type: Schema.Types.ObjectId,
+        ref: "RubroArticulo"
     },
     active: Boolean,
     delete: {

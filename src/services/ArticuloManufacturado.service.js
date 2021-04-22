@@ -3,18 +3,17 @@ import ArtManufactModel from "../models/articuloManufacturado.model";
 //Find All ArticuloManufacturado
 let findAllArticuloManufacturado = async() => {
     try {
-        let artManFacs = await ArtManufactModel.find({active:true});
+        let artManFacs = await ArtManufactModel.find({active:true}).populate('RubroGeneral');
         return artManFacs;
     } catch (error) {
-        console.error(error);
-        // throw new Error(error);
+        throw new Error(error);
     }
 }
 
 //Find One ArticuloManufacturado
 let findOneArticuloManufacturado = async(artManFacsReq) => {
     try {
-      let artManFac = await ArtManufactModel.findById(artManFacsReq.params.id);
+      let artManFac = await ArtManufactModel.findById(artManFacsReq.params.id).populate('RubroGeneral');
       return artManFac;
     } catch (e) {
       throw new Error(error);

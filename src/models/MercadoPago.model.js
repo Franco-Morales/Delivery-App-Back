@@ -20,6 +20,4 @@ const MercadoPagoSchema = new Schema({
 });
 
 
-const MercadoPagoModel = model('MercadoPago',MercadoPagoSchema);
-
-export { MercadoPagoSchema, MercadoPagoModel };
+export default model('MercadoPago',MercadoPagoSchema);

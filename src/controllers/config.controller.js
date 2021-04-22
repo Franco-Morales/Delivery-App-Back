@@ -2,12 +2,11 @@ import ConfigSvc from "../services/Config.service";
 
 let getOne = async (req,res) => {
   try {
-    let config = await ConfigSvc.findOneConfig(req)
+    let config = await ConfigSvc.findOneConfig(req);
     if(config){
-      res.status(200).json(config)
-    }else{
-      res.status(204).json({"msg":"Empty"})
+      res.status(204).json({"msg":"Empty"});
     }
+    res.status(200).json(config);
   } catch (error) {
     res.status(500).json({"error":error});
   }
@@ -21,7 +20,7 @@ let updateOne = async(req,res) => {
     }else{
       res.status(200).json({"msg":"Empty"})
     }
-  } catch (e) {
+  } catch (error) {
     res.status(500).json({"error": error})
   }
 }
@@ -29,6 +28,6 @@ let updateOne = async(req,res) => {
 /**
 * Configuracion Controller
 */
-const ConfigCtrl = { getAll, updateOne};
+const ConfigCtrl = { getOne, updateOne};
 
 export default ConfigCtrl;

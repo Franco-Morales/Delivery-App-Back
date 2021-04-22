@@ -1,9 +1,6 @@
 import { Schema, model } from "mongoose";
-import { RubGrlSchema } from "./rubroGeneral.model";
 
-/**
- * Modelo ArticuloManufacturado
- */
+
 const ArtManufactSchema = new Schema({
     tiempoEstimado: Date,
     denominacion: String,
@@ -22,7 +19,8 @@ const ArtManufactSchema = new Schema({
         }
     ],
     RubroGeneral: {
-        type: RubGrlSchema
+        type: Schema.Types.ObjectId,
+        ref: "RubroGeneral"
     },
     active: Boolean,
     delete: {
@@ -35,6 +33,4 @@ const ArtManufactSchema = new Schema({
 });
 
 
-const ArtManufactModel = model('ArtManufact',ArtManufactSchema);
-
-export default ArtManufactModel;
+export default model('ArtManufact',ArtManufactSchema);

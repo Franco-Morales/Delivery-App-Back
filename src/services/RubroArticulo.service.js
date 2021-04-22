@@ -1,4 +1,4 @@
-import { RubroArticulo } from "../models/rubroArticulo.model";
+import RubroArticulo from "../models/rubroArticulo.model";
 
 //Find All Rubro Articulo
 let findAllRubroArticulo = async() => {
@@ -15,7 +15,7 @@ let findOneRubroArticulo = async(rubArtReq) => {
   try {
     let rubArticulo = await RubroArticulo.findById(rubArtReq.params.id);
     return rubArticulo;
-  } catch (e) {
+  } catch (error) {
     throw new Error(error);
   }
 }

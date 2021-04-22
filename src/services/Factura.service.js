@@ -15,7 +15,7 @@ let findOneFactura = async(facturaReq) => {
     try {
       let factura = await Factura.findById(facturaReq.params.id)
       return factura;
-    } catch (e) {
+    } catch (error) {
       throw new Error(error);
     }
 }

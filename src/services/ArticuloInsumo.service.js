@@ -3,17 +3,17 @@ import ArticuloInsumo from "../models/articuloInsumo.model";
 //Find All ArticuloInsumo
 let findAllArticuloInsumo = async() => {
     try {
-        let artIns = await ArticuloInsumo.find({active:true});
-        return artIns;
+      let artIns = await ArticuloInsumo.find({active:true}).populate('RubArt');
+      return artIns;
     } catch (error) {
-        throw new Error(error);
+      throw new Error(error);
     }
 }
 
 //Find One ArticuloInsumo
 let findOneArticuloInsumo = async(artInReq) => {
     try {
-      let artIn = await ArticuloInsumo.findById(artInReq.params.id);
+      let artIn = await ArticuloInsumo.findById(artInReq.params.id).populate('RubArt');
       return artIn;
     } catch (e) {
       throw new Error(error);
@@ -28,7 +28,6 @@ let saveArticuloInsumo = async (artInReq) => {
       let artInSaved = await artIn.save();
       return artInSaved;
     } catch (error) {
-        console.log(error);
         throw new Error(error);
     }
 }
@@ -74,7 +73,7 @@ let activeArticuloInsumo = async (artInReq) =>{
     let artIn = await ArticuloInsumo.findOneAndUpdate(
       { _id: artInReq.params.id },
       { $set: { active } },
-      {new:true}
+      { new:true }
     );
     return artIn;
   } catch (error) {

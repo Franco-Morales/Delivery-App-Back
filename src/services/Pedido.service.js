@@ -3,7 +3,7 @@ import Pedido from "../models/pedido.model";
 //Find All Pedido
 let findAllPedido = async() => {
     try {
-        let pedidos = await Pedido.find({ active: true });
+        let pedidos = await Pedido.find({ active: true }).populate('MdoPago');
         return pedidos;
     } catch (error) {
         throw new Error(error);
@@ -15,7 +15,7 @@ let findOnePedido = async(pedidoReq) => {
     try {
       let pedido = await Pedido.findById(pedidoReq.params.id);
       return pedido;
-    } catch (e) {
+    } catch (error) {
       throw new Error(error);
     }
 }

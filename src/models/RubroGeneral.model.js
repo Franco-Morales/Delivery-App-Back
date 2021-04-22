@@ -15,7 +15,5 @@ const RubGrlSchema = new Schema({
   }
 });
 
-const RubroGeneral = model('RubroGeneral',RubGrlSchema);
 
-
-export { RubGrlSchema, RubroGeneral };
+export default model('RubroGeneral',RubGrlSchema);

@@ -4,8 +4,8 @@ import Config from "../models/pedido.model";
 let findOneConfig = async(configReq) => {
     try {
       let config = await Config.findById(configReq.params.id);
-      return pedido;
-    } catch (e) {
+      return config;
+    } catch (error) {
       throw new Error(error);
     }
 }
@@ -23,6 +23,6 @@ let updateConfig = async (configReq) =>{
 /**
  * Config Service
  */
-const ConfigSvc = {findOnePedido, updatePedido};
+const ConfigSvc = {findOneConfig, updateConfig};
 
 export default ConfigSvc;

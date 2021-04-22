@@ -4,13 +4,11 @@ import RubGnlSvc from "../services/rubroGeneral.service";
 let getAll = async (req,res) => {
   try {
     let rubGenerales = await RubGnlSvc.findAllRubroGeneral();
-    if (rubGenerales.length != 0) {
-      res.status(200).json(rubGenerales);
-    } else {
-      res.status(204).json({"msg":"Empty"})
-    }
+      
+    res.status(200).json(rubGenerales);
+
   } catch (error) {
-    res.status(500).json({"error":error});
+    res.status(500).json({"error": error.message});
   }
 }
 
