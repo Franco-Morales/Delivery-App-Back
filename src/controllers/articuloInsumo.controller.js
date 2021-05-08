@@ -16,7 +16,7 @@ let getAll = async (req,res) => {
 
 let getOne = async (req,res) => {
   try {
-    let artIn = await ArticuloInsumoSvc.findOneArticuloManufacturado(req)
+    let artIn = await ArticuloInsumoSvc.findOneArticuloInsumo(req)
     if(artIn){
       res.status(200).json(artIn)
     }else{

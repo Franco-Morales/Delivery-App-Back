@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 
 
 const ArtManufactSchema = new Schema({
-    tiempoEstimado: Date,
+    tiempoEstimado: String,
     denominacion: String,
     precioVenta: Number,
     img: String,
@@ -15,7 +15,8 @@ const ArtManufactSchema = new Schema({
             ArtInsumo: {
                 type: Schema.Types.ObjectId,
                 ref: 'ArtInsumo'
-            }
+            },
+            _id: false
         }
     ],
     RubroGeneral: {

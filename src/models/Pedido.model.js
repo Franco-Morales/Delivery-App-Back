@@ -28,7 +28,8 @@ const PedidoSchema = new Schema({
             ArticuloInsumo: {
                 type: Schema.Types.ObjectId,
                 ref: 'ArtInsumo'
-            }
+            },
+            _id: false
         }
     ],
     Factura: {

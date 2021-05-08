@@ -1,26 +1,29 @@
 import ArticuloInsumo from "../models/articuloInsumo.model";
 
-//Find All ArticuloInsumo
+
+//Find All Articulo Insumo
 let findAllArticuloInsumo = async() => {
     try {
       let artIns = await ArticuloInsumo.find({active:true}).populate('RubArt');
       return artIns;
     } catch (error) {
-      throw new Error(error);
+      console.error(`Error Svc Art Insumo : ${error}`);
     }
 }
 
-//Find One ArticuloInsumo
+//Find One Articulo Insumo
 let findOneArticuloInsumo = async(artInReq) => {
+  let _id = artInReq.params.id;
+  let filter = { _id, active: true };
     try {
-      let artIn = await ArticuloInsumo.findById(artInReq.params.id).populate('RubArt');
+      let artIn = await ArticuloInsumo.findOne(filter).populate('RubArt');
       return artIn;
-    } catch (e) {
-      throw new Error(error);
+    } catch (error) {
+      console.error(`Error Svc Art Insumo : ${error}`);
     }
 }
 
-//Save ArticuloInsumo
+//Save Articulo Insumo
 let saveArticuloInsumo = async (artInReq) => {
     try {
       let { denominacion, precioCompra, precioVenta, stockActual, stockMinimo, unidadMedida, esInsumo, RubArt } = artInReq.body;
@@ -28,61 +31,61 @@ let saveArticuloInsumo = async (artInReq) => {
       let artInSaved = await artIn.save();
       return artInSaved;
     } catch (error) {
-        throw new Error(error);
+        console.error(`Error Svc Art Insumo : ${error}`);
     }
 }
 
-//Update ArticuloInsumo
+//Update Articulo Insumo
 let updateArticuloInsumo = async (artInReq) =>{
     try {
         let artInUpdated = await ArticuloInsumo.findOneAndUpdate({_id: artInReq.params.id}, artInReq.body,{new:true});
         return artInUpdated;
     } catch (error) {
-        throw new Error(error);
+        console.error(`Error Svc Art Insumo : ${error}`);
     }
 }
 
-//Delete (Soft Delete)
+//Delete Articulo Insumo
 let deleteArticuloInsumo = async (artInReq) =>  {
-    try {
-        let { user_uid } = artInReq.body;
-        let deleteOptions = {
-            user_uid,
-            deletedAt: new Date()
-        };
-
-        let artInDeleted = await ArticuloInsumo.findOneAndUpdate(
-            {_id: artInReq.params.id },
-            {
-              $set:{
-                active: false,
-                delete: deleteOptions
-              }
-          },{ new: true });
-        return artInDeleted;
-    } catch (error) {
-        throw new Error(error);
-    }
-}
-
-//Active Articulo Insumo
-let activeArticuloInsumo = async (artInReq) =>{
   try {
-    let { active } = artInReq.body;
+    let { user_uid } = artInReq.body;
+    let deleteOptions = {
+        user_uid,
+        deletedAt: new Date()
+    };
 
-    let artIn = await ArticuloInsumo.findOneAndUpdate(
-      { _id: artInReq.params.id },
-      { $set: { active } },
-      { new:true }
-    );
-    return artIn;
+    let artInDeleted = await ArticuloInsumo.findOneAndUpdate(
+      {_id: artInReq.params.id },
+      {
+        $set:{
+          active: false,
+          delete: deleteOptions
+        }
+      },{ new: true });
+    return artInDeleted;
   } catch (error) {
-    console.log('Error : ',error);
+      console.error(`Error Svc Art Insumo : ${error}`);
   }
 }
 
+//Active Articulo Insumo
+let activeArticuloInsumo = async (artInReq) => {
+  let { active } = artInReq.body;
+  let actOpt = { active, delete: {} };
 
-/**º
+  try {
+    let artIn = await ArticuloInsumo.findOneAndUpdate(
+      { _id: artInReq.params.id },
+      { $set: actOpt },
+      { new: true }
+    );
+    return artIn;
+  } catch (error) {
+    console.error(`Error Svc Art Insumo : ${error}`);
+  }
+}
+
+/**
  * Articulo Insumo Service
  */
 const ArticuloInsumoSvc = {
@@ -91,6 +94,7 @@ const ArticuloInsumoSvc = {
   saveArticuloInsumo,
   updateArticuloInsumo,
   deleteArticuloInsumo,
-  activeArticuloInsumo};
+  activeArticuloInsumo
+};
 
 export default ArticuloInsumoSvc;

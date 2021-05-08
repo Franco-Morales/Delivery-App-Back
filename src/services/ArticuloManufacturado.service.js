@@ -2,34 +2,36 @@ import ArtManufactModel from "../models/articuloManufacturado.model";
 
 //Find All ArticuloManufacturado
 let findAllArticuloManufacturado = async() => {
-    try {
-        let artManFacs = await ArtManufactModel.find({active:true}).populate('RubroGeneral');
-        return artManFacs;
-    } catch (error) {
-        throw new Error(error);
-    }
+  try {
+    let artManFacs = await ArtManufactModel.find({active:true}).populate('RubroGeneral');
+    return artManFacs;
+  } catch (error) {
+      console.error(`Error Svc ArtManufact: ${error}`);
+  }
 }
 
 //Find One ArticuloManufacturado
 let findOneArticuloManufacturado = async(artManFacsReq) => {
-    try {
-      let artManFac = await ArtManufactModel.findById(artManFacsReq.params.id).populate('RubroGeneral');
-      return artManFac;
-    } catch (e) {
-      throw new Error(error);
-    }
+  let _id = artManFacsReq.params.id;
+  let filter = { _id, active: true };
+  try {
+    let artManFac = await ArtManufactModel.findById(filter).populate('RubroGeneral');
+    return artManFac;
+  } catch (error) {
+    console.error(`Error Svc ArtManufact: ${error}`);
+  }
 }
 
 //Save ArticuloManufacturado
 let saveArticuloManufacturado = async (artManFacsReq) => {
-    try {
-      let { tiempoEstimado, denominacion , precioVenta ,img ,ArtManufactDet, RubroGeneral } = artManFacsReq.body;
-      let artManFac = ArtManufactModel({tiempoEstimado, denominacion , precioVenta ,img ,ArtManufactDet, RubroGeneral, active:true});
-      let artManFacSaved = await artManFac.save();
-      return artManFacSaved;
-    } catch (error) {
-        throw new Error(error);
-    }
+  let { tiempoEstimado, denominacion , precioVenta ,img ,ArtManufactDet, RubroGeneral } = artManFacsReq.body;
+  try {
+    let artManFac = ArtManufactModel({tiempoEstimado, denominacion, precioVenta, img , ArtManufactDet, RubroGeneral, active:true});
+    let artManFacSaved = await artManFac.save();
+    return artManFacSaved;
+  } catch (error) {
+      console.error(`Error Svc ArtManufact: ${error}`);
+  }
 }
 
 //Update ArticuloManufacturado
@@ -38,46 +40,46 @@ let updateArticuloManufacturado = async (artManFacsReq) =>{
         let artManFacUpdated = await ArtManufactModel.findOneAndUpdate({_id: artManFacsReq.params.id},artManFacsReq.body,{new:true});
         return artManFacUpdated;
     } catch (error) {
-        throw new Error(error);
+        console.error(`Error Svc ArtManufact: ${error}`);
     }
 }
 
 //Delete (Soft Delete)
 let deleteArticuloManufacturado = async (artManFacsReq) =>  {
+  let { user_uid } = artManFacsReq.body;
+  let deleteOptions = {
+      user_uid,
+      deletedAt: new Date()
+  };
     try {
-        let { user_uid } = artManFacsReq.body;
-        let deleteOptions = {
-            user_uid,
-            deletedAt: new Date()
-        };
-
-        let facturaDeleted = await ArtManufactModel.findOneAndUpdate(
-            {_id: artManFacsReq.params.id },
-            {
-              $set:{
-                active: false,
-                delete: deleteOptions
-              }
-          },{ new: true });
-        return facturaDeleted;
+      let facturaDeleted = await ArtManufactModel.findOneAndUpdate(
+          {_id: artManFacsReq.params.id },
+          {
+            $set:{
+              active: false,
+              delete: deleteOptions
+            }
+        },{ new: true });
+      return facturaDeleted;
     } catch (error) {
-        throw new Error(error);
+        console.error(`Error Svc ArtManufact: ${error}`);
     }
 }
 
 //Active Articulo Manufacturado
 let activeArticuloManufacturado= async (artManFacsReq) =>{
-  try {
-    let { active } = artManFacsReq.body;
+  let { active } = artManFacsReq.body;
+  let actOpt = { active, delete: {} };
 
+  try {
     let artManFac = await ArtManufactModel.findOneAndUpdate(
-      { _id: artManFacsReq.params.id },
-      { $set: { active } },
-      {new:true}
+      filter,
+      { $set: actOpt },
+      { new: true }
     );
     return artManFac;
   } catch (error) {
-    console.log('Error : ',error);
+    console.error(`Error Svc ArtManufact: ${error}`);
   }
 }
 
@@ -91,6 +93,7 @@ const ArticuloManufacturadoSvc = {
   saveArticuloManufacturado,
   updateArticuloManufacturado,
   deleteArticuloManufacturado,
-  activeArticuloManufacturado };
+  activeArticuloManufacturado 
+};
 
 export default ArticuloManufacturadoSvc;

@@ -6,17 +6,19 @@ let findAllRubroGeneral = async() => {
     let rubGenerales = await RubroGeneral.find({ active: true });
     return rubGenerales;
   } catch (error) {
-    throw new Error(error.message);
+    console.error(`Error Svc RubroGeneral : ${error}`);
   }
 }
 
 //Find One Rubro General
 let findOneRubroGeneral = async(rubGnlReq) => {
+  let _id = rubGnlReq.params.id;
+  let filter = { _id, active: true };
   try {
-    let rubGeneral = await RubroGeneral.findById(rubGnlReq.params.id);
+    let rubGeneral = await RubroGeneral.findOne(filter);
     return rubGeneral;
   } catch (error) {
-    throw new Error(error);
+    console.error(`Error Svc RubroGeneral : ${error}`);
   }
 }
 
@@ -28,7 +30,7 @@ let saveRubroGeneral = async (rubGnlReq) => {
     let rubGnlSaved = await auxRubGnl.save();
     return rubGnlSaved;
   } catch (error) {
-    throw new Error(error);
+    console.error(`Error Svc RubroGeneral : ${error}`);
   }
 }
 
@@ -38,31 +40,18 @@ let updateRubroGeneral= async (rubGnlReq) =>{
     let rubGeneralUpdated = await RubroGeneral.findOneAndUpdate({_id: rubGnlReq.params.id},rubGnlReq.body,{new:true});
     return rubGeneralUpdated;
   } catch (error) {
-    throw new Error(error);
+    console.error(`Error Svc RubroGeneral : ${error}`);
   }
 }
 
 //Delete Rubro General
 let deleteRubroGeneral = async (rubGnlReq) => {
+  let { user_uid } = rubGnlReq.body;
+  let deleteOptions = {
+    user_uid,
+    deletedAt: new Date()
+  };
   try {
-    if(rubGnlReq.body.restore) {
-      let rubroGralRestored = await RubroGeneral.findOneAndUpdate(
-        {_id: rubGnlReq.params.id },
-        {
-          $set:{
-            active: true,
-            delete: {}
-          }
-      },{new:true});
-      return rubroGralRestored;
-    }
-
-    let { user_uid } = rubGnlReq.body;
-    let deleteOptions = {
-      user_uid,
-      deletedAt: new Date()
-    };
-
     let rubroGralDeleted = await RubroGeneral.findOneAndUpdate(
       {_id: rubGnlReq.params.id },
       {
@@ -70,25 +59,25 @@ let deleteRubroGeneral = async (rubGnlReq) => {
           active: false,
           delete: deleteOptions
         }
-    },{new:true});
+      },{new:true});
     return rubroGralDeleted;
-  }   catch (error) {
-    throw new Error(error);
+  } catch (error) {
+    console.error(`Error Svc RubroGeneral : ${error}`);
   }
 }
 //Active Rubro General
 let activeRubroGeneral = async (rubGnlReq) =>{
+  let { active } = rubGnlReq.body;
+  let actOpt = { active, delete: {} };
   try {
-    let { active } = rubGnlReq.body;
-
     let rubGeneral = await RubroGeneral.findOneAndUpdate(
       { _id: rubGnlReq.params.id },
-      { $set: { active } },
+      { $set: actOpt },
       {new:true}
     );
-    return rubGeneral
+    return rubGeneral;
   } catch (error) {
-    console.log('Error : ',error);
+    console.error(`Error Svc RubroGeneral : ${error}`);
   }
 }
 
@@ -103,5 +92,6 @@ const RubGnlSvc = {
   updateRubroGeneral,
   activeRubroGeneral
 };
+
 
 export default RubGnlSvc;

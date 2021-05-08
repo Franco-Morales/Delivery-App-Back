@@ -20,7 +20,8 @@ const FacturaSchema = new Schema({
         ArticuloIsumo: {
             type: Schema.Types.ObjectId,
             ref: 'ArtInsumo'
-        }
+        },
+        _id: false
     },
     active: Boolean,
     delete: {

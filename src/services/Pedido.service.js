@@ -2,85 +2,85 @@ import Pedido from "../models/pedido.model";
 
 //Find All Pedido
 let findAllPedido = async() => {
-    try {
-        let pedidos = await Pedido.find({ active: true }).populate('MdoPago');
-        return pedidos;
-    } catch (error) {
-        throw new Error(error);
-    }
+  try {
+      let pedidos = await Pedido.find({ active: true }).populate('MdoPago');
+      return pedidos;
+  } catch (error) {
+    console.error(`Error Svc Pedido : ${error}`);
+  }
 }
 
 //Find One Pedido
 let findOnePedido = async(pedidoReq) => {
-    try {
-      let pedido = await Pedido.findById(pedidoReq.params.id);
-      return pedido;
-    } catch (error) {
-      throw new Error(error);
-    }
+  let _id = pedidoReq.params.id;
+  let filter = { _id, active: true };
+  try {
+    let pedido = await Pedido.findOne(filter);
+    return pedido;
+  } catch (error) {
+    console.error(`Error Svc Pedido : ${error}`);
+  }
 }
 
 //Save Pedido
 let savePedido = async (pedidoReq) => {
-    try {
-      let { fecha, estado, horaEstimadaFin, tipoEnvio, total, Cliente, DetallePedido, Factura, MdoPago} = pedidoReq.body;
-      let pedido = Pedido({fecha, estado, horaEstimadaFin, tipoEnvio, total, cliente, detalle, factura,active:true});
-      let pedidoSaved = await pedido.save();
-      return pedidoSaved;
-    } catch (error) {
-        throw new Error(error);
-    }
+  try {
+    let { fecha, estado, horaEstimadaFin, tipoEnvio, total, Cliente, DetallePedido, Factura, MdoPago} = pedidoReq.body;
+    let pedido = Pedido({fecha, estado, horaEstimadaFin, tipoEnvio, total, Cliente, DetallePedido, Factura, MdoPago,active:true});
+    let pedidoSaved = await pedido.save();
+    return pedidoSaved;
+  } catch (error) {
+      console.error(`Error Svc Pedido : ${error}`);
+  }
 }
 
 //Update Pedido
 let updatePedido = async (pedidoReq) =>{
-    try {
-        let pedidoUpdated = await Pedido.findOneAndUpdate({_id: pedidoReq.params.id},pedidoReq.body,{new:true});
-        return pedidoUpdated;
-    } catch (error) {
-        throw new Error(error);
-    }
+  try {
+      let pedidoUpdated = await Pedido.findOneAndUpdate({_id: pedidoReq.params.id},pedidoReq.body,{new:true});
+      return pedidoUpdated;
+  } catch (error) {
+      console.error(`Error Svc Pedido : ${error}`);
+  }
 }
 
-//Delete (Soft Delete)
+//Delete Pedido
 let deletePedido = async (pedidoReq) =>  {
-    try {
-        let { user_uid } = pedidoReq.body;
-        let deleteOptions = {
-            user_uid,
-            deletedAt: new Date()
-        };
-
-        let pedidoDeleted = await Pedido.findOneAndUpdate(
-            {_id: pedidoReq.params.id },
-            {
-              $set:{
-                active: false,
-                delete: deleteOptions
-              }
-          },{new:true});
-        return pedidoDeleted;
-    } catch (error) {
-        throw new Error(error);
-    }
+  let { user_uid } = pedidoReq.body;
+  let deleteOptions = {
+      user_uid,
+      deletedAt: new Date()
+  };
+  try {
+    let pedidoDeleted = await Pedido.findOneAndUpdate(
+        {_id: pedidoReq.params.id },
+        {
+          $set:{
+            active: false,
+            delete: deleteOptions
+          }
+      },{new:true});
+    return pedidoDeleted;
+  } catch (error) {
+    console.error(`Error Svc Pedido : ${error}`);
+  }
 }
 
 //Active Pedido
 let activePedido = async (pedidoReq) =>{
+  let { active } = pedidoReq.body;
+  let actOpt = { active, delete: {} };
   try {
-    let { active } = pedidoReq.body;
-
     let pedido = await Pedido.findOneAndUpdate(
       { _id: pedidoReq.params.id },
-      { $set: { active } },
+      { $set: actOpt },
       {new:true}
     );
     return pedido;
   } catch (error) {
-    console.log('Error : ',error);
+    console.error(`Error Svc Pedido : ${error}`);
   }
 }
-
 
 /**
  * Pedido Service

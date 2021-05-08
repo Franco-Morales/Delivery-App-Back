@@ -30,13 +30,9 @@ let getOne = async (req,res) => {
 let updateOne = async (req,res) => {
   try {
     let pedidoUpdated = await PedidoSvc.updatePedido(req)
-    if(pedidoUpdated){
-      res.status(200).json(pedidoUpdated)
-    }else{
-      res.status(204).json({"msg":"Empty"})
-    }
+    res.status(200).json(pedidoUpdated);
   } catch (error) {
-    res.status(500).json({"error":error});
+    res.status(500).json({"error": error});
   }
 }
 

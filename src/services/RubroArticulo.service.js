@@ -6,17 +6,19 @@ let findAllRubroArticulo = async() => {
     let rubArticulos = await RubroArticulo.find({ active: true });
     return rubArticulos;
   } catch (error) {
-    throw new Error(error);
+    console.error(`Error Svc Rubro Art : ${error}`);
   }
 }
 
 //Find One Rubro Aritculo
 let findOneRubroArticulo = async(rubArtReq) => {
+  let _id = rubArtReq.params.id;
+  let filter = { _id, active: true };
   try {
-    let rubArticulo = await RubroArticulo.findById(rubArtReq.params.id);
+    let rubArticulo = await RubroArticulo.find(filter);
     return rubArticulo;
   } catch (error) {
-    throw new Error(error);
+    console.error(`Error Svc Rubro Art : ${error}`);
   }
 }
 
@@ -28,7 +30,7 @@ let saveRubroArticulo = async (rubArtReq) => {
     let rubArtSaved = await rubArticulo.save();
     return rubArtSaved;
   } catch (error) {
-    throw new Error(error);
+    console.error(`Error Svc Rubro Art : ${error}`);
   }
 }
 
@@ -38,19 +40,18 @@ let updateRubroArticulo = async (rubArtReq) =>{
     let rubArtUpdated = await RubroArticulo.findOneAndUpdate({_id: rubArtReq.params.id},rubArtReq.body,{new:true});
     return rubArtUpdated;
   } catch (error) {
-    throw new Error(error);
+    console.error(`Error Svc Rubro Art : ${error}`);
   }
 }
 
 //Delete (Soft Delete)
 let deleteRubroArticulo = async (rubArtReq) =>  {
-  try {
-    let { user_uid } = req.body
-    let deleteOptions = {
-      user_uid,
-      deletedAt: new Date()
+  let { user_uid } = rubArtReq.body
+  let deleteOptions = {
+    user_uid,
+    deletedAt: new Date()
   };
-
+  try {
     let rubroArtDeleted = await RubroArticulo.findOneAndUpdate(
       {_id: rubArtReq.params.id },
       {
@@ -58,26 +59,26 @@ let deleteRubroArticulo = async (rubArtReq) =>  {
           active: false,
           delete: deleteOptions
         }
-    },{new:true});
+      },{new:true});
     return rubroArtDeleted;
   } catch (error) {
-    throw new Error(error);
+    console.error(`Error Svc Rubro Art : ${error}`);
   }
 }
 
 //Active Rubro Aritculo
 let activeRubroArticulo = async (rubArtReq) =>{
+  let { active } = rubArtReq.body;
+  let actOpt = { active, delete: {} };
   try {
-    let { active } = rubArtReq.body;
-
     let rubArt = await RubroArticulo.findOneAndUpdate(
       { _id: rubArtReq.params.id },
-      { $set: { active } },
+      { $set: actOpt },
       {new:true}
     );
     return rubArt;
   } catch (error) {
-    console.log('Error : ',error);
+    console.error(`Error Svc Rubro Art : ${error}`);
   }
 }
 
