@@ -47,13 +47,12 @@ let updateArticuloInsumo = async (artInReq) =>{
 
 //Delete Articulo Insumo
 let deleteArticuloInsumo = async (artInReq) =>  {
-  try {
-    let { user_uid } = artInReq.body;
+  let { user_uid } = artInReq.body;
     let deleteOptions = {
         user_uid,
         deletedAt: new Date()
     };
-
+  try {
     let artInDeleted = await ArticuloInsumo.findOneAndUpdate(
       {_id: artInReq.params.id },
       {

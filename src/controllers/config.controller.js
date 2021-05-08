@@ -16,9 +16,6 @@ let saveOne = async (req,res) => {
 let getOne = async (req,res) => {
   try {
     let config = await ConfigSvc.findOneConfig(req);
-    // if(config){
-    //   res.status(204).json({"msg":"Empty"});
-    // }
     res.status(200).json(config);
   } catch (error) {
     res.status(500).json({"error":error});

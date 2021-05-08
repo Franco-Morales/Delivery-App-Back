@@ -4,22 +4,309 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="./css/index.css">´
+    <!--Fontawesome-->
+    <script src="https://kit.fontawesome.com/918d19c8b4.js" crossorigin="anonymous"></script>
     <title>Documentación</title>
 </head>
 <body>
-    <div class="container">
-        <section id='landing'>
+    <aside>
+        <nav>
+            <ul>
+                <li>
+                    <a href="./index.html">Inicio</a>
+                </li>
+                <li>
+                    <a href="#proyect">Estructura</a>
+                </li>
+                <li>
+                    <a href="#app-server">App</a>
+                </li>
+                <li>
+                    <a href="#routes">Rutas</a>
+                </li>
+                <li>
+                    <a href="#models">Modelos</a>
+                </li>
+                <li>
+                    <a href="#controllers">Controlador</a>
+                </li>
+                <li>
+                    <a href="#services">Servicio</a>
+                </li>
+                <li>
+                    <a href="#middleware">Middleware</a>
+                </li>
+                <li>
+                    <a href="#links">Bibliografía</a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    <main>
+        <div id="landing" class="text-center">
+            <h1 class="display-4">Documentación Backend</h1>
+            <h2 class="lead">Delivery App Backend</h2>
+        </div>
+        <section id="docs" class="container">
+            <article id="proyect">
+                <div class="row">
+                    <div class="col-12">
+                        <h3>Estructura del proyecto</h3>
+                        <hr>
+                    </div>
+                    <div class="col-12">
+                        <p>
+                            Dentro del directorio /src se encuentran 5 carpetas y 4 archivos importantes, los cuales son :
+                            <ul>
+                                <li>/controllers</li>
+                                <li>/middlewares</li>
+                                <li>/models</li>
+                                <li>/routes</li>
+                                <li>/service</li>
+                                <li>app.js</li>
+                                <li>database.js</li>
+                                <li>server.js</li>
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+            </article>
+            <article id="app-server">
+                <div class="row">
+                    <div class="col-12">
+                        <h3>App.js, Server.js y Database.js</h3>
+                        <hr>
+                    </div>
+                    <div class="col-12">
+                        <p>
+                            El archivo <i>server.js</i> crea una instancia de <i>Express()</i> y la exporta para que el script <i>App.js</i> lo incialize mediante el metodo asíncrono <i>main()</i>.
+                        </p>
+                        <p>
+                            El archivo <i>databe.js</i> contiene la conexión a MongoDB mendiante mongoose.
+                        </p>
+                    </div>
+                </div>
+            </article>
+            <article id="routes">
+                <div class="row">
+                    <div class="col-12">
+                        <h3>Routes</h3>
+                        <hr>
+                    </div>
+                    <div class="col-12">
+                        <p>
+                            La carpeta <i>/routes</i> contiene todas las rutas disponibles de la [API], cada archivo correspone con una unica entidad. La URL básica para acceder a un recurso es mediante: <code>http://localhost:2021/api/v1/recurso</code>.
+                        </p>
+                        <p>
+                            El formato de un archivo routes es el siguiente: 
+                            <code>
+                                <pre>
+                                    router.get(url,function);
+                                </pre>
+                            </code>
+                        </p>
+                        <p>
+                            Lista de vervos HTTP soportados : 
+                            <ul>
+                                <li>DELETE</li>
+                                <li>GET</li>
+                                <li>POST</li>
+                                <li>PUT</li>
+                                <li>PATH</li>
+                            </ul>
+                        </p>
+                    </div>
+                    <div class="col-12">
+                        <h4>Peticiones</h4>
+                        <h6 class="subtitle">GET</h6>
+                        <p>
+                            El método [ GET ] tiene dos posibles intercaciones : <code>http://localhost:2021/api/v1/recurso</code> o <code>http://localhost:2021/api/v1/recurso/:id</code>.
+                        </p>
+                        <h6 class="subtitle">POST</h6>
+                        <p>
+                            El método [ POST ] tiene una posible intercacion : <code>http://localhost:2021/api/v1/recurso</code>.
+                        </p>
+                        <h6 class="subtitle">PUT</h6>
+                        <p>
+                            El método [ GET ] tiene una posible intercacion : <code>http://localhost:2021/api/v1/recurso/:id</code>.
+                        </p>
+                        <h6 class="subtitle">DELETE</h6>
+                        <p>
+                            El método [ DELETE ] tiene una posible intercacion : <code>http://localhost:2021/api/v1/recurso/:id</code>.
+                        </p>
+                        <h6 class="subtitle">PATCH</h6>
+                        <p>
+                            El método [ PATCH ] tiene una posible intercacion : <code>http://localhost:2021/api/v1/recurso/:id</code>.
+                        </p>
+                    </div>
+                </div>
+            </article>
+            <article id="models">
+                <div class="row">
+                    <div class="col-12">
+                        <h3>Models</h3>
+                        <hr>
+                    </div>
+                    <div class="col-12">
+                        <p>
+                            La carpeta <i>/models</i> contiene los modelos que corresponden con una unica entidad. 
+                        </p>
+                        <p>
+                            Ejemplo básico de un modelo : 
+                            <code>
+                                <pre>
+                                    import { Schema, model } from 'mongoose';
+
+                                    const schemaRecurso = new Schema({
+                                        propiedad1: String
+                                    });
+
+                                    export default model('recursoModel',schemaRecurso);
+                                </pre>
+                            </code>
+                            Los modelos utilizados tienen propiedades en común que son : 
+                            <ul>
+                                <li><code>_id</code> creada automaticamente por mongoose</li>
+                                <li><code>active</code> creada automaticamente en modelo, no nativa de mongoose</li>
+                                <li><code>delete</code> creada automaticamente en modelo, no nativa de mongoose</li>
+                            </ul>
+                        </p>
+                        <p>Más información sobre <a href="https://mongoosejs.com/docs/guide.html#definition">Schema</a> y <a href="https://mongoosejs.com/docs/models.html">model</a></p>
+                    </div>
+                </div>
+            </article>
+            <article id="controllers">
+                <div class="row">
+                    <div class="col-12">
+                        <h3>Controllers</h3>
+                        <hr>
+                    </div>
+                    <div class="col-12">
+                        <p>
+                            La carpeta <i>/controllers</i> contiene los controladores para cada ruta disponibles de la [API], cada archivo corresponde con una unica entidad. La repsonsabilidad del controlador es unicamente gestionar las peticiones HTTP, por su parte cada método del controlador llama a una función del Servicio.
+                        </p>
+                        <p>
+                            El formato de un archivo controlador es el siguiente: 
+                            <code>
+                                <pre>
+                                    import RecursoSvc from './root/services/recurso.service.js'
+
+                                    let getAll = async (req, res) => {
+                                        try {
+                                            let recurso = await recursoSvs.metodo(req);
+                                            res.status(200).json(recurso);
+                                        } catch (e) {
+                                            res.status(500).json({'error': error})
+                                        }
+                                    }
+                                    . . . 
+                                    const RecursoCtrl = { getAllRecurso };
+                                    export default RecursoCtrl;
+                                </pre>
+                            </code>
+                        </p>
+                        <p>
+                            Cada controlador tiene cinco funciones básicas : 
+                            <ul>
+                                <li>GetAll</li>
+                                <li>GetOne</li>
+                                <li>PostOne</li>
+                                <li>UpdateOne</li>
+                                <li>DeleteOne</li>
+                                <li>Active</li>
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+            </article>
+            <article id="services">
+                <div class="row">
+                    <div class="col-12">
+                        <h3>Services</h3>
+                        <hr>
+                    </div>
+                    <div class="col-12">
+                        <p>
+                            La carpeta <i>/services</i> contiene los servicios para cada controlador disponibles de la [API], cada archivo corresponde con una unica entidad. La repsonsabilidad del servicio es gestionar la lógica implícita, por su parte cada método del servicio llama a uno o varions <i>model</i>.
+                        </p>
+                        <p>
+                            El formato de un archivo service es el siguiente: 
+                            <code>
+                                <pre>
+                                    import RecursoModel from './root/model/recurso.model.js'
+
+                                    let findAllRecurso = async (reqRecurso) => {
+                                        try {
+                                            let recurso = await RecursoModel.metodoMongoose(reqRecurso=null);
+                                            return recurso;
+                                        } catch (e) {
+                                            console.error(`Error Recurso Service : ${e}`);
+                                        }
+                                    }
+                                    . . . 
+                                    const RecursoSvc = { findAllRecurso };
+                                    export default RecursoSvc;
+                                </pre>
+                            </code>
+                        </p>
+                    </div>
+                    <div class="col-12">
+                        <h4>Aclaraciones</h4>
+                        <p>
+                            Los metodos <code>findAllRecurso()</code> y <code>findOneRecurso()</code> retornar un arreglo o un objeto siempre y cuando este tenga la propiedad <code>active: true</code>
+                        </p>
+                        <p>
+                            La función <i>deleteOne[recurso]</i> solo realiza un "soft delete" (baja lógica), cuyo paramatro deben ser el <code>uid</code> del usuario, cambia la propiedad <i>delete</i> por un objeto <code>{user_uid: uid, deleteAt: Date}</code> y modifica el estado de <i>active</i> a <code>false</code>. 
+                        </p>
+                        <p>
+                            El método <i>active</i> realiza todo lo contrario cambia la propiedad <i>delete</i> por un objeto vacio <code>{ }</code>, que es ignorado automaticamente por mongoose a la hora de realizar operaciones. Por último cambia el estado de <i>active</i> a <code>true</code>.
+                        </p>
+                        <p>
+                            La función <a href="https://mongoosejs.com/docs/populate.html">populate</a> realiza un <i>join</i> de subdocumentos, en vez de retornar un atributo <code>_id: id</code> devuelve el objeto en cuestion. 
+                        </p>
+                    </div>
+                </div>
+            </article>
+            <article id="middleware">
+                <div class="row">
+                    <div class="col-12">
+                        <h3>Middleware</h3>
+                        <hr>
+                    </div>
+                    <div class="col-12">
+                        <p>No implementado</p>
+                    </div>
+                </div>
+            </article>
+        </section>
+        <section id="links" class="container my-5">
             <div class="row">
+                <div class="col-12 mb-3">
+                    <h1>Bibliografía</h1>
+                </div>
                 <div class="col-12">
-                    <h1 class="text-center">Documentación Oficial para el Backend</h1>
+                    <ul>
+                        <li>
+                            <a href="https://expressjs.com/es/">Express</a>
+                        </li>
+                        <li>
+                            <a href="https://mongoosejs.com/docs/guide.html">Mongoose</a>
+                        </li>
+                        <li>
+                            <a href="https://docs.mongodb.com/manual/">MongoDB</a>
+                        </li>
+                    </ul>
+                    </p>
                 </div>
             </div>
         </section>
-    </div>
+    </main>
+    <!-- Bootstrap -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
 </body>
 </html>
