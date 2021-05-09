@@ -27,7 +27,7 @@ npm run build
 Revisar la carpeta 'dist' creada donde se encontrará el proyecto compilado.
 
 ## Documentación
-[https://franco-morales.github.io/Delivery-App-Back/](Docs)
+[Docs](https://franco-morales.github.io/Delivery-App-Back/)
 
 ## Tecnologías
 * [Express.js](https://www.npmjs.com/package/express)
