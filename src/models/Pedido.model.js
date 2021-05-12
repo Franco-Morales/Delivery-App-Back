@@ -4,7 +4,7 @@ import { Schema, model } from "mongoose";
 const PedidoSchema = new Schema({
     fecha: Date,
     estado: String,
-    horaEstimadaFin: Date,
+    horaEstimadaFin: Number,
     tipoEnvio: Number,
     total: Number,
     // Cliente

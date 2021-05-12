@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 
 
 const ArtManufactSchema = new Schema({
-    tiempoEstimado: String,
+    tiempoEstimado: Number,
     denominacion: String,
     precioVenta: Number,
     img: String,
