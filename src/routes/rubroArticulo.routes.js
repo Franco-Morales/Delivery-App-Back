@@ -1,4 +1,5 @@
 import { Router } from "express";
+import middleware from '../middlewares/user.middleware'
 import RubArtCtrl from "../controllers/rubroArticulo.controller";
 
 

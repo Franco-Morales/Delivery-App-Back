@@ -77,7 +77,7 @@
             <article id="app-server">
                 <div class="row">
                     <div class="col-12">
-                        <h3>App.js, Server.js y Database.js</h3>
+                        <h3>App.js, Server.js, Database.js y Firebase.js</h3>
                         <hr>
                     </div>
                     <div class="col-12">
@@ -85,8 +85,9 @@
                             El archivo <i>server.js</i> crea una instancia de <i>Express()</i> y la exporta para que el script <i>App.js</i> lo incialize mediante el metodo asíncrono <i>main()</i>.
                         </p>
                         <p>
-                            El archivo <i>databe.js</i> contiene la conexión a MongoDB mendiante mongoose.
+                            El archivo <i>database.js</i> contiene la conexión a MongoDB mendiante mongoose.
                         </p>
+                        <p>El archivo <i>firebase.js</i> es donde se realiza la conexion y certificacion al SDK del proyecto de Firebase en cuestion. Exporta al administrador del SDK</p>
                     </div>
                 </div>
             </article>
@@ -101,7 +102,7 @@
                             La carpeta <i>/routes</i> contiene todas las rutas disponibles de la [API], cada archivo correspone con una unica entidad. La URL básica para acceder a un recurso es mediante: <code>http://localhost:2021/api/v1/recurso</code>.
                         </p>
                         <p>
-                            El formato de un archivo routes es el siguiente: 
+                            El formato de un archivo routes es el siguiente:
                             <code>
                                 <pre>
                                     router.get(url,function);
@@ -109,7 +110,7 @@
                             </code>
                         </p>
                         <p>
-                            Lista de vervos HTTP soportados : 
+                            Lista de vervos HTTP soportados :
                             <ul>
                                 <li>DELETE</li>
                                 <li>GET</li>
@@ -152,10 +153,10 @@
                     </div>
                     <div class="col-12">
                         <p>
-                            La carpeta <i>/models</i> contiene los modelos que corresponden con una unica entidad. 
+                            La carpeta <i>/models</i> contiene los modelos que corresponden con una unica entidad.
                         </p>
                         <p>
-                            Ejemplo básico de un modelo : 
+                            Ejemplo básico de un modelo :
                             <code>
                                 <pre>
                                     import { Schema, model } from 'mongoose';
@@ -167,7 +168,7 @@
                                     export default model('recursoModel',schemaRecurso);
                                 </pre>
                             </code>
-                            Los modelos utilizados tienen propiedades en común que son : 
+                            Los modelos utilizados tienen propiedades en común que son :
                             <ul>
                                 <li><code>_id</code> creada automaticamente por mongoose</li>
                                 <li><code>active</code> creada automaticamente en modelo, no nativa de mongoose</li>
@@ -189,7 +190,7 @@
                             La carpeta <i>/controllers</i> contiene los controladores para cada ruta disponibles de la [API], cada archivo corresponde con una unica entidad. La repsonsabilidad del controlador es unicamente gestionar las peticiones HTTP, por su parte cada método del controlador llama a una función del Servicio.
                         </p>
                         <p>
-                            El formato de un archivo controlador es el siguiente: 
+                            El formato de un archivo controlador es el siguiente:
                             <code>
                                 <pre>
                                     import RecursoSvc from './root/services/recurso.service.js'
@@ -202,14 +203,14 @@
                                             res.status(500).json({'error': error})
                                         }
                                     }
-                                    . . . 
+                                    . . .
                                     const RecursoCtrl = { getAllRecurso };
                                     export default RecursoCtrl;
                                 </pre>
                             </code>
                         </p>
                         <p>
-                            Cada controlador tiene cinco funciones básicas : 
+                            Cada controlador tiene cinco funciones básicas :
                             <ul>
                                 <li>GetAll</li>
                                 <li>GetOne</li>
@@ -233,7 +234,7 @@
                             La carpeta <i>/services</i> contiene los servicios para cada controlador disponibles de la [API], cada archivo corresponde con una unica entidad. La repsonsabilidad del servicio es gestionar la lógica implícita, por su parte cada método del servicio llama a uno o varions <i>model</i>.
                         </p>
                         <p>
-                            El formato de un archivo service es el siguiente: 
+                            El formato de un archivo service es el siguiente:
                             <code>
                                 <pre>
                                     import RecursoModel from './root/model/recurso.model.js'
@@ -246,7 +247,7 @@
                                             console.error(`Error Recurso Service : ${e}`);
                                         }
                                     }
-                                    . . . 
+                                    . . .
                                     const RecursoSvc = { findAllRecurso };
                                     export default RecursoSvc;
                                 </pre>
@@ -259,13 +260,13 @@
                             Los metodos <code>findAllRecurso()</code> y <code>findOneRecurso()</code> retornar un arreglo o un objeto siempre y cuando este tenga la propiedad <code>active: true</code>
                         </p>
                         <p>
-                            La función <i>deleteOne[recurso]</i> solo realiza un "soft delete" (baja lógica), cuyo paramatro deben ser el <code>uid</code> del usuario, cambia la propiedad <i>delete</i> por un objeto <code>{user_uid: uid, deleteAt: Date}</code> y modifica el estado de <i>active</i> a <code>false</code>. 
+                            La función <i>deleteOne[recurso]</i> solo realiza un "soft delete" (baja lógica), cuyo paramatro deben ser el <code>uid</code> del usuario, cambia la propiedad <i>delete</i> por un objeto <code>{user_uid: uid, deleteAt: Date}</code> y modifica el estado de <i>active</i> a <code>false</code>.
                         </p>
                         <p>
                             El método <i>active</i> realiza todo lo contrario cambia la propiedad <i>delete</i> por un objeto vacio <code>{ }</code>, que es ignorado automaticamente por mongoose a la hora de realizar operaciones. Por último cambia el estado de <i>active</i> a <code>true</code>.
                         </p>
                         <p>
-                            La función <a href="https://mongoosejs.com/docs/populate.html">populate</a> realiza un <i>join</i> de subdocumentos, en vez de retornar un atributo <code>_id: id</code> devuelve el objeto en cuestion. 
+                            La función <a href="https://mongoosejs.com/docs/populate.html">populate</a> realiza un <i>join</i> de subdocumentos, en vez de retornar un atributo <code>_id: id</code> devuelve el objeto en cuestion.
                         </p>
                     </div>
                 </div>
@@ -277,7 +278,11 @@
                         <hr>
                     </div>
                     <div class="col-12">
-                        <p>No implementado</p>
+                        <p>La carpeta /middlewares contiene el unico middleware llamado user.middleware. Verifica si existe el usuario en una coleccion de firestore (base de datos del proyecto de Firebase) mediante un request.body.uid dejandolo continuar si existe, en cambio si no existe no puede continuar.</p>
+                        <p>El middleware crea una instancia de el archivo firebase.js para obtener el administrador.</p>
+                        <p>Utiliza el request body de la ruta para obtener el id del usuario.</p>
+                        <p>Es llamado antes de la ruta a utilizar.</p>
+                        <p>La funciones <a href="#">existUser</a> realiza una validacion de si el usuario existe , retorna un next() caso de encontrarlo , sino devuelve un status de 400. </p>
                     </div>
                 </div>
             </article>
