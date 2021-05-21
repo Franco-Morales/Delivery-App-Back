@@ -5,6 +5,7 @@ import RubArtCtrl from "../controllers/rubroArticulo.controller";
 
 const router = Router();
 
+//router.use(middleware.existUser).get('/rubroarticulo',RubArtCtrl.getAll);
 router.get('/rubroarticulo',RubArtCtrl.getAll);
 router.post('/rubroarticulo',RubArtCtrl.postOne);
 
