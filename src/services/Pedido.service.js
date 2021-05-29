@@ -22,6 +22,18 @@ let findAllPedido = async() => {
   }
 }
 
+//Find All Pedido by User Firebase ID
+let findAllByUser = async (pedidoReq) => {
+  let fid = pedidoReq.params.fid;
+  let filter = { active: true, 'Cliente.firebase_id': fid };
+  try {
+    let pedidoByUser = await Pedido.aggregate([{'$match': filter}]);
+    return pedidoByUser;
+  } catch (error) {
+    console.error(`Error Svc Pedido : ${error}`);
+  }
+}
+
 //Find One Pedido
 let findOnePedido = async(pedidoReq) => {
   let _id = pedidoReq.params.id;
@@ -97,6 +109,6 @@ let activePedido = async (pedidoReq) =>{
 /**
  * Pedido Service
  */
-const PedidoSvc = {findAllPedido, findOnePedido, savePedido, updatePedido, deletePedido, activePedido};
+const PedidoSvc = {findAllPedido, findAllByUser, findOnePedido, savePedido, updatePedido, deletePedido, activePedido};
 
 export default PedidoSvc;

@@ -14,6 +14,15 @@ let getAll = async (req,res) => {
   }
 }
 
+let getAllbyUser = async (req, res) => {
+  try {
+    let pedidoUser = await PedidoSvc.findAllByUser(req);
+    res.status(200).json(pedidoUser);
+  } catch (error) {
+    res.status(500).json({"error":error});
+  }
+}
+
 let getOne = async (req,res) => {
   try {
     let pedido = await PedidoSvc.findOnePedido(req)
@@ -67,6 +76,6 @@ let active = async (req,res) => {
 /**
 * Pedido Controller
 */
-const PedidoCtrl = { getAll, getOne, postOne, updateOne, deleteOne, active };
+const PedidoCtrl = { getAll, getAllbyUser, getOne, postOne, updateOne, deleteOne, active };
 
 export default PedidoCtrl;

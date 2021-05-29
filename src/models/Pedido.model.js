@@ -4,17 +4,18 @@ import { Schema, model } from "mongoose";
 const PedidoSchema = new Schema({
     fecha: Date,
     estado: String,
-    horaEstimadaFin: Date,
+    horaEstimadaFin: Number,
     tipoEnvio: Number,
     total: Number,
     // Cliente
     Cliente: {
-        id : String,
+        firebase_id : String,
         Domicilio : {
             calle: String,
             numero: String,
             localidad: String
-        }
+        },
+        _id: false
     },
     //
     DetallePedido: [
