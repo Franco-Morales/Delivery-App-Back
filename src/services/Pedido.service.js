@@ -3,7 +3,19 @@ import Pedido from "../models/pedido.model";
 //Find All Pedido
 let findAllPedido = async() => {
   try {
-      let pedidos = await Pedido.find({ active: true }).populate('MdoPago');
+      let pedidos = await Pedido.find({ active: true }).populate({
+        path:'DetallePedido',
+        populate:{
+          path:'ArtManufact',
+          model: 'ArtManufact'
+        }
+      }).populate({
+        path:'DetallePedido',
+        populate:{
+          path:'ArticuloInsumo',
+          model:'ArtInsumo'
+        }
+      })
       return pedidos;
   } catch (error) {
     console.error(`Error Svc Pedido : ${error}`);
