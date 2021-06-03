@@ -3,7 +3,13 @@ import RubroArticulo from "../models/rubroArticulo.model";
 //Find All Rubro Articulo
 let findAllRubroArticulo = async() => {
   try {
-    let rubArticulos = await RubroArticulo.find({ active: true });
+    let rubArticulos = await RubroArticulo.find({ active: true }).populate({
+      path: 'RubArtPadre',
+      populate: {
+        path: 'RubArtPadre',
+        model: 'RubroArticulo'
+      } 
+    });
     return rubArticulos;
   } catch (error) {
     console.error(`Error Svc Rubro Art : ${error}`);
@@ -15,7 +21,13 @@ let findOneRubroArticulo = async(rubArtReq) => {
   let _id = rubArtReq.params.id;
   let filter = { _id, active: true };
   try {
-    let rubArticulo = await RubroArticulo.find(filter);
+    let rubArticulo = await RubroArticulo.findOne(filter).populate({
+      path: 'RubArtPadre',
+      populate: {
+        path: 'RubArtPadre',
+        model: 'RubroArticulo'
+      } 
+    });
     return rubArticulo;
   } catch (error) {
     console.error(`Error Svc Rubro Art : ${error}`);
@@ -25,8 +37,8 @@ let findOneRubroArticulo = async(rubArtReq) => {
 //Save Rubro Articulo
 let saveRubroArticulo = async (rubArtReq) => {
   try {
-    let { denominacion } = rubArtReq.body;
-    let rubArticulo = RubroArticulo({denominacion,active:true});
+    let { denominacion, RubArtPadre } = rubArtReq.body;
+    let rubArticulo = RubroArticulo({denominacion,RubArtPadre,active:true});
     let rubArtSaved = await rubArticulo.save();
     return rubArtSaved;
   } catch (error) {
