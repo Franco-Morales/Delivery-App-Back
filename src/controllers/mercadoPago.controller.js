@@ -1,5 +1,7 @@
 import MercadoPagoSvc from "../services/mercadoPago.service";
-
+import ConfigSvc from "../services/Config.service";
+import PedidoSvc from "../services/Pedido.service"
+import mercadopago from 'mercadopago';
 
 let getAll = async (req,res) => {
     try {
@@ -49,12 +51,67 @@ let getAll = async (req,res) => {
     }
   }
 
+  let checkout = async(req,res) => {
+    try {
+      let config = await ConfigSvc.findFirstConfig();
+      mercadopago.configure({
+        access_token: config.tokenMercadoPago
+      })
+      let preference = await MercadoPagoSvc.createPreference({
+        uidUsuario:req.body.uidUsuario,
+        uidPedido: req.body.uidPedido,
+        titulo:req.body.titulo,
+        descripcion:req.body.descripcion,
+        precioTotal:req.body.precioTotal
+      })
+      mercadopago.preferences.create(preference)
+      .then(resp => {
+        res.status(200).json(resp.body.init_point)
+      })
+      .catch(error => res.status(500).json({"error":error.message}))
+    } catch (error) {
+      res.status(500).json({"error":error.message});
+    }
+  }
+
+  let getDataPago = async(req,res) => {
+    try {
+      let config = await ConfigSvc.findFirstConfig();
+      let pago = await MercadoPagoSvc.getDataPagoByPedido({
+        uidPedido: req.params.id,
+        tokenMercadoPago: config.tokenMercadoPago
+      });
+      let pedidoMdo = await PedidoSvc.findOnePedido(req)
+      if(pedidoMdo.MdoPago == null || pago.status == "pending"){
+        let mdoPagoCreated = await MercadoPagoSvc.saveMercadoPago({identificadorPago: pago.id ,
+        fechaCreacion: pago.card.date_created ,
+        fechaAprobacion: pago.date_approved,
+        formaPago: pago.payment_type_id,
+        metodoPago: pago.payment_method_id,
+        nroTarjeta: pago.card.first_six_digits+"XXXXXX"+pago.card.last_four_digits,
+        estado: pago.status})
+        let mdoPedido = {
+          params:{
+            id: req.params.id
+          },
+          body:{
+            MdoPago: mdoPagoCreated._id
+          }
+        }
+        let updatePedido = await PedidoSvc.updatePedido(mdoPedido)
+        res.status(200).json(mdoPagoCreated)
+      }
+    } catch (error) {
+      res.status(500).json({"error":error.message});
+    }
+  }
+
   let deleteOne = async (req,res) => {
     try {
       let mdoPagoDeleted = await MercadoPagoSvc.deleteMercadoPago(req);
       res.status(200).json(mdoPagoDeleted);
     } catch (error) {
-      res.status(500).json({"error":error});
+      res.status(500).json({"error":error.message});
     }
   }
 
@@ -63,7 +120,7 @@ let getAll = async (req,res) => {
       let mdoPagoActived = await MercadoPagoSvc.activeMercadoPago(req);
       res.status(202).json(mdoPagoActived);
     } catch (error) {
-      res.status(500).json({"error":error});
+      res.status(500).json({"error":error.message});
     }
   }
 
@@ -71,6 +128,6 @@ let getAll = async (req,res) => {
   /**
   * Mercado Pago Controller
   */
-  const MercadoPagoCtrl = { getAll, getOne, postOne, updateOne, deleteOne, active };
+  const MercadoPagoCtrl = { getAll, getOne, postOne, updateOne, checkout, getDataPago, deleteOne, active };
 
   export default MercadoPagoCtrl;

@@ -9,6 +9,15 @@ let findOneConfig = async(configReq) => {
       console.error(`Error Svc Config: ${error}`);
     }
 }
+//Find First Config
+let findFirstConfig = async(configReq) => {
+  try {
+    let config = await Config.find({});
+    return config[0];
+  } catch (error) {
+    console.error(`Error Svc Config: ${error.message}`);
+  }
+}
 //Post Config
 let postConfig = async (configReq) => {
   let { emailEmpresa, tokenMercadoPago, lat, lng } = configReq.body;
@@ -35,6 +44,6 @@ let updateConfig = async (configReq) =>{
 /**
  * Config Service
  */
-const ConfigSvc = {findOneConfig, updateConfig, postConfig};
+const ConfigSvc = {findOneConfig, findFirstConfig, updateConfig, postConfig};
 
 export default ConfigSvc;
