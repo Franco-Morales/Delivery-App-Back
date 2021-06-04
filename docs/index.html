@@ -40,6 +40,9 @@
                     <a href="#middleware">Middleware</a>
                 </li>
                 <li>
+                    <a href="#invModule">Inventario</a>
+                </li>
+                <li>
                     <a href="#links">Bibliografía</a>
                 </li>
             </ul>
@@ -62,6 +65,7 @@
                             Dentro del directorio /src se encuentran 5 carpetas y 4 archivos importantes, los cuales son :
                             <ul>
                                 <li>/controllers</li>
+                                <li>/inventario</li>
                                 <li>/middlewares</li>
                                 <li>/models</li>
                                 <li>/routes</li>
@@ -282,7 +286,47 @@
                         <p>El middleware crea una instancia de el archivo firebase.js para obtener el administrador.</p>
                         <p>Utiliza el request body de la ruta para obtener el id del usuario.</p>
                         <p>Es llamado antes de la ruta a utilizar.</p>
-                        <p>La funciones <a href="#">existUser</a> realiza una validacion de si el usuario existe , retorna un next() caso de encontrarlo , sino devuelve un status de 400. </p>
+                        <p>La funciones <code>existUser()</code> realiza una validacion de si el usuario existe , retorna un next() caso de encontrarlo , sino devuelve un status de 400. </p>
+                    </div>
+                </div>
+            </article>
+            <article id="invModule">
+                <div class="row">
+                    <div class="col-12">
+                        <h3>Inventario</h3>
+                        <hr>
+                    </div>
+                    <div class="col-12">
+                        <p>La carpeta /inventario contiene el módulo del control de stock llamado <code>inventario.js</code></p>
+                        <p>Las funciones que exporta el módulo son <code>restarStock()</code> y <code>preValidate()</code></p>
+                    </div>
+                    <div class="col-12">
+                        <h4>Funcion : restarStock()</h4>
+                        <p>La función recibe un objeto pedido previamente validado que itera sobre las propiedade <i>DetallePedido</i>, para llamar a dos funciones auxliares que gestionan independientemente el stock de <i>Artículo Insumo</i> y <i>Artículo Manufacturado</i> .</p>
+                    </div>
+                    <div class="col-12">
+                        <h4>Funcion : preValidate()</h4>
+                        <p>La función recibe un objeto pedido que itera sobre las propiedade <i>DetallePedido</i>, para verificar si se puede realizar el pedido pasado por parametro.</p>
+                        <p>Retorna un objeto que contiene un arreglo de ids y estados de stock para cada <i>Artículo Insumo</i> y <i>Artículo Manufacturado</i> respectivamente, junto a otra propiedad booleana llamada stock, que contiene el estado global del pedido.</p>
+                        <p>
+                            <pre>
+                                <code>
+                                    stock = { 
+                                        artInsumo: [
+                                            { _id: id, stockStatus: boolean}
+                                        ], 
+                                        artManufact: [
+                                            { _id: id, stockStatus: boolean}
+                                        ], 
+                                        status: boolean
+                                    };
+                                </code>
+                            </pre>
+                        </p>
+                    </div>
+                    <div class="col-12">
+                        <h4>Funciones auxiliares</h4>
+                        <p>Las funciones auxiliares se encuentran documentadas en el <a href="https://github.com/Franco-Morales/Delivery-App-Back/blob/desarrollo/src/inventario/inventario.js">código</a></p>
                     </div>
                 </div>
             </article>
