@@ -82,7 +82,9 @@ let getAll = async (req,res) => {
         tokenMercadoPago: config.tokenMercadoPago
       });
       let pedidoMdo = await PedidoSvc.findOnePedido(req)
-      if(pedidoMdo.MdoPago == null || pago.status == "pending"){
+
+      if(pedidoMdo.MdoPago == null){
+        //Crear Mercado Pago
         let mdoPagoCreated = await MercadoPagoSvc.saveMercadoPago({identificadorPago: pago.id ,
         fechaCreacion: pago.card.date_created ,
         fechaAprobacion: pago.date_approved,
@@ -95,11 +97,23 @@ let getAll = async (req,res) => {
             id: req.params.id
           },
           body:{
-            MdoPago: mdoPagoCreated._id
+            MdoPago: mdoPagoCreated._id,
+            estado: pago.status == 'approved' ? 'aprobado' : 'en espera'
           }
         }
-        let updatePedido = await PedidoSvc.updatePedido(mdoPedido)
+        await PedidoSvc.updatePedido(mdoPedido)
         res.status(200).json(mdoPagoCreated)
+      }else{
+        let mdoFind = await MercadoPagoSvc.findOneMercadoPago({id:pedidoMdo.MdoPago})
+        if(mdoFind.estado != pago.status){
+            mdoFind = await MercadoPagoSvc.updateMercadoPago({
+              id: pedidoMdo.MdoPago,
+              estado: pago.status,
+              fechaAprobacion: pago.date_approved
+            })
+            await PedidoSvc.updatePedido({params:{id:req.params.id},body:{estado:pago.status == 'approved' ? 'aprobado' : 'en espera'}})
+        }
+        res.status(200).json(mdoFind)
       }
     } catch (error) {
       res.status(500).json({"error":error.message});

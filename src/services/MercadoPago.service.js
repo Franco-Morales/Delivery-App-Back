@@ -38,7 +38,7 @@ let saveMercadoPago = async (mdoPagoReq) => {
 //Update Mercado Pago
 let updateMercadoPago = async (mdoPagoReq) =>{
   try {
-    let mdoPagoUpdated = await MercadoPago.findOneAndUpdate({_id: mdoPagoReq.params.id},mdoPagoReq.body,{new:true});
+    let mdoPagoUpdated = await MercadoPago.findOneAndUpdate({_id: mdoPagoReq.id},mdoPagoReq,{new:true});
     return mdoPagoUpdated;
   } catch (error) {
     console.error(`Error Svc MdoPago : ${error.message}`);
