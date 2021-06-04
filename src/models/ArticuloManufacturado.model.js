@@ -6,6 +6,7 @@ const ArtManufactSchema = new Schema({
     denominacion: String,
     precioVenta: Number,
     img: String,
+    stock: Boolean,
     // ArticuloManufacturadoDetalle
     ArtManufactDet: [
         {
@@ -32,6 +33,24 @@ const ArtManufactSchema = new Schema({
         default: {}
     }
 });
+
+ArtManufactSchema.statics.stockValidation = async function(artManufactId) {
+    let artManufactDetStock = [];
+
+    try {
+        let artManufact = await this.findOne({_id:artManufactId}).populate('ArtManufactDet.ArtInsumo');
+    
+        artManufact.ArtManufactDet.forEach( detalle => {
+            artManufactDetStock.push({ stock: detalle.ArtInsumo.stock });
+        });
+        let aux = artManufactDetStock.every( item => item.stock);
+        artManufact.stock = aux;
+        await artManufact.save();
+    } catch (error) {
+        console.error(`Model : ArtManufact : Statics : Error : ${error}`);
+    }
+}
+
 
 
 export default model('ArtManufact',ArtManufactSchema);

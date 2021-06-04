@@ -9,6 +9,7 @@ const ArtInsumoSchema = new Schema({
     precioVenta: Number,
     stockActual: Number,
     stockMinimo: Number,
+    stock: Boolean,
     unidadMedida: String,
     esInsumo: Schema.Types.Boolean,
     //RubroInsumo
@@ -27,7 +28,8 @@ const ArtInsumoSchema = new Schema({
 });
 
 ArtInsumoSchema.methods.stockValidation = function() {
-    return (this.stockActual>this.stockMinimo);
+    this.stock = (this.stockActual>this.stockMinimo);
+    return this.stock;
 };
 
 export default model('ArtInsumo',ArtInsumoSchema);
