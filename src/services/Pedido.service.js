@@ -1,9 +1,10 @@
 import Pedido from "../models/pedido.model";
-
+import Inventario from "../inventario/inventario";
 //Find All Pedido
 let findAllPedido = async() => {
   try {
-      let pedidos = await Pedido.find({ active: true }).populate({
+      let pedidos = await Pedido.find({ active: true })
+      .populate({
         path:'DetallePedido',
         populate:{
           path:'ArtManufact',
@@ -15,7 +16,8 @@ let findAllPedido = async() => {
           path:'ArticuloInsumo',
           model:'ArtInsumo'
         }
-      })
+      });
+
       return pedidos;
   } catch (error) {
     console.error(`Error Svc Pedido : ${error}`);
@@ -51,8 +53,10 @@ let savePedido = async (pedidoReq) => {
   try {
     let { fecha, estado, horaEstimadaFin, tipoEnvio, total, Cliente, DetallePedido, Factura, MdoPago} = pedidoReq.body;
     let pedido = Pedido({fecha, estado, horaEstimadaFin, tipoEnvio, total, Cliente, DetallePedido, Factura, MdoPago,active:true});
-    let pedidoSaved = await pedido.save();
-    return pedidoSaved;
+    Inventario.preValidate(pedido);
+    // let pedidoSaved = await pedido.save();
+    // return pedidoSaved;
+    return pedido;
   } catch (error) {
       console.error(`Error Svc Pedido : ${error}`);
   }

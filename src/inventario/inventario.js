@@ -1,4 +1,5 @@
 import ArticuloInsumo from "../models/articuloInsumo.model";
+import ArticuloManufacturadoModel from "../models/ArticuloManufacturado.model";
 
 /**
  * Resta los articulos insumo de cada pedido, el pedido debe estar previamente validado.
@@ -78,7 +79,7 @@ const preValidate = async (pedido) => {
         }
     }
     stock.status = validateStockState(stock);
-    console.log(stock);
+
     return stock;
 }
 
@@ -111,14 +112,16 @@ let artInsumoStockValidate = async (cantidadPedido, articuloInsumo) => {
  * Retorna un objeto con el id del artManufactirado y un estado de stock, que prevalida el pedido actual.
  * Si stockStatus es true, se puede descontar del inventario, caso contrario stockActual será falso.
  * No exportable.
- * @param {number} cantidadPedido 
- * @param {*} articuloManufact 
+ * @param {number} CantidadPedido 
+ * @param {any} ArticuloManufacturadoID
  * @returns 
  */
-let artManufactStockValidate = async (cantidadPedido, articuloManufact) => {
-    let auxObj = { _id: articuloManufact._id, stockStatus: true };
+let artManufactStockValidate = async (cantidadPedido, artmanufactId) => {
+    let auxObj = { _id: artmanufactId, stockStatus: true };
     // Todos los articulos insumos de un Articulo Manufactarado en específico
     let artsInsumo = [];
+
+    let articuloManufact = await ArticuloManufacturadoModel.findOne({ _id:artmanufactId});
 
     articuloManufact.ArtManufactDet.forEach( artIns => {
         let auxArtIns = { _id:"", cantidad: 0 };
@@ -137,7 +140,7 @@ let artManufactStockValidate = async (cantidadPedido, articuloManufact) => {
                 return auxObj;
             }
         } catch (error) {
-            console.error(error);
+            console.error(`Module : Inventario : Error : ${error}`);
         }
     }
     return auxObj;

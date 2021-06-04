@@ -27,9 +27,14 @@ const ArtInsumoSchema = new Schema({
   }
 });
 
+
 ArtInsumoSchema.methods.stockValidation = function() {
-    this.stock = (this.stockActual>this.stockMinimo);
-    return this.stock;
+    return (this.stockActual > this.stockMinimo);
 };
+
+ArtInsumoSchema.methods.updateStock = function() {
+    this.stock = (this.stockActual > this.stockMinimo);
+}
+
 
 export default model('ArtInsumo',ArtInsumoSchema);

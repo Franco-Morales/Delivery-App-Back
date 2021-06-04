@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, models } from "mongoose";
 
 
 const ArtManufactSchema = new Schema({
@@ -52,5 +52,4 @@ ArtManufactSchema.statics.stockValidation = async function(artManufactId) {
 }
 
 
-
-export default model('ArtManufact',ArtManufactSchema);
+export default models.ArtManufact || model('ArtManufact',ArtManufactSchema);
