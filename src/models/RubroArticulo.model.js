@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, models } from "mongoose";
 
 /**
  * Modelo RubroArticulo
@@ -21,4 +21,4 @@ const RubArtSchema = new Schema({
 });
 
 
-export default model('RubroArticulo',RubArtSchema);
+export default models.RubroArticulo || model('RubroArticulo',RubArtSchema);

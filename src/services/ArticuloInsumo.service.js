@@ -2,7 +2,7 @@ import ArticuloInsumo from "../models/articuloInsumo.model";
 
 
 //Find All Articulo Insumo
-let findAllArticuloInsumo = async(method='crud') => {
+let findAllArticuloInsumo = async(method=null) => {
   let artIns = []
   try {
     if(method==='menu') {
@@ -23,6 +23,21 @@ let findOneArticuloInsumo = async(artInReq) => {
   let filter = { _id, active: true };
   try {
     let artIn = await ArticuloInsumo.findOne(filter).populate('RubArt');
+    return artIn;
+  } catch (error) {
+    console.error(`Error Svc Art Insumo : ${error}`);
+  }
+}
+
+// Search Articulo Insumo
+let searchArticuloInsumo = async (query) => {
+  let filter = { 
+    active: true, 
+    esInsumo: false, 
+    denominacion: { $regex: new RegExp(query,'i') }
+  };
+  try {
+    let artIn = await ArticuloInsumo.find(filter);
     return artIn;
   } catch (error) {
     console.error(`Error Svc Art Insumo : ${error}`);
@@ -96,6 +111,7 @@ let activeArticuloInsumo = async (artInReq) => {
 const ArticuloInsumoSvc = {
   findAllArticuloInsumo,
   findOneArticuloInsumo,
+  searchArticuloInsumo,
   saveArticuloInsumo,
   updateArticuloInsumo,
   deleteArticuloInsumo,

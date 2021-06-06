@@ -22,6 +22,23 @@ let findOneArticuloManufacturado = async(artManFacsReq) => {
   }
 }
 
+//Search Articulo Manufacturado
+let searchArticuloManufacturado = async (query) => {
+  let filter = { 
+    active: true,
+    denominacion: {
+      $regex: new RegExp(query,'i')
+    } 
+  };
+
+  try {
+    let artManFac = await ArtManufactModel.find(filter);
+    return artManFac;
+  } catch (error) {
+    console.error(`Error Svc ArtManufact: ${error}`);
+  }
+}
+
 //Save ArticuloManufacturado
 let saveArticuloManufacturado = async (artManFacsReq) => {
   let { tiempoEstimado, denominacion , precioVenta ,img ,ArtManufactDet, RubroGeneral } = artManFacsReq.body;
@@ -90,6 +107,7 @@ let activeArticuloManufacturado= async (artManFacsReq) =>{
 const ArticuloManufacturadoSvc = {
   findAllArticuloManufacturado,
   findOneArticuloManufacturado,
+  searchArticuloManufacturado,
   saveArticuloManufacturado,
   updateArticuloManufacturado,
   deleteArticuloManufacturado,
