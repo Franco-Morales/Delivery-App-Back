@@ -9,10 +9,17 @@ let getAllMenu = async (req, res) => {
     try {
 
         if (req.query.search) {
+            // console.log('query');
             let artIns = await ArtInsumoSvc.searchArticuloInsumo(req.query.search);
             let artManufact = await ArtManufactSvc.searchArticuloManufacturado(req.query.search);
             menu = [...artIns, ...artManufact];
+        } else if(req.query.filter){
+            // console.log('filter');
+            let artIns = await ArtInsumoSvc.filterArtInsumoByRubroArt(req.query.filter);
+            let artManufact = await ArtManufactSvc.filterArtManufactByRubroGnl(req.query.filter);
+            menu = [...artIns, ...artManufact];
         } else {
+            // console.log('menu');
             let artIns = await ArtInsumoSvc.findAllArticuloInsumo('menu');
             let artManufact = await ArtManufactSvc.findAllArticuloManufacturado();
             menu = [...artIns, ...artManufact];

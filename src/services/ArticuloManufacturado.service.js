@@ -1,4 +1,6 @@
+import { Types } from "mongoose";
 import ArtManufactModel from "../models/articuloManufacturado.model";
+// import RubroGeneral from "../models/rubroGeneral.model";
 
 //Find All ArticuloManufacturado
 let findAllArticuloManufacturado = async() => {
@@ -33,6 +35,24 @@ let searchArticuloManufacturado = async (query) => {
 
   try {
     let artManFac = await ArtManufactModel.find(filter);
+    return artManFac;
+  } catch (error) {
+    console.error(`Error Svc ArtManufact: ${error}`);
+  }
+}
+
+//Filter Articulo Manufacturado By Rubro General
+let filterArtManufactByRubroGnl = async (rubGnlId) => {
+
+  try {
+    let artManFac = await ArtManufactModel.aggregate([
+      {
+        $match: { 
+          active: true,
+          RubroGeneral: Types.ObjectId(rubGnlId)
+        }
+      }
+    ]);
     return artManFac;
   } catch (error) {
     console.error(`Error Svc ArtManufact: ${error}`);
@@ -108,6 +128,7 @@ const ArticuloManufacturadoSvc = {
   findAllArticuloManufacturado,
   findOneArticuloManufacturado,
   searchArticuloManufacturado,
+  filterArtManufactByRubroGnl,
   saveArticuloManufacturado,
   updateArticuloManufacturado,
   deleteArticuloManufacturado,

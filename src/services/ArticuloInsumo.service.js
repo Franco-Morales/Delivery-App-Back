@@ -1,5 +1,5 @@
+import { Types } from "mongoose";
 import ArticuloInsumo from "../models/articuloInsumo.model";
-
 
 //Find All Articulo Insumo
 let findAllArticuloInsumo = async(method=null) => {
@@ -38,6 +38,23 @@ let searchArticuloInsumo = async (query) => {
   };
   try {
     let artIn = await ArticuloInsumo.find(filter);
+    return artIn;
+  } catch (error) {
+    console.error(`Error Svc Art Insumo : ${error}`);
+  }
+}
+
+let filterArtInsumoByRubroArt = async (rubArtId) => {
+  try {
+    let artIn = await ArticuloInsumo.aggregate([
+      {
+        $match: {
+          active: true,
+          esInsumo: false,
+          RubArt: Types.ObjectId(rubArtId)
+        }
+      }
+    ]);
     return artIn;
   } catch (error) {
     console.error(`Error Svc Art Insumo : ${error}`);
@@ -112,6 +129,7 @@ const ArticuloInsumoSvc = {
   findAllArticuloInsumo,
   findOneArticuloInsumo,
   searchArticuloInsumo,
+  filterArtInsumoByRubroArt,
   saveArticuloInsumo,
   updateArticuloInsumo,
   deleteArticuloInsumo,
