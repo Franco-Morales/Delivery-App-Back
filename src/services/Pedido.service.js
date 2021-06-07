@@ -1,5 +1,6 @@
 import Pedido from "../models/pedido.model";
 import Inventario from "../inventario/inventario";
+
 //Find All Pedido
 let findAllPedido = async() => {
   try {
@@ -53,10 +54,8 @@ let savePedido = async (pedidoReq) => {
   try {
     let { fecha, estado, horaEstimadaFin, tipoEnvio, total, Cliente, DetallePedido, Factura, MdoPago} = pedidoReq.body;
     let pedido = Pedido({fecha, estado, horaEstimadaFin, tipoEnvio, total, Cliente, DetallePedido, Factura, MdoPago,active:true});
-    Inventario.preValidate(pedido);
-    // let pedidoSaved = await pedido.save();
-    // return pedidoSaved;
-    return pedido;
+    let pedidoSaved = await pedido.save();
+    return pedidoSaved;
   } catch (error) {
       console.error(`Error Svc Pedido : ${error}`);
   }
