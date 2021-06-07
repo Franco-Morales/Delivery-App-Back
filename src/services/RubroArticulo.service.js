@@ -19,15 +19,29 @@ let findAllRubroArticulo = async() => {
 //Find One Rubro Aritculo
 let findOneRubroArticulo = async(rubArtReq) => {
   let _id = rubArtReq.params.id;
-  let filter = { _id, active: true };
   try {
-    let rubArticulo = await RubroArticulo.findOne(filter).populate({
-      path: 'RubArtPadre',
-      populate: {
-        path: 'RubArtPadre',
-        model: 'RubroArticulo'
-      } 
-    });
+    let rubArticulo = await RubroArticulo.aggregate([
+      { 
+        $addFields: {
+          _id: { $toString: '$_id' }
+        }
+      },
+      {
+        $graphLookup: {
+          from: RubroArticulo.collection.name,
+          startWith: '$RubArtPadre',
+          connectFromField: 'RubroArticulo.RubArtPadre',
+          connectToField: '_id',
+          as: 'rubroSuperior'
+        }
+      },
+      {
+        $match: {
+          active: true,
+          _id
+        }
+      }
+    ]);
     return rubArticulo;
   } catch (error) {
     console.error(`Error Svc Rubro Art : ${error}`);
