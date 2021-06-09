@@ -6,6 +6,7 @@ const router = Router();
 
 
 router.get('/menu', MenuCtrl.getAllMenu);
+router.get('/menu/:id', MenuCtrl.getOneMenu);
 
 
 

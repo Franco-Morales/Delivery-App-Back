@@ -4,22 +4,17 @@ import ArtManufactSvc from "../services/ArticuloManufacturado.service";
 
 let getAllMenu = async (req, res) => {
     let menu = [];
-
-    // console.log(req.query);
     try {
 
         if (req.query.search) {
-            // console.log('query');
             let artIns = await ArtInsumoSvc.searchArticuloInsumo(req.query.search);
             let artManufact = await ArtManufactSvc.searchArticuloManufacturado(req.query.search);
             menu = [...artIns, ...artManufact];
         } else if(req.query.filter){
-            // console.log('filter');
             let artIns = await ArtInsumoSvc.filterArtInsumoByRubroArt(req.query.filter);
             let artManufact = await ArtManufactSvc.filterArtManufactByRubroGnl(req.query.filter);
             menu = [...artIns, ...artManufact];
         } else {
-            // console.log('menu');
             let artIns = await ArtInsumoSvc.findAllArticuloInsumo('menu');
             let artManufact = await ArtManufactSvc.findAllArticuloManufacturado();
             menu = [...artIns, ...artManufact];
@@ -30,10 +25,32 @@ let getAllMenu = async (req, res) => {
     }
 }
 
+let getOneMenu = async (req, res) => {
+    let plato = { tipo: "", data: {} };
+    try {
+        let artInsumo = await ArtInsumoSvc.findOneArticuloInsumo(req);
+        let artManufact = await ArtManufactSvc.findOneArticuloManufacturado(req);
+
+        if(artInsumo) {
+            plato.data = artInsumo;
+            plato.tipo = 'artInsumo';
+        }
+
+        if(artManufact) {
+            plato.data = artManufact;
+            plato.tipo = 'artManufact';
+        }
+        
+        res.status(200).json(plato)
+    } catch (error) {
+        res.status(500).json({"error":error});
+    }
+}
+
 /**
  * Menu Controller
  */
-const MenuCtrl = { getAllMenu };
+const MenuCtrl = { getAllMenu, getOneMenu };
 
 
 export default MenuCtrl;

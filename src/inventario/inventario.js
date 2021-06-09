@@ -1,5 +1,5 @@
 import ArticuloInsumo from "../models/articuloInsumo.model";
-import ArticuloManufacturadoModel from "../models/ArticuloManufacturado.model";
+import ArticuloManufacturado from "../models/ArticuloManufacturado.model";
 
 /**
  * Resta los articulos insumo de cada pedido, el pedido debe estar previamente validado.
@@ -7,12 +7,10 @@ import ArticuloManufacturadoModel from "../models/ArticuloManufacturado.model";
  * @param {*} pedido 
  */
 const restarStock = async (pedido) => {
-
     for (const detPedido of pedido.DetallePedido) {
         if (detPedido.ArtManufact) {
-            await artManufactStock(detPedido.cantidad, detPedido.ArtManufact);
+            await artManufactStock(detPedido.cantidad, detPedido.ArtManufact._id);
         }
-
         if(detPedido.ArticuloInsumo) {
             await artInsumoStock(detPedido.cantidad, detPedido.ArticuloInsumo);
         }
@@ -25,23 +23,32 @@ const restarStock = async (pedido) => {
  * @param {number} cantidadPedido Cantidad a descontar del insumo
  * @param {*} artManufact 
  */
-let artManufactStock = async (cantidadPedido, artManufact) => {
+let artManufactStock = async (cantidadPedido, artManufactId) => {
     // Todos los articulos insumos de un Articulo Manufactarado en específico
-    let artsInsumo = [];
+    let artInsumoArray = [];
 
-    artManufact.ArtManufactDet.forEach( artIns => {
-        let auxArtIns = { _id:"", cantidad: 0 };
-        auxArtIns.cantidad = artIns.cantidad*cantidadPedido;
-        auxArtIns._id = artIns.ArtInsumo;
-        artsInsumo.push(auxArtIns);
-    });
+    try {
+        let artManufactAux = await ArticuloManufacturado.findById(artManufactId);
 
-    for (const el of artsInsumo) {
-        let artInsumoAux = await ArticuloInsumo.findOne({ _id: el._id });
-        if(artInsumoAux.stockValidation()){
-            artInsumoAux.stockActual-=el.cantidad;
-            await artInsumoAux.save();
-        } 
+        artManufactAux.ArtManufactDet.forEach( artIns => {
+            let auxArtIns = { _id:"", cantidad: 0 };
+            auxArtIns.cantidad = artIns.cantidad*cantidadPedido;
+            auxArtIns._id = artIns.ArtInsumo;
+            artInsumoArray.push(auxArtIns);
+        });
+
+        for (const el of artInsumoArray) {
+            let artInsumoAux = await ArticuloInsumo.findOne({ _id: el._id });
+            if(artInsumoAux.stockValidation()){
+                artInsumoAux.stockActual-=el.cantidad;
+                artInsumoAux.updateStock();
+                await artInsumoAux.save();
+            }
+        }
+
+        ArticuloManufacturado.stockValidation(artManufactId);
+    } catch (error) {
+        console.error(error);
     }
 }
 
@@ -62,15 +69,18 @@ let artInsumoStock = async (cantidadPedido, artIns) => {
 /**
  * Prevalida si el pedido puede realizarse con exito y que ningun artInsumo este por debajo del stock minimo.
  * @param {*} pedido Pedido a validar
- * @returns {object}
+ * @returns object
  */
 const preValidate = async (pedido) => {
-    let stock = { artInsumo:[], artManufact: [], status: true};
+    //Art Insumos, Art Manufacturados, status general del pedido
+    let stock = { artInsumos:[], artManufacts: [], status: true};
+    //Arreglo auxliar de Art. Manufacturados
+    let auxArrayArtManufact = [];
 
     for (const detPedido of pedido.DetallePedido) {
         if (detPedido.ArtManufact) {
-            let artManufactStatus = await artManufactStockValidate(detPedido.cantidad, detPedido.ArtManufact);
-            stock.artManufact.push(artManufactStatus);
+            let aux = { cant: detPedido.cantidad, id: detPedido.ArtManufact._id };
+            auxArrayArtManufact.push(aux);
         }
 
         if(detPedido.ArticuloInsumo) {
@@ -78,6 +88,10 @@ const preValidate = async (pedido) => {
             stock.artInsumo.push(artInsumoStatus);
         }
     }
+    // console.log(auxArrayArtManufact);
+    let artManuStatus = await artManufactStockValidate(auxArrayArtManufact);
+
+    stock.artManufacts = [...artManuStatus];
     stock.status = validateStockState(stock);
 
     return stock;
@@ -112,38 +126,68 @@ let artInsumoStockValidate = async (cantidadPedido, articuloInsumo) => {
  * Retorna un objeto con el id del artManufactirado y un estado de stock, que prevalida el pedido actual.
  * Si stockStatus es true, se puede descontar del inventario, caso contrario stockActual será falso.
  * No exportable.
- * @param {number} CantidadPedido 
- * @param {any} ArticuloManufacturadoID
- * @returns 
+ * @param {any} artManufacts 
+ * @returns Array
  */
-let artManufactStockValidate = async (cantidadPedido, artmanufactId) => {
-    let auxObj = { _id: artmanufactId, stockStatus: true };
-    // Todos los articulos insumos de un Articulo Manufactarado en específico
-    let artsInsumo = [];
+let artManufactStockValidate = async (artManufacts) => {
+    let stockStatusArray = [];
+    //Referencia para restar y comprobar valores 
+    let refArtInsumos = [];
 
-    let articuloManufact = await ArticuloManufacturadoModel.findOne({ _id:artmanufactId});
+    let artManufactArray = [];
 
-    articuloManufact.ArtManufactDet.forEach( artIns => {
-        let auxArtIns = { _id:"", cantidad: 0 };
-        auxArtIns.cantidad = artIns.cantidad*cantidadPedido;
-        auxArtIns._id = artIns.ArtInsumo;
-        artsInsumo.push(auxArtIns);
-    });
+    try {
+        for (const elem of artManufacts) {
+            let obj = { cant: elem.cant, artManu: {} };
+            obj.artManu = await ArticuloManufacturado.findById(elem.id);
 
-    for (const el of artsInsumo) {
-        try {
-            let artInsumoAux = await ArticuloInsumo.findOne({ _id: el._id });
-            artInsumoAux.stockActual-=el.cantidad;
-            
-            if(!artInsumoAux.stockValidation()) {
-                auxObj.stockStatus = artInsumoAux.stockValidation();
-                return auxObj;
-            }
-        } catch (error) {
-            console.error(`Module : Inventario : Error : ${error}`);
+            artManufactArray.push(obj);
         }
+    } catch (error) {
+        console.error(`Module : Inventario : preValidate -> artManufactStockValidate -> findbyId : Error : ${error}`);
     }
-    return auxObj;
+    /*          */
+    try {
+        for (let objPedido of artManufactArray) {
+            let artManufactStatus = { _id: objPedido.artManu._id, stockStatus: true };
+
+            for (let artInsumo of objPedido.artManu.ArtManufactDet) {
+
+                let ref = refArtInsumos.find( element => element._id.toString() == artInsumo.ArtInsumo.toString() );
+                if( ref ) {
+                    if(ref.stockActual > ref.stockMinimo) {
+                        ref.stockActual = ref.stockActual - (objPedido.cant*artInsumo.cantidad);
+
+                        if((ref.stockActual > ref.stockMinimo)){
+                            let index = refArtInsumos.findIndex( element => element._id.toString() == artInsumo.ArtInsumo.toString() );
+                            refArtInsumos[index] = ref;
+                        } else {
+                            break;
+                        }
+
+                    } else {
+                        artManufactStatus.stockStatus = false;
+                        break;
+                    }
+                } else {
+                    let artInsumoAux = await ArticuloInsumo.findById(artInsumo.ArtInsumo);
+
+                    artInsumoAux.stockActual = artInsumoAux.stockActual - ( objPedido.cant*artInsumo.cantidad );
+                    if (artInsumoAux.stockValidation()) {
+                        refArtInsumos.push(artInsumoAux);
+                    } else {
+                        artManufactStatus.stockStatus = false;
+                        break;
+                    }
+                }
+            }
+            stockStatusArray.push(artManufactStatus);
+        }
+    } catch (error) {
+        console.error(`Module : Inventario : preValidate() -> artManufactStockValidate() : Error : ${error}`);
+    }
+
+    return stockStatusArray;
 }
 
 /**
@@ -151,14 +195,21 @@ let artManufactStockValidate = async (cantidadPedido, artmanufactId) => {
  * Actualiza el estado del stock.
  * No exportable.
  * @param {object} stock 
- * @returns {boolean}
+ * @returns boolean
  */
 let validateStockState = (stock) => {
-    let arrayStatus = [...stock.artInsumo, ...stock.artManufact];
+    let arrayStatus = [];
+
+    if(stock.artInsumos) arrayStatus = [...stock.artInsumos];
+    if(stock.artManufacts) arrayStatus = [...stock.artManufacts];
+
     let aux = arrayStatus.every( status => status.stockStatus );
     return aux;
 }
 
-let Inventario = { restarStock, preValidate };
+/**
+ * Módulo Inventario
+ */
+const Inventario = { restarStock, preValidate };
 
 export default Inventario;
