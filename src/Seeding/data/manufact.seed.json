@@ -1,0 +1,142 @@
+[
+    {
+        "_id": "6095a45f3a56f90348f747ec",
+        "tiempoEstimado": 40,
+        "denominacion": "pizza Mussarrella",
+        "precioVenta": 370,
+        "stock": true,
+        "img": "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80",
+        "ArtManufactDet": [
+            {
+                "_id": "6095a5c26efb1004fc95a192",
+                "cantidad": 250,
+                "unidadMedida": "gramos",
+                "ArtInsumo": "6089db25cb195719ac0d6f18"
+            },
+            {
+                "_id": "6095a5c26efb1004fc95a193",
+                "cantidad": 0.06,
+                "unidadMedida": "litros",
+                "ArtInsumo": "6089dbbacb195719ac0d6f1a"
+            },
+            {
+                "_id": "6095a5c26efb1004fc95a194",
+                "cantidad": 25,
+                "unidadMedida": "gramos",
+                "ArtInsumo": "6089dc83cb195719ac0d6f1e"
+            },
+            {
+                "_id": "6095a5c26efb1004fc95a195",
+                "cantidad": 100,
+                "unidadMedida": "gramo",
+                "ArtInsumo": "6095a2ec7db9480c4c5134a6"
+            }
+        ],
+        "RubroGeneral": {
+            "_id": "60bc3aa0cabb522214ef4d5f"
+        },
+        "active": true
+    },
+    {
+        "_id": "609c60c392c30709e0a1ba13",
+        "tiempoEstimado": 40,
+        "denominacion": "Pizza Especial",
+        "precioVenta": 520,
+        "stock": true,
+        "img": "https://rankea.com.ar/wp-content/uploads/2020/08/Pizza-especial-la-alfonsina.jpeg",
+        "ArtManufactDet": [
+            {
+                "cantidad": 250,
+                "unidadMedida": "gramos",
+                "ArtInsumo": "6089db25cb195719ac0d6f18"
+            },
+            {
+                "cantidad": 0.06,
+                "unidadMedida": "litros",
+                "ArtInsumo": "6089dbbacb195719ac0d6f1a"
+            },
+            {
+                "cantidad": 25,
+                "unidadMedida": "gramos",
+                "ArtInsumo": "6089dc83cb195719ac0d6f1e"
+            },
+            {
+                "cantidad": 100,
+                "unidadMedida": "gramo",
+                "ArtInsumo": "6095a2ec7db9480c4c5134a6"
+            },
+            {
+                "cantidad": 80,
+                "unidadMedida": "gramos",
+                "ArtInsumo": "609c5f8b92c30709e0a1ba12"
+            }
+        ],
+        "RubroGeneral": {
+            "_id": "60bc3aa0cabb522214ef4d5f"
+        },
+        "active": true
+    },
+    {
+        "_id": "609c61c392c30709e0a1ba15",
+        "tiempoEstimado": 40,
+        "denominacion": "Pizza de Jamón Crudo y Rúcula",
+        "precioVenta": 520,
+        "stock": true,
+        "img": "https://www.recetasnatura.com.ar/sites/default/files/styles/receta_cuerpo/public/pizza-de-jamon-crudo-rucula-y-tomates-secos.jpg?itok=jdGKX1y9",
+        "ArtManufactDet": [
+            {
+                "cantidad": 250,
+                "unidadMedida": "gramos",
+                "ArtInsumo": "6089db25cb195719ac0d6f18"
+            },
+            {
+                "cantidad": 0.06,
+                "unidadMedida": "litros",
+                "ArtInsumo": "6089dbbacb195719ac0d6f1a"
+            },
+            {
+                "cantidad": 25,
+                "unidadMedida": "gramos",
+                "ArtInsumo": "6089dc83cb195719ac0d6f1e"
+            },
+            {
+                "cantidad": 100,
+                "unidadMedida": "gramo",
+                "ArtInsumo": "6095a2ec7db9480c4c5134a6"
+            },
+            {
+                "cantidad": 120,
+                "unidadMedida": "gramos",
+                "ArtInsumo": "609c61b192c30709e0a1ba14"
+            }
+        ],
+        "RubroGeneral": {
+            "_id": "60bc3aa0cabb522214ef4d5f"
+        },
+        "active": true
+    },
+    {
+        "_id": "609c63c692c30709e0a1ba19",
+        "tiempoEstimado": 40,
+        "denominacion": "Papas con Cheddar",
+        "precioVenta": 520,
+        "stock": false,
+        "img": "https://upload.wikimedia.org/wikipedia/commons/0/03/Shake_shack_cheese_fries.jpg",
+        "ArtManufactDet": [
+            {
+                "cantidad": 400,
+                "unidadMedida": "gramos",
+                "ArtInsumo": "609c626192c30709e0a1ba17"
+            },
+            {
+                "cantidad": 200,
+                "unidadMedida": "gramos",
+                "ArtInsumo": "609c623392c30709e0a1ba16"
+            }
+        ],
+        "RubroGeneral": {
+            "_id": "60bc3b3b4bb2a08db779ec11"
+        },
+        "active": true
+    }
+]

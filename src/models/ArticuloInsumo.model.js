@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, models } from "mongoose";
 
 /**
  * ArticuloInsumo
@@ -37,4 +37,4 @@ ArtInsumoSchema.methods.updateStock = function() {
 }
 
 
-export default model('ArtInsumo',ArtInsumoSchema);
+export default models.ArtInsumo ||model('ArtInsumo',ArtInsumoSchema);

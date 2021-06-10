@@ -1,0 +1,27 @@
+[
+    {
+        "_id": "60bc3aa0cabb522214ef4d5f",
+        "denominacion":"Pizzas",
+        "active":true
+    },
+    {
+        "_id": "60bc3aa0cabb522214ef4d60",
+        "denominacion":"Empanadas",
+        "active":true
+    },
+    {
+        "_id": "60bc3aa0cabb522214ef4d61",
+        "denominacion":"Hamburguesas",
+        "active":true
+    },
+    {
+        "_id": "60bc3aa0cabb522214ef4d62",
+        "denominacion":"Lomos",
+        "active":true
+    },
+    {
+        "_id": "60bc3b3b4bb2a08db779ec11",
+        "denominacion":"Papas",
+        "active":true
+    }
+]

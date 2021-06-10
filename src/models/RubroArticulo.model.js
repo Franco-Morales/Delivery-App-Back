@@ -8,8 +8,7 @@ const RubArtSchema = new Schema({
   active: Boolean,
   RubArtPadre: {
     type: Schema.Types.ObjectId,
-    ref: 'RubroArticulo',
-    default: {}
+    ref: 'RubroArticulo'
   },
   delete: {
     type:{
