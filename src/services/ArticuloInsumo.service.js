@@ -13,7 +13,26 @@ let findAllArticuloInsumo = async(method=null) => {
     artIns = await ArticuloInsumo.find({active:true}).populate('RubArt');
     return artIns;
   } catch (error) {
-    console.error(`Error Svc Art Insumo : ${error}`);
+    console.error(`Error Svc Art Insumo : ${error.message}`);
+  }
+}
+
+let findAllArticuloInsumoPaginate = async(req,method = null) => {
+  let artIns = [];
+  let count = 0;
+  try {
+    let limit = parseInt(req.query.limit);
+    let skip = parseInt(req.query.skip);
+    let count = await ArticuloInsumo.countDocuments({active: true});
+    if(method == 'menu'){
+        let count = await ArticuloInsumo.countDocuments({esInsumo: false,active:true});
+      artIns = await ArticuloInsumo.find({active: true, esInsumo: false}).skip(skip).limit(limit).populate('RubArt');
+      return ({artInsumos: artIns,isLast:limit + skip >= count ? true : false,isFirst: skip != 0 ? false : true,count: count})
+    }
+    artIns = await ArticuloInsumo.find({active: true}).skip(skip).limit(limit).populate('RubArt');
+    return ({artInsumos: artIns,isLast:limit + skip >= count ? true : false,isFirst: skip != 0 ? false : true,count: count})
+  } catch (error) {
+    console.error(`Error Svc Art Insumo : ${error.message}`);
   }
 }
 
@@ -25,39 +44,33 @@ let findOneArticuloInsumo = async(artInReq) => {
     let artIn = await ArticuloInsumo.findOne(filter).populate('RubArt');
     return artIn;
   } catch (error) {
-    console.error(`Error Svc Art Insumo : ${error}`);
+    console.error(`Error Svc Art Insumo : ${error.message}`);
   }
 }
 
 // Search Articulo Insumo
 let searchArticuloInsumo = async (query) => {
-  let filter = { 
-    active: true, 
-    esInsumo: false, 
+  let filter = {
+    active: true,
+    esInsumo: false,
     denominacion: { $regex: new RegExp(query,'i') }
   };
   try {
     let artIn = await ArticuloInsumo.find(filter);
     return artIn;
   } catch (error) {
-    console.error(`Error Svc Art Insumo : ${error}`);
+    console.error(`Error Svc Art Insumo : ${error.message}`);
   }
 }
 
-let filterArtInsumoByRubroArt = async (rubArtId) => {
+let filterArtInsumoByRubroArt = async (query,rubArtId) => {
   try {
     let artIn = await ArticuloInsumo.aggregate([
-      {
-        $match: {
-          active: true,
-          esInsumo: false,
-          RubArt: Types.ObjectId(rubArtId)
-        }
-      }
+      {$match: {denominacion: { $regex: new RegExp(query,'i')},active: true,esInsumo: false,RubArt: Types.ObjectId(rubArtId)}}
     ]);
     return artIn;
   } catch (error) {
-    console.error(`Error Svc Art Insumo : ${error}`);
+    console.error(`Error Svc Art Insumo : ${error.message}`);
   }
 }
 
@@ -69,7 +82,7 @@ let saveArticuloInsumo = async (artInReq) => {
     let artInSaved = await artIn.save();
     return artInSaved;
   } catch (error) {
-      console.error(`Error Svc Art Insumo : ${error}`);
+      console.error(`Error Svc Art Insumo : ${error.message}`);
   }
 }
 
@@ -79,7 +92,7 @@ let updateArticuloInsumo = async (artInReq) =>{
       let artInUpdated = await ArticuloInsumo.findOneAndUpdate({_id: artInReq.params.id}, artInReq.body,{new:true});
       return artInUpdated;
   } catch (error) {
-      console.error(`Error Svc Art Insumo : ${error}`);
+      console.error(`Error Svc Art Insumo : ${error.message}`);
   }
 }
 
@@ -101,7 +114,7 @@ let deleteArticuloInsumo = async (artInReq) =>  {
       },{ new: true });
     return artInDeleted;
   } catch (error) {
-      console.error(`Error Svc Art Insumo : ${error}`);
+      console.error(`Error Svc Art Insumo : ${error.message}`);
   }
 }
 
@@ -118,7 +131,7 @@ let activeArticuloInsumo = async (artInReq) => {
     );
     return artIn;
   } catch (error) {
-    console.error(`Error Svc Art Insumo : ${error}`);
+    console.error(`Error Svc Art Insumo : ${error.message}`);
   }
 }
 
@@ -127,6 +140,7 @@ let activeArticuloInsumo = async (artInReq) => {
  */
 const ArticuloInsumoSvc = {
   findAllArticuloInsumo,
+  findAllArticuloInsumoPaginate,
   findOneArticuloInsumo,
   searchArticuloInsumo,
   filterArtInsumoByRubroArt,

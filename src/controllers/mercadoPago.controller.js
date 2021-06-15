@@ -12,7 +12,7 @@ let getAll = async (req,res) => {
         res.status(204).json({"msg":"Empty"})
       }
     } catch (error) {
-      res.status(500).json({"error":error});
+      res.status(500).json({"error":error.message});
     }
   }
 
@@ -25,7 +25,7 @@ let getAll = async (req,res) => {
         res.status(204).json({"msg":"Empty"})
       }
     } catch (error) {
-      res.status(500).json({"error":error});
+      res.status(500).json({"error":error.message});
     }
   }
 
@@ -38,7 +38,7 @@ let getAll = async (req,res) => {
         res.status(204).json({"msg":"Empty"})
       }
     } catch (error) {
-      res.status(500).json({"error":error});
+      res.status(500).json({"error":error.message});
     }
   }
 
@@ -47,7 +47,7 @@ let getAll = async (req,res) => {
       let mdoPago = await MercadoPagoSvc.saveMercadoPago(req);
       res.status(200).json(mdoPago);
     } catch (error) {
-      res.status(500).json({"error":error});
+      res.status(500).json({"error":error.message});
     }
   }
 

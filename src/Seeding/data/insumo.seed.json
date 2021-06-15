@@ -141,5 +141,15 @@
         "esInsumo": false,
         "RubArt": "60bc3aa0cabb522214ef4d6b",
         "active": true
+    },
+    {
+        "_id":"60bc3aa08d5c50d1aecd3ba17",
+        "denominacion":"Gaseosa Coca Cola light 1.5 l",
+        "precioCompra":110,"precioVenta":150,
+        "stockActual":15,"stock":true,"stockMinimo":4,
+        "unidadMedida":"unidad","esInsumo":false,
+        "RubArt":"60bc3aa0cabb522214ef4d6a",
+        "active":true,
+        "img":"https://carrefourar.vtexassets.com/arquivos/ids/191120-800-auto?width=800&height=auto&aspect=true"
     }
 ]

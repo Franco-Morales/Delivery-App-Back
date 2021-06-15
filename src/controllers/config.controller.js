@@ -9,7 +9,7 @@ let saveOne = async (req,res) => {
     // }
     res.status(200).json(config);
   } catch (error) {
-    res.status(500).json({"error":error});
+    res.status(500).json({"Error Config Ctrl": error.message})
   }
 }
 
@@ -18,7 +18,16 @@ let getOne = async (req,res) => {
     let config = await ConfigSvc.findOneConfig(req);
     res.status(200).json(config);
   } catch (error) {
-    res.status(500).json({"error":error});
+    res.status(500).json({"Error Config Ctrl": error.message})
+  }
+}
+
+let getFirst = async(req,res) => {
+  try {
+    let config = await ConfigSvc.findFirstConfig(req)
+    res.status(200).json(config)
+  } catch (error) {
+    res.status(500).json({"Error Config Ctrl": error.message})
   }
 }
 
@@ -31,13 +40,13 @@ let updateOne = async(req,res) => {
       res.status(204).json({"msg":"Empty"})
     }
   } catch (error) {
-    res.status(500).json({"error": error})
+    res.status(500).json({"Error Config Ctrl": error.message})
   }
 }
 
 /**
 * Configuracion Controller
 */
-const ConfigCtrl = { getOne, updateOne, saveOne };
+const ConfigCtrl = { getOne, updateOne, getFirst, saveOne };
 
 export default ConfigCtrl;

@@ -10,7 +10,7 @@ let getAll = async (req,res) => {
       res.status(204).json({"msg":"Empty"})
     }
   } catch (error) {
-    res.status(500).json({"error":error});
+    res.status(500).json({"error":error.message});
   }
 }
 
@@ -23,7 +23,7 @@ let getOne = async (req,res) => {
       res.status(204).json({"msg":"Empty"});
     }
   } catch (error) {
-    res.status(500).json({"error":error});
+    res.status(500).json({"error":error.message});
   }
 }
 
@@ -36,7 +36,7 @@ let updateOne = async (req,res) => {
       res.status(204).json({"msg":"Empty"})
     }
   } catch (error) {
-    res.status(500).json({"error":error});
+    res.status(500).json({"error":error.message});
   }
 }
 
@@ -45,7 +45,7 @@ let postOne = async (req,res) => {
     let facturaSaved = await FacturaSvc.saveFactura(req);
     res.status(200).json(facturaSaved);
   } catch (error) {
-    res.status(500).json({"error":error});
+    res.status(500).json({"error":error.message});
   }
 }
 
@@ -63,7 +63,7 @@ let active = async (req,res) => {
     let facturaActived = await FacturaSvc.activeFactura(req);
     res.status(202).json(facturaActived);
   } catch (error) {
-    res.status(500).json({"error":error});
+    res.status(500).json({"error":error.message});
   }
 }
 

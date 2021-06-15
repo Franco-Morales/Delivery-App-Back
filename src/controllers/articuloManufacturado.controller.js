@@ -14,6 +14,19 @@ let getAll = async (req,res) => {
   }
 }
 
+let getAllPaginate = async(req,res) => {
+  try {
+    let artManFacs = await ArticuloManufacturadoSvc.findAllArticuloManufacturadoPaginate(req)
+    if (artManFacs.artManFac != []) {
+      res.status(200).json(artManFacs);
+    } else {
+      res.status(204).json({"msg":"Empty"})
+    }
+  } catch (error) {
+    res.status(500).json({"error":error.message});
+  }
+}
+
 let getOne = async (req,res) => {
   try {
     let artManFac = await ArticuloManufacturadoSvc.findOneArticuloManufacturado(req)
@@ -70,6 +83,6 @@ let active = async (req,res) => {
 /**
 * Articulo Manufacturado Controller
 */
-const ArticuloManufacturadoCtrl = { getAll, getOne, postOne, updateOne, deleteOne, active };
+const ArticuloManufacturadoCtrl = { getAll, getAllPaginate, getOne, postOne, updateOne, deleteOne, active };
 
 export default ArticuloManufacturadoCtrl;

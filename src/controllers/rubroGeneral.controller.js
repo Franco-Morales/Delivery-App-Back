@@ -4,11 +4,11 @@ import RubGnlSvc from "../services/rubroGeneral.service";
 let getAll = async (req,res) => {
   try {
     let rubGenerales = await RubGnlSvc.findAllRubroGeneral();
-      
+
     res.status(200).json(rubGenerales);
 
   } catch (error) {
-    res.status(500).json({"error": error});
+    res.status(500).json({"error": error.message});
   }
 }
 
@@ -21,7 +21,7 @@ let getOne = async (req,res) => {
       res.status(204).json({"msg":"Empty"})
     }
   } catch (error) {
-    res.status(500).json({"error":error});
+    res.status(500).json({"error":error.message});
   }
 }
 
@@ -30,7 +30,7 @@ let updateOne = async (req,res) => {
     let rubGeneralUpdated = await RubGnlSvc.updateRubroGeneral(req)
     res.status(200).json(rubGeneralUpdated);
   } catch (error) {
-    res.status(500).json({"error":error});
+    res.status(500).json({"error":error.message});
   }
 }
 
@@ -39,7 +39,7 @@ let postOne = async (req,res) => {
     let rubGnl = await RubGnlSvc.saveRubroGeneral(req);
     res.status(200).json(rubGnl);
   } catch (error) {
-    res.status(500).json({"error":error});
+    res.status(500).json({"error":error.message});
   }
 }
 
@@ -48,7 +48,7 @@ let deleteOne = async (req,res) => {
     let rubGeneralDeleted = await RubGnlSvc.deleteRubroGeneral(req);
     res.status(200).json(rubGeneralDeleted);
   } catch (error) {
-    res.status(500).json({"error":error});
+    res.status(500).json({"error":error.message});
   }
 }
 
@@ -57,7 +57,7 @@ let active = async (req,res) => {
     let rubGeneralActived = await RubGnlSvc.activeRubroGeneral(req);
     res.status(202).json(rubGeneralActived);
   } catch (error) {
-    res.status(500).json({"error":error});
+    res.status(500).json({"error":error.message});
   }
 }
 

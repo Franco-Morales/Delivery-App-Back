@@ -14,6 +14,19 @@ let getAll = async (req,res) => {
   }
 }
 
+let getAllPaginate = async(req,res)=>{
+  try {
+    let artIns = await ArticuloInsumoSvc.findAllArticuloInsumoPaginate(req);
+    if(artIns.artInsumos != []){
+      res.status(200).json(artIns);
+    }else{
+      res.status(204).json({"msg":"Empty"})
+    }
+  } catch (error) {
+    res.status(500).json({"error":error.message});
+  }
+}
+
 let getOne = async (req,res) => {
   try {
     let artIn = await ArticuloInsumoSvc.findOneArticuloInsumo(req)
@@ -70,6 +83,6 @@ let active = async (req,res) => {
 /**
 * Articulo Insumo Controller
 */
-const ArticuloInsumoCtrl = { getAll, getOne, postOne, updateOne, deleteOne, active };
+const ArticuloInsumoCtrl = { getAll, getAllPaginate, getOne, postOne, updateOne, deleteOne, active };
 
 export default ArticuloInsumoCtrl;
