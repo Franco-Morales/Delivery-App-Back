@@ -12,6 +12,7 @@ const ArtInsumoSchema = new Schema({
     stock: Boolean,
     unidadMedida: String,
     esInsumo: Schema.Types.Boolean,
+    img: String,
     //RubroInsumo
     RubArt: {
         type: Schema.Types.ObjectId,
