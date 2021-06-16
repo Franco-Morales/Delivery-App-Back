@@ -97,8 +97,7 @@ let getAll = async (req,res) => {
             id: req.params.id
           },
           body:{
-            MdoPago: mdoPagoCreated._id,
-            estado: pago.status == 'approved' ? 'aprobado' : 'en espera'
+            MdoPago: mdoPagoCreated._id
           }
         }
         await PedidoSvc.updatePedido(mdoPedido)
