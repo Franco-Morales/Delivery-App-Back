@@ -10,19 +10,26 @@ import ArticuloInsumo from "../models/ArticuloInsumo.model";
 import manufactJson from "./data/manufact.seed.json";
 import ArticuloManufact from "../models/ArticuloManufacturado.model";
 
+import configJson from "./data/config.json";
+import Config from "../models/Config.model";
+
 import Hefesto from "./Hefesto";
 
+
 const init = async () => {
+    console.log('Subrutine: Demeter [ INIT ]');
     try {
         await Hefesto.init();
         await germinate();
+
+        console.log('Subrutine: Demeter [ END ]');
     } catch (error) {
         console.error(`Module : Gaia -> SubRutine : Demeter -> Init : Error -> ${error}`);
     }
 }
 
 const germinate = async () => {
-    let seeds = [ seedRubGnl, seedRubArt, seedInsumo, seedManufact ];
+    let seeds = [ seedConfig, seedRubGnl, seedRubArt, seedInsumo, seedManufact ];
     try {
         for (const seed of seeds) {
             await seed();
@@ -32,6 +39,17 @@ const germinate = async () => {
     }
 }
 
+
+let seedConfig = async () => {
+    try {
+        let configDoc = await Config(configJson);
+        configDoc.save();
+        
+        await Hefesto.forge({ config : configDoc._id});
+    } catch (error) {
+        console.error(error);
+    }
+}
 
 let seedRubGnl = async () => {
     let ids = [];
@@ -81,5 +99,12 @@ let seedManufact = async () => {
     await Hefesto.forge({ artManufact : ids});
 }
 
-
+/**
+ * El módulo 'Demeter' se encarga de acceder a la carpeta `/data` para recorrer e incertar los valores en la BD.
+ * 
+ * Función principal @function `init()`
+ * Sub funciones : 
+ * @function `germinate()` 
+ * @function `seed*()`
+ */
 export default { init };

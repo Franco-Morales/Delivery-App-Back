@@ -138,5 +138,146 @@
             "_id": "60bc3b3b4bb2a08db779ec11"
         },
         "active": true
+    },
+    {
+        "_id":"60c9206e3f99541b2872f263",
+        "tiempoEstimado": 30,
+        "denominacion": "Empanadas J&Q",
+        "precioVenta": 440,
+        "stock": true,
+        "img": "https://www.frizata.com/ar/files/products/5d35cf6fc1524-27-4.jpg",
+        "ArtManufactDet": [
+            {
+                "cantidad": 12,
+                "unidadMedida": "unidad",
+                "ArtInsumo": "60c91e4e04ad2c263cf7006b"
+            },
+            {
+                "cantidad": 200,
+                "unidadMedida": "gramos",
+                "ArtInsumo": "6095a2ec7db9480c4c5134a6"
+            },
+            {
+                "cantidad": 200,
+                "unidadMedida": "gramos",
+                "ArtInsumo": "609c5f8b92c30709e0a1ba12"
+            }
+        ],
+        "RubroGeneral": {
+            "_id": "60bc3aa0cabb522214ef4d60"
+        },
+        "active": true
+    },
+    {
+        "_id":"60c9210d7a06db33881e5144",
+        "tiempoEstimado": 30,
+        "denominacion": "Empanadas Carne",
+        "precioVenta": 440,
+        "stock": true,
+        "img": "https://cuk-it.com/wp-content/uploads/2020/05/thumb02-1-1024x576-2.jpg",
+        "ArtManufactDet": [
+            {
+                "cantidad": 12,
+                "unidadMedida": "unidad",
+                "ArtInsumo": "60c91e4e04ad2c263cf7006b"
+            },
+            {
+                "cantidad": 200,
+                "unidadMedida": "gramos",
+                "ArtInsumo": "60c920534290251c5c9083bd"
+            },
+            {
+                "cantidad": 2,
+                "unidadMedida": "unidad",
+                "ArtInsumo": "609c5f4b92c30709e0a1ba11"
+            },
+            {
+                "cantidad": 60,
+                "unidadMedida": "gramos",
+                "ArtInsumo": "60c926994429f32eb09969ff"
+            }
+        ],
+        "RubroGeneral": {
+            "_id": "60bc3aa0cabb522214ef4d60"
+        },
+        "active": true
+    },
+    {
+        "_id":"60c9260e7a8d06231c7047b2",
+        "tiempoEstimado": 45,
+        "denominacion": "Hamburguesa Completa",
+        "precioVenta": 490,
+        "stock": true,
+        "img": "https://recetasdecocina.space/wp-content/uploads/2019/09/hamburguesa-casera.jpg",
+        "ArtManufactDet": [
+            {
+                "cantidad": 1,
+                "unidadMedida": "unidad",
+                "ArtInsumo": "60c921fbbfc5cb1b409b559f"
+            },
+            {
+                "cantidad": 100,
+                "unidadMedida": "gramos",
+                "ArtInsumo": "60c920534290251c5c9083bd"
+            },
+            {
+                "cantidad": 80,
+                "unidadMedida": "gramos",
+                "ArtInsumo": "60c9234a87fc1d2468c63b27"
+            },
+            {
+                "cantidad": 60,
+                "unidadMedida": "gramos",
+                "ArtInsumo": "60c9234a87fc1d2468c63b28"
+            },
+            {
+                "cantidad": 1,
+                "unidadMedida": "gramos",
+                "ArtInsumo": "609c5f4b92c30709e0a1ba11"
+            }
+        ],
+        "RubroGeneral": {
+            "_id": "60bc3aa0cabb522214ef4d61"
+        },
+        "active": true
+    },
+    {
+        "_id":"60c9260e7a8d06231c7047b3",
+        "tiempoEstimado": 50,
+        "denominacion": "Lomo Completa",
+        "precioVenta": 560,
+        "stock": true,
+        "img": "https://inmendoza.com/wp-content/uploads/2019/02/Colinas-1.jpg",
+        "ArtManufactDet": [
+            {
+                "cantidad": 1,
+                "unidadMedida": "unidad",
+                "ArtInsumo": "60c9263149dac50e0455ddf2"
+            },
+            {
+                "cantidad": 100,
+                "unidadMedida": "gramos",
+                "ArtInsumo": "60c920534290251c5c9083bd"
+            },
+            {
+                "cantidad": 80,
+                "unidadMedida": "gramos",
+                "ArtInsumo": "60c9234a87fc1d2468c63b27"
+            },
+            {
+                "cantidad": 60,
+                "unidadMedida": "gramos",
+                "ArtInsumo": "60c9234a87fc1d2468c63b28"
+            },
+            {
+                "cantidad": 1,
+                "unidadMedida": "gramos",
+                "ArtInsumo": "609c5f4b92c30709e0a1ba11"
+            }
+        ],
+        "RubroGeneral": {
+            "_id": "60bc3aa0cabb522214ef4d62"
+        },
+        "active": true
     }
 ]

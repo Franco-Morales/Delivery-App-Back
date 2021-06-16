@@ -25,6 +25,16 @@
         "active": true
     },
     {
+        "_id": "60c921fbbfc5cb1b409b559f",
+        "denominacion": "Panificados",
+        "active": true
+    },
+    {
+        "_id": "60c921fbbfc5cb1b409b559e",
+        "denominacion": "Verduras",
+        "active": true
+    },
+    {
         "_id": "60bc3aa0cabb522214ef4d68",
         "denominacion": "Otros",
         "active": true

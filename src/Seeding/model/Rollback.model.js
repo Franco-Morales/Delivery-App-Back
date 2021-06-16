@@ -2,6 +2,10 @@ import { Schema, model, models, Types } from "mongoose";
 
 
 const RollBackSchema = new Schema({
+    config: {
+        type: Types.ObjectId,
+        ref: "Config"
+    },
     rubGnl: [
         { 
             type: Types.ObjectId,

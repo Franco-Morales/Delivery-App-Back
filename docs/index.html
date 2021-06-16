@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     <link rel="stylesheet" href="./css/index.css">´
     <!--Fontawesome-->
     <script src="https://kit.fontawesome.com/918d19c8b4.js" crossorigin="anonymous"></script>
@@ -20,6 +20,9 @@
                 </li>
                 <li>
                     <a href="#proyect">Estructura</a>
+                </li>
+                <li>
+                    <a href="#herramienta">"Gaia"</a>
                 </li>
                 <li>
                     <a href="#app-server">App</a>
@@ -301,11 +304,11 @@
                         <p>Las funciones que exporta el módulo son <code>restarStock()</code> y <code>preValidate()</code></p>
                     </div>
                     <div class="col-12">
-                        <h4>Funcion : restarStock()</h4>
+                        <h4>Función : restarStock()</h4>
                         <p>La función recibe un objeto pedido previamente validado que itera sobre las propiedade <i>DetallePedido</i>, para llamar a dos funciones auxliares que gestionan independientemente el stock de <i>Artículo Insumo</i> y <i>Artículo Manufacturado</i> .</p>
                     </div>
                     <div class="col-12">
-                        <h4>Funcion : preValidate()</h4>
+                        <h4>Función : preValidate()</h4>
                         <p>La función recibe un objeto pedido que itera sobre las propiedade <i>DetallePedido</i>, para verificar si se puede realizar el pedido pasado por parametro.</p>
                         <p>Retorna un objeto que contiene un arreglo de ids y estados de stock para cada <i>Artículo Insumo</i> y <i>Artículo Manufacturado</i> respectivamente, junto a otra propiedad booleana llamada stock, que contiene el estado global del pedido.</p>
                         <p>
@@ -327,6 +330,74 @@
                     <div class="col-12">
                         <h4>Funciones auxiliares</h4>
                         <p>Las funciones auxiliares se encuentran documentadas en el <a href="https://github.com/Franco-Morales/Delivery-App-Back/blob/desarrollo/src/inventario/inventario.js">código</a></p>
+                    </div>
+                </div>
+            </article>
+            <article id="herramienta">
+                <div class="row">
+                    <div class="col-12">
+                        <h3>Herramienta de desarrollo para la prueba el servidor</h3>
+                        <hr>
+                    </div>
+                    <div class="col-12">
+                        <h4>Módulo : Gaia</h4>
+                        <p>El archivo <code>Gaia.index.js</code> contiene un código hecho en js ES2016 para el seeding (<a href="https://en.wikipedia.org/wiki/Database_seeding">ver</a>) de la base de datos.</p>
+                        <p>Modo de uso : </p>
+                        <p>Llamar al archivo dentro de la función <code>main()</code> del archivo <code>App.js</code>, ejecutar el método <code>terraform()</code> introducir un parametro del tipo <code>string</code> . Los cuales pueden ser `create`, `update`, `drop`, `purge`. La función solo adminte un parametro </p>
+                        <p>Para más información <a href="https://github.com/Franco-Morales/Delivery-App-Back/tree/desarrollo/src/Seeding">ver</a> la documentación de cada archivo</p>
+                    </div>
+                    <div class="col-12">
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr>
+                                  <th scope="col">Parámetro</th>
+                                  <th scope="col">Descripción</th>
+                                  <th scope="col">Uso</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">'update'</th>
+                                    <td>Agrega los nuevos documentos en la base de datos. Las coleciones albergan a los documentos creados mediante <code>Gaia</code> y los creados mediante otros metodos</td>
+                                    <td>Usar una única vez</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">'create'</th>
+                                    <td>Borra los documentos si y solo sí fueron creados mediante <code>Gaia</code> mediante un mecanismo de rollback y luego agrega los nuevos documentos</td>
+                                    <td>Multiples veces</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">'drop'</th>
+                                    <td>Borra los documentos si y solo sí fueron creados mediante <code>Gaia</code> unicamente, en caso de existir otros documentos estos permanecen la base de datos</td>
+                                    <td>Multiples veces</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">'purge'</th>
+                                    <td>Borra los documentos de las coleciones sean creados mediante <code>Gaia</code> u otros medios, pero no borra las coleciones en si</td>
+                                    <td>Multiples veces</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-12">
+                        <h4>Información del Programa</h4>
+                        <table class="table table-bordered mt-4">
+                            <thead>
+                                <tr>
+                                  <th scope="col">Nombre</th>
+                                  <th scope="col">Objetivo</th>
+                                  <th scope="col">Versión</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row"> Gaia </th>
+                                    <td>Seeding automático de la BD uso exclusivo del desarrollo del servidor</td>
+                                    <td>Beta 2021.0.1</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p>Versionado usado [fase:año:major:minor]</p>
                     </div>
                 </div>
             </article>
@@ -354,8 +425,6 @@
         </section>
     </main>
     <!-- Bootstrap -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
 </body>
 </html>
