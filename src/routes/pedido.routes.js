@@ -14,4 +14,7 @@ router.put('/pedido/:id',PedidoCtrl.updateOne);
 router.delete('/pedido/:id',PedidoCtrl.deleteOne);
 router.patch('/pedido/:id', PedidoCtrl.active);
 
+
+//filter routes
+router.get('/pedido/byState/:state',PedidoCtrl.getPedidosByState)
 export default router;
