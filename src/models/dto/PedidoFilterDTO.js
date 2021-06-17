@@ -2,8 +2,6 @@ import admin from "../../firebase";
 const db = admin.firestore();
 
 class PedidoFilterDTO {
-  nombre 
-  
   constructor(pedido) {
     this._id = pedido._id;
     this.tiempoFin = pedido.horaEstimadaFin;
