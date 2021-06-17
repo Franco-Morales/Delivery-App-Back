@@ -7,6 +7,7 @@ import ArticuloManufacturado from "../models/ArticuloManufacturado.model";
  * @param {*} pedido 
  */
 const restarStock = async (pedido) => {
+    // console.log('Restando Stock');
     for (const detPedido of pedido.DetallePedido) {
         if (detPedido.ArtManufact) {
             await artManufactStock(detPedido.cantidad, detPedido.ArtManufact._id);
@@ -39,11 +40,10 @@ let artManufactStock = async (cantidadPedido, artManufactId) => {
 
         for (const el of artInsumoArray) {
             let artInsumoAux = await ArticuloInsumo.findOne({ _id: el._id });
-            if(artInsumoAux.stockValidation()){
-                artInsumoAux.stockActual-=el.cantidad;
-                artInsumoAux.updateStock();
-                await artInsumoAux.save();
-            }
+
+            artInsumoAux.stockActual-=el.cantidad;
+            artInsumoAux.updateStock();
+            await artInsumoAux.save();
         }
 
         ArticuloManufacturado.stockValidation(artManufactId);
@@ -59,11 +59,11 @@ let artManufactStock = async (cantidadPedido, artManufactId) => {
  * @param {*} artIns
  */
 let artInsumoStock = async (cantidadPedido, artIns) => {
-    if(artIns.stockValidation()) {
-        let auxStockActual = artIns.stockActual-cantidadPedido;
-        let articuloUpdated = await ArticuloInsumo.findOneAndUpdate({_id: artIns._id},{ $set:{stockActual: auxStockActual} },{ new:true });
-        articuloUpdated.stockValidation();
-    }
+    let artInsumoAux = await ArticuloInsumo.findById(artIns);
+
+    artInsumoAux.stockActual = artInsumoAux.stockActual-cantidadPedido
+    artInsumoAux.stockValidation();
+    artInsumoAux.save();
 };
 
 /**
@@ -72,11 +72,13 @@ let artInsumoStock = async (cantidadPedido, artIns) => {
  * @returns object
  */
 const preValidate = async (pedido) => {
-    console.log("prevalidando")
+    // console.log("prevalidando")
     //Art Insumos, Art Manufacturados, status general del pedido
     let stock = { artInsumos:[], artManufacts: [], status: true};
     //Arreglo auxliar de Art. Manufacturados
     let auxArrayArtManufact = [];
+    //Arreglo auxliar de Art. Insumo.esInsumo == false
+    let auxArrayArtInsumo = [];
 
     for (const detPedido of pedido.DetallePedido) {
         if (detPedido.ArtManufact) {
@@ -85,15 +87,17 @@ const preValidate = async (pedido) => {
         }
 
         if(detPedido.ArticuloInsumo) {
-            let artInsumoStatus = await artInsumoStockValidate(detPedido.cantidad, detPedido.ArticuloInsumo);
-            stock.artInsumo.push(artInsumoStatus);
+            let aux = { cant: detPedido.cantidad, id: detPedido.ArticuloInsumo };
+            auxArrayArtInsumo.push(aux);
         }
     }
-    // console.log(auxArrayArtManufact);
     let artManuStatus = await artManufactStockValidate(auxArrayArtManufact);
+    let artInsumoStatus = await artInsumoStockValidate(auxArrayArtInsumo);
 
     stock.artManufacts = [...artManuStatus];
+    stock.artInsumos = [...artInsumoStatus];
     stock.status = validateStockState(stock);
+
     return stock;
 }
 
@@ -106,16 +110,25 @@ const preValidate = async (pedido) => {
  * @param {*} articuloInsumo 
  * @returns
  */
-let artInsumoStockValidate = async (cantidadPedido, articuloInsumo) => {
-    let auxObj = { _id: articuloInsumo._id, stockStatus: true };
+let artInsumoStockValidate = async (artInsumos) => {
+    let stockStatusArray = [];
+
     try {
-        let artInsumoAux = await ArticuloInsumo.findById({_id: articuloInsumo._id});
+        for (const element of artInsumos) {
+            let aux = { _id: element._id, stockStatus: true };
 
-        artInsumoAux.stockActual-=cantidadPedido;
+            let artInsumoAux = await ArticuloInsumo.findById(element.id);
+            artInsumoAux.stockActual = artInsumoAux.stockActual - element.cantidad;
+            
+            if (!artInsumoAux.stockValidation()) {
+                aux.stockStatus = false;
+                stockStatusArray.push(aux);
+                continue;
+            } 
+            stockStatusArray.push(aux);
+        }
 
-        auxObj.stockStatus = artInsumoAux.stockValidation();
-
-        return auxObj;
+        return stockStatusArray;
     } catch (error) {
         console.error(error);
     }

@@ -120,7 +120,7 @@
         "tiempoEstimado": 40,
         "denominacion": "Papas con Cheddar",
         "precioVenta": 520,
-        "stock": false,
+        "stock": true,
         "img": "https://upload.wikimedia.org/wikipedia/commons/0/03/Shake_shack_cheese_fries.jpg",
         "ArtManufactDet": [
             {

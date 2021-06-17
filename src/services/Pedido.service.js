@@ -170,20 +170,19 @@ let acceptPedido = async(id,status)=>{
   let pedido = await Pedido.findOne({_id : id})
   //Si el estado actual del pedido es "en espera" lo aceptara para mandarlo a cocina
   if(status == StatePedido.ESPERA){
-    //let stock = await Inventario.preValidate(pedido)
-    /*if(!stock.status){
-      await Inventario.restarStock(pedido)
-      pedido.estado = StatePedido.COCINA
-      await pedido.save()
-      console.log("pedido",pedido)
+    let stock = await Inventario.preValidate(pedido);
+    if(stock.status){
+      await Inventario.restarStock(pedido);
+      pedido.estado = StatePedido.COCINA;
+      await pedido.save();
       return {"message": "El pedido fue procesado correctamente."}
     }
     else{
       return {"message": "El pedido no se pudo procesar por falta de stock de insumos"}
-    }*/
-    pedido.estado = StatePedido.COCINA
-    await pedido.save()
-    return {"message":"El pedido fue procesado correctamente." }
+    }
+    // pedido.estado = StatePedido.COCINA
+    // await pedido.save()
+    // return {"message":"El pedido fue procesado correctamente." }
   }
 
   //Si el estado actual es "en cocina" lo aceptara para marcarlo como finalizado y mandarlo a delivery
