@@ -17,4 +17,5 @@ router.patch('/pedido/:id', PedidoCtrl.active);
 
 //filter routes
 router.get('/pedido/byState/:state',PedidoCtrl.getPedidosByState)
+router.put('/pedido/accept/:id',PedidoCtrl.acceptPedido)
 export default router;

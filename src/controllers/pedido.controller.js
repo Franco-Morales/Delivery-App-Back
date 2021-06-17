@@ -72,6 +72,7 @@ let active = async (req,res) => {
   }
 }
 
+//obtener pedidos según estado
 let getPedidosByState = async(req,res)=>{
   try{
     let pedidos = await PedidoSvc.getPedidosByState(req.params.state);
@@ -80,9 +81,20 @@ let getPedidosByState = async(req,res)=>{
     res.status(500).json({"error":error});
   }
 }
+
+//aceptar pedido
+let acceptPedido = async(req,res) =>{
+  try {
+    let exito = await PedidoSvc.acceptPedido(req.params.id,req.body.status);
+    res.status(200).json(exito.message)
+  } catch (error) {
+    res.status(500).json({"error":error})
+  }
+
+}
 /**
 * Pedido Controller
 */
-const PedidoCtrl = { getAll, getAllbyUser, getOne, postOne, updateOne, deleteOne, active,getPedidosByState };
+const PedidoCtrl = { getAll, getAllbyUser, getOne, postOne, updateOne, deleteOne, active,getPedidosByState,acceptPedido };
 
 export default PedidoCtrl;

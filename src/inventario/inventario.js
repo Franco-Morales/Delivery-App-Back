@@ -72,6 +72,7 @@ let artInsumoStock = async (cantidadPedido, artIns) => {
  * @returns object
  */
 const preValidate = async (pedido) => {
+    console.log("prevalidando")
     //Art Insumos, Art Manufacturados, status general del pedido
     let stock = { artInsumos:[], artManufacts: [], status: true};
     //Arreglo auxliar de Art. Manufacturados
@@ -93,7 +94,6 @@ const preValidate = async (pedido) => {
 
     stock.artManufacts = [...artManuStatus];
     stock.status = validateStockState(stock);
-
     return stock;
 }
 
