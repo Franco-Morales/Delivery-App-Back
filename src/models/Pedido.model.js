@@ -7,6 +7,9 @@ const PedidoSchema = new Schema({
     horaEstimadaFin: Number,
     tipoEnvio: Number,
     total: Number,
+    
+    accepted: Date, // guardo la fecha(hora) estimada de finalizado del pedido(demorado o no)
+
     // Cliente
     Cliente: {
         firebase_id : String,
@@ -50,6 +53,9 @@ const PedidoSchema = new Schema({
         },
         default: {}
     }
+},
+{
+    timestamps: true
 });
 
 

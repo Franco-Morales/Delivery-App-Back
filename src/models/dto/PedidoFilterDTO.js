@@ -7,7 +7,7 @@ class PedidoFilterDTO {
     this.tiempoFin = pedido.horaEstimadaFin;
     this.envio =
       pedido.tipoEnvio == 1 ? "Envio a domicilio" : "Retiro en local";
-    this.horaE = this.getHoralet(pedido.fecha);
+    this.horaE = this.getTime(pedido.fecha);
     this.total = pedido.total;
     this.DetallePedido = pedido.DetallePedido;
     this.estado = pedido.estado;
@@ -16,11 +16,25 @@ class PedidoFilterDTO {
         "Desconocido";
     };
     this.domicilio = this.getDomicilio(pedido.Cliente);
+    this.horaAccepted= (pedido.accepted)?this.getTime(pedido.accepted) : "00.00" 
+    this.horaFin = (pedido.accepted)?this.getTimeEnd(pedido.accepted):"Aun no aceptado";
   }
 
-  getHoralet(fecha) {
-    let date = new Date(fecha);
-    return date.getHours() + ":" + date.getMinutes();
+  getTime(date) {
+    return this.formatTime(date.getHours())+":"+ this.formatTime(date.getMinutes());
+  }
+
+  getTimeEnd(date){
+    date.setTime(date.getTime()+(this.tiempoFin*60*1000)) //minutos*segundos*milisegundos
+    return this.formatTime(date.getHours())+":"+ this.formatTime(date.getMinutes());
+  }
+  
+  formatTime(n){
+    if(n<10){
+      return "0"+n.toString();
+    }else{
+      return n.toString();
+    }
   }
   async getUser(uid) {
     try {

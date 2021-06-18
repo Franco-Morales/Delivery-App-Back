@@ -140,8 +140,12 @@ let activePedido = async (pedidoReq) => {
 
 //Pedido por estado
 let getPedidosByState = async (state) => {
+  let filtro = state==StatePedido.COCINA?
+  {active:true,estado:{$in:[StatePedido.COCINA,StatePedido.DEMORADO]}}:
+  {active:true,estado: state}
+  
   try {
-    let pedidos = await Pedido.find({ active: true, estado: state })
+    let pedidos = await Pedido.find(filtro)
       .populate({
         path: "DetallePedido",
         populate: {
@@ -158,6 +162,7 @@ let getPedidosByState = async (state) => {
       });
     let pedidosDTO = [];
     pedidos.forEach((pedido) => {
+      console.log(pedido)
       pedidosDTO.push(new PedidoFilterDTO(pedido));
     });
     return pedidosDTO;
@@ -166,11 +171,11 @@ let getPedidosByState = async (state) => {
   }
 };
 
-let acceptPedido = async(id,status)=>{
+let acceptPedido = async(id,state)=>{
   let pedido = await Pedido.findOne({_id : id})
   //Si el estado actual del pedido es "en espera" lo aceptara para mandarlo a cocina
-  if(status == StatePedido.ESPERA){
-    let stock = await Inventario.preValidate(pedido);
+  if(state == StatePedido.ESPERA){
+    /*let stock = await Inventario.preValidate(pedido);
     if(stock.status){
       await Inventario.restarStock(pedido);
       pedido.estado = StatePedido.COCINA;
@@ -179,25 +184,36 @@ let acceptPedido = async(id,status)=>{
     }
     else{
       return {"message": "El pedido no se pudo procesar por falta de stock de insumos"}
-    }
-    // pedido.estado = StatePedido.COCINA
-    // await pedido.save()
-    // return {"message":"El pedido fue procesado correctamente." }
+    }*/
+    pedido.estado = StatePedido.COCINA
+    pedido.accepted = Date.now()
+    await pedido.save()
+     return {"message":"El pedido fue procesado correctamente." }
   }
 
   //Si el estado actual es "en cocina" lo aceptara para marcarlo como finalizado y mandarlo a delivery
-  if(status === StatePedido.COCINA){
+  if(state === StatePedido.COCINA){
     pedido.estado = StatePedido.LISTO
+    pedido.accepted = Date.now()
     await pedido.save()
     return {"message":"El pedido esta finalizado. Listo para entregar."}
   }
 
   //Si el estado actual es "listo" lo marcara como entregado
-  if(status === StatePedido.LISTO){
+  if(state === StatePedido.LISTO){
     pedido.estado = StatePedido.ENTREGADO
+    pedido.accepted = Date.now()
     await pedido.save()
     return {"message":"El pedido ya fue entregado al cliente con éxito" }
   }
+}
+
+let demorarPedido = async (id) =>{
+  let pedido = await Pedido.findOne({_id : id})
+  pedido.horaEstimadaFin += 10;
+  pedido.estado = StatePedido.DEMORADO
+  await pedido.save()
+  return {"message":"El pedido fue demorado 10 minutos."}
 }
 /**
  * Pedido Service
@@ -211,7 +227,8 @@ const PedidoSvc = {
   deletePedido,
   activePedido,
   getPedidosByState,
-  acceptPedido
+  acceptPedido,
+  demorarPedido
 };
 
 export default PedidoSvc;
