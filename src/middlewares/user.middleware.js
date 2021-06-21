@@ -4,7 +4,7 @@ const db = admin.firestore()
 
 const middleware = {}
 
- middleware.existUser = async(req, res, next) => {
+middleware.existUser = async(req, res, next) => {
   let uid =  req.body.uid;
   const snapshot = await db.collection('clients').where('uid', '==', uid).get();
   let user = null;

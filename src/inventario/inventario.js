@@ -220,9 +220,38 @@ let validateStockState = (stock) => {
     return aux;
 }
 
+
+const calcularCostos = async (DetallePedido) => {
+    let totalCosto = 0;
+    let totalVenta = 0;
+
+    try {
+        for (const detPedido of DetallePedido) {
+            if(detPedido.ArtManufact) {
+                let artManuAux = await ArticuloManufacturado.findById(detPedido.ArtManufact);
+
+                for (const artIns of artManuAux.ArtManufactDet) {
+                    let artInsumoAux = await ArticuloInsumo.findById(artIns.ArtInsumo);
+                    totalCosto = totalCosto + (artInsumoAux.precioCompra*detPedido.cantidad);
+                    totalVenta = totalVenta + (artInsumoAux.precioVenta*detPedido.cantidad);
+                }
+            }
+            if(detPedido.ArticuloInsumo) {
+                let artInsumoAux = await ArticuloInsumo.findById(detPedido.ArticuloInsumo);
+                totalCosto = totalCosto + (artInsumoAux.precioCompra*detPedido.cantidad);
+                totalVenta = totalVenta + (artInsumoAux.precioVenta*detPedido.cantidad);
+            }
+        }
+
+        return { totalCosto, totalVenta };
+    } catch (error) {
+        console.error(`Module : Inventario : calcularCostos() : Error : ${error}`);
+    }
+}
+
 /**
  * Módulo Inventario
  */
-const Inventario = { restarStock, preValidate };
+const Inventario = { restarStock, preValidate, calcularCostos };
 
 export default Inventario;

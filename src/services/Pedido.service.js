@@ -1,7 +1,11 @@
 import Pedido from "../models/pedido.model";
 import PedidoFilterDTO from "../models/dto/PedidoFilterDTO";
-import Inventario from "../inventario/inventario";
 import StatePedido from '../models/const/statePedido';
+
+import Inventario from "../inventario/inventario";
+import FacturaSvc from "./Factura.service";
+
+
 //Find All Pedido
 let findAllPedido = async () => {
   try {
@@ -162,7 +166,6 @@ let getPedidosByState = async (state) => {
       });
     let pedidosDTO = [];
     pedidos.forEach((pedido) => {
-      console.log(pedido)
       pedidosDTO.push(new PedidoFilterDTO(pedido));
     });
     return pedidosDTO;
@@ -194,16 +197,18 @@ let acceptPedido = async(id,state)=>{
   //Si el estado actual es "en cocina" lo aceptara para marcarlo como finalizado y mandarlo a delivery
   if(state === StatePedido.COCINA){
     pedido.estado = StatePedido.LISTO
-    pedido.accepted = Date.now()
-    await pedido.save()
+    pedido.accepted = Date.now();
+    await pedido.save();
     return {"message":"El pedido esta finalizado. Listo para entregar."}
   }
 
   //Si el estado actual es "listo" lo marcara como entregado
   if(state === StatePedido.LISTO){
-    pedido.estado = StatePedido.ENTREGADO
-    pedido.accepted = Date.now()
-    await pedido.save()
+    pedido.estado = StatePedido.ENTREGADO;
+    pedido.accepted = Date.now();
+    let pedidoEntregado = await pedido.save();
+    await FacturaSvc.saveFactura(pedidoEntregado);
+
     return {"message":"El pedido ya fue entregado al cliente con éxito" }
   }
 }

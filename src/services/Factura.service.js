@@ -1,5 +1,10 @@
 import Factura from "../models/factura.model";
 
+import Inventario from "../inventario/inventario";
+import { transporter } from "../mailer/mail.index";
+import admin from '../firebase';
+
+
 //Find All Factura
 let findAllFactura = async() => {
   try {
@@ -23,12 +28,54 @@ let findOneFactura = async(facturaReq) => {
 }
 
 //Save Factura
-let saveFactura = async (facturaReq) => {
+let saveFactura = async (pedido) => {
+
+  let { accepted, Cliente, _id, DetallePedido, tipoEnvio, total, active } = pedido;
+  let montoDecuento = 0;
+
+  if(tipoEnvio) {
+    let totalPedido = DetallePedido.reduce( (acc, obj) => acc + obj.subTotal );
+    montoDecuento = totalPedido - total;
+  }
+
+  let user;
+  const db = admin.firestore();
+
+  // console.log(pedido);
+  let { totalCosto, totalVenta } = await Inventario.calcularCostos(DetallePedido);
+
   try {
-    let { fecha, numero, descuento, formaPago, nroTarjeta, totalVenta, totalCosto, DetalleFactura} = facturaReq.body;
-    let factura = Factura({fecha, numero, descuento, formaPago, nroTarjeta, totalVenta, totalCosto, DetalleFactura, active:true});
-    let facturaSaved = await factura.save();
-    return facturaSaved;
+    const snapshot = await db.collection('clients').where('uid', '==', Cliente.firebase_id).get();
+    snapshot.forEach( doc => user = doc.data() );
+    
+    let linkFront = `http://localhost:4200/${user.uid}/pedidos/${pedido._id}`;
+
+    let factura = Factura({
+      _id,
+      fecha: accepted,
+      total,
+      DetalleFactura: DetallePedido,
+      totalVenta,
+      totalCosto,
+      montoDecuento,
+      active
+    });
+
+    await factura.save();
+
+    const htmltext = `
+      <h3>Factura ${factura._id}</h3>
+      <p>Para descargar su factura visite el siguiente <a href="${linkFront}">link</a></p>
+    `;
+
+    await transporter.sendMail({
+      from: '"El Buen Sabor " <francomorales145@gmail.com>',
+      to: user.email,
+      subject: "El Buen Sabor [ Asunto ]",
+      html: htmltext,
+    });
+
+    console.log('email enviado');
   } catch (error) {
     console.error(`Error Svc Factura : ${error}`);
   }
