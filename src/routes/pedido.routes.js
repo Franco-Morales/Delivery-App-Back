@@ -22,4 +22,9 @@ router.put('/pedido/accept/:id',PedidoCtrl.acceptPedido)
 //demorar pedido
 
 router.get('/pedido/demorar/:id', PedidoCtrl.demorarPedido)
+
+//cancelar pedido
+
+router.put('/pedido/cancel/:id', PedidoCtrl.cancelPedido)
+
 export default router;

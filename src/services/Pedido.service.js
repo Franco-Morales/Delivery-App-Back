@@ -144,9 +144,14 @@ let activePedido = async (pedidoReq) => {
 
 //Pedido por estado
 let getPedidosByState = async (state) => {
-  let filtro = state==StatePedido.COCINA?
-  {active:true,estado:{$in:[StatePedido.COCINA,StatePedido.DEMORADO]}}:
-  {active:true,estado: state}
+  let filtro = {}
+  if(state == StatePedido.COCINA){
+    filtro = {active:true,estado:{$in:[StatePedido.COCINA,StatePedido.DEMORADO]}}
+  } else if ( state == StatePedido.CANCELADO){
+    filtro = {active:true,estado:{$in:[StatePedido.ENTREGADO,StatePedido.CANCELADO]}}
+  } else {
+    filtro = {active:true,estado: state}
+  }
   
   try {
     let pedidos = await Pedido.find(filtro)
@@ -165,6 +170,7 @@ let getPedidosByState = async (state) => {
         },
       });
     let pedidosDTO = [];
+    console.log("encontrados",pedidos.length)
     pedidos.forEach((pedido) => {
       pedidosDTO.push(new PedidoFilterDTO(pedido));
     });
@@ -220,6 +226,16 @@ let demorarPedido = async (id) =>{
   await pedido.save()
   return {"message":"El pedido fue demorado 10 minutos."}
 }
+
+let cancelPedido = async (id, motivo) => {
+  let pedido = await Pedido.findOne({_id: id})
+  pedido.canceled.fecha = Date.now()
+  pedido.canceled.motivo = motivo
+  pedido.estado = StatePedido.CANCELADO
+  await pedido.save()
+  return {"message": "El pedido fue cancelado exitosamente"}
+
+}
 /**
  * Pedido Service
  */
@@ -233,7 +249,8 @@ const PedidoSvc = {
   activePedido,
   getPedidosByState,
   acceptPedido,
-  demorarPedido
+  demorarPedido,
+  cancelPedido
 };
 
 export default PedidoSvc;
