@@ -101,6 +101,17 @@ let demorarPedido = async (req, res) => {
     res.status(500).json({ error: error });
   }
 };
+
+//cancelar pedido
+
+let cancelPedido = async (req, res) => {
+  try {
+    let cancel = await PedidoSvc.cancelPedido(req.params.id, req.body.motivo);
+    res.status(200).json(cancel.message);
+  } catch (error) { 
+    res.status(500).json({error : error})
+  }
+}
 /**
  * Pedido Controller
  */
@@ -115,6 +126,7 @@ const PedidoCtrl = {
   getPedidosByState,
   acceptPedido,
   demorarPedido,
+  cancelPedido
 };
 
 export default PedidoCtrl;

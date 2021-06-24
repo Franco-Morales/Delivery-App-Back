@@ -9,7 +9,10 @@ const PedidoSchema = new Schema({
     total: Number,
     
     accepted: Date, // guardo la fecha(hora) estimada de finalizado del pedido(demorado o no)
-
+    canceled: {
+        fecha: Date,
+        motivo: String
+    },
     // Cliente
     Cliente: {
         firebase_id : String,

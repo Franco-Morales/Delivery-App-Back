@@ -18,6 +18,8 @@ class PedidoFilterDTO {
     this.domicilio = this.getDomicilio(pedido.Cliente);
     this.horaAccepted= (pedido.accepted)?this.getTime(pedido.accepted) : "00.00" 
     this.horaFin = (pedido.accepted)?this.getTimeEnd(pedido.accepted):"Aun no aceptado";
+    this.horaCancel = (pedido.canceled.fecha)?this.getTime(pedido.canceled.fecha):"No cancelado"
+    this.motivoCancel = (pedido.canceled.motivo)?pedido.canceled.motivo:""
   }
 
   getTime(date) {
