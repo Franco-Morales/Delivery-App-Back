@@ -7,9 +7,9 @@ import artManuRoutes from "./articuloManufacturado.routes";
 import artInsRoutes from "./articuloInsumo.routes";
 import configRoutes from "./config.routes";
 import menuRoutes from "./menu.routes";
+import reporteRoutes from "./reporte.routes";
 
-
-const Routes = [ 
+const Routes = [
     rubGnlRoutes,
     rubArtRoutes,
     pedidoRoutes,
@@ -18,7 +18,8 @@ const Routes = [
     artManuRoutes,
     artInsRoutes,
     configRoutes,
-    menuRoutes
+    menuRoutes,
+    reporteRoutes
 ]
 
 

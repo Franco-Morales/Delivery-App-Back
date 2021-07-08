@@ -43,6 +43,79 @@ let findAllByUser = async (pedidoReq) => {
   }
 };
 
+/FindAllAndGroupByUser
+let findAllPedidoGroupByUser = async(pedidoReq) =>{
+  try {
+    let pedido = {
+      _id: '$_id',
+      total:'$total',
+      horaEstimadaFin:'$horaEstimadaFin',
+      tipoEnvio:'$tipoEnvio',
+      total:'$total',
+      DetallePedido:'$DetallePedido',
+      Factura:'$Factura',
+      active:'$active',
+      createdAt:'$createdAt',
+      updatedAt:'$updatedAt',
+      MdoPago:'$MdoPago'
+    };
+    let pedidos = await Pedido.aggregate([
+      {$match:{active:true}},
+      {$group:{_id:"$Cliente.firebase_id",pedidos:{$push:pedido}}}
+    ])
+
+    return pedidos;
+  } catch (error) {
+    console.error(`Error Svc Pedido : ${error.message}`);
+  }
+}
+
+let countMostFood = async(pedidoReq) => {
+  try {
+    let fecha = pedidoReq.body.fecha;
+    let finder = fecha ? {active:true,createdAt:{$gte: new Date(fecha.desde),$lt: new Date(fecha.hasta)}} : {active:true}
+    let comida = {};
+    let pedidos = await Pedido
+    .find(finder)
+    .populate({
+      path: "DetallePedido",
+      populate: {
+        path: "ArtManufact",
+        model: "ArtManufact",
+      },
+    })
+    pedidos.forEach(e => {
+       e.DetallePedido.forEach(c => {
+        if(c.ArtManufact){
+          comida[c.ArtManufact._id] = {_id:c.ArtManufact._id,denominacion:c.ArtManufact.denominacion,cantidadComprado:comida[c.ArtManufact._id] ? comida[c.ArtManufact._id].cantidadComprado + c.cantidad : c.cantidad};
+        }
+      })
+    })
+    let comidaOrdenada = Object.entries(comida).map((e) => ( e[1]  ));
+    comidaOrdenada.sort((a,b) => (a.cantidadComprado > b.cantidadComprado) ? -1 : ((b.cantidadComprado > a.cantidadComprado) ? 1 : 0))
+    return comidaOrdenada;
+  } catch (error) {
+    console.error(`Error Svc Pedido : ${error.message}`);
+  }
+}
+
+let entriesByPeriod = async(pedidoReq) => {
+  try {
+    let mensual = pedidoReq.body.mensual;
+    let groupOptions = mensual ? {año:{$year:"$accepted"},mes:{$month:"$accepted"}} : {año:{$year:"$accepted"},mes:{$month:"$accepted"},dia:{$dayOfMonth:"$accepted"}}
+
+    let pedidos = await Pedido.aggregate([
+      {$match:{estado:"entregado"}},
+      {$group:{_id:groupOptions,
+        ingreso:{$sum:"$total"}}},
+      {$sort:{"_id.año":1,"_id.mes":1,"_id.dia":1}}
+    ])
+    return pedidos
+  } catch (error) {
+    console.error(`Error Svc Pedido : ${error.message}`);
+  }
+}
+
 //Find One Pedido
 let findOnePedido = async (pedidoReq) => {
   let _id = pedidoReq.params.id;
@@ -152,7 +225,7 @@ let getPedidosByState = async (state) => {
   } else {
     filtro = {active:true,estado: state}
   }
-  
+
   try {
     let pedidos = await Pedido.find(filtro)
       .populate({
@@ -242,6 +315,9 @@ let cancelPedido = async (id, motivo) => {
 const PedidoSvc = {
   findAllPedido,
   findAllByUser,
+  findAllPedidoGroupByUser,
+  entriesByPeriod,
+  countMostFood,
   findOnePedido,
   savePedido,
   updatePedido,

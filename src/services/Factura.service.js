@@ -27,6 +27,26 @@ let findOneFactura = async(facturaReq) => {
   }
 }
 
+//Gain by Period
+let gainByPeriod = async (facturaReq) =>{
+  try {
+    let fecha = facturaReq.body.fecha;
+    let periodo = fecha ? {active:true,fecha:{$gte: new Date(fecha.desde),$lt: new Date(fecha.hasta)}} : {active:true}
+    let ganancia = await Factura.aggregate([
+      {$match:periodo},
+      {$group:{
+        _id:null,
+        totalVenta:{$sum:"$totalVenta"},
+        totalCosto:{$sum:"$totalCosto"},
+      }},
+      {$addFields:{totalGanancia:{$subtract:["$totalVenta","$totalCosto"]}}}
+    ])
+    return ganancia;
+  } catch (error) {
+    console.error(`Error Svc Factura : ${error.message}`);
+  }
+}
+
 //Save Factura
 let saveFactura = async (pedido) => {
 
@@ -47,7 +67,7 @@ let saveFactura = async (pedido) => {
   try {
     const snapshot = await db.collection('clients').where('uid', '==', Cliente.firebase_id).get();
     snapshot.forEach( doc => user = doc.data() );
-    
+
     let linkFront = `http://localhost:4200/${user.uid}/pedidos/${pedido._id}`;
 
     let factura = Factura({
@@ -132,7 +152,7 @@ let activeFactura = async (facturaReq) =>{
 /**
  * Factura Service
  */
-const FacturaSvc = { findAllFactura, findOneFactura, saveFactura, updateFactura, deleteFactura, activeFactura};
+const FacturaSvc = { findAllFactura, findOneFactura, gainByPeriod, saveFactura, updateFactura, deleteFactura, activeFactura};
 
 
 export default FacturaSvc;
