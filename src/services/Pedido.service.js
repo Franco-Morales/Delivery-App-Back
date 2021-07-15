@@ -43,40 +43,62 @@ let findAllByUser = async (pedidoReq) => {
   }
 };
 
-/FindAllAndGroupByUser
+//FindAllAndGroupByUser
 let findAllPedidoGroupByUser = async(pedidoReq) =>{
   try {
-    let pedido = {
-      _id: '$_id',
-      total:'$total',
-      horaEstimadaFin:'$horaEstimadaFin',
-      tipoEnvio:'$tipoEnvio',
-      total:'$total',
-      DetallePedido:'$DetallePedido',
-      Factura:'$Factura',
-      active:'$active',
-      createdAt:'$createdAt',
-      updatedAt:'$updatedAt',
-      MdoPago:'$MdoPago'
-    };
-    let pedidos = await Pedido.aggregate([
-      {$match:{active:true}},
-      {$group:{_id:"$Cliente.firebase_id",pedidos:{$push:pedido}}}
-    ])
-
-    return pedidos;
+    // let pedido = {
+    //   _id: '$_id',
+    //   total:'$total',
+    //   horaEstimadaFin:'$horaEstimadaFin',
+    //   tipoEnvio:'$tipoEnvio',
+    //   total:'$total',
+    //   DetallePedido:'$DetallePedido',
+    //   Factura:'$Factura',
+    //   active:'$active',
+    //   createdAt:'$createdAt',
+    //   updatedAt:'$updatedAt',
+    //   MdoPago:'$MdoPago'
+    // };
+    // let pedidos = await Pedido.aggregate([
+    //   {$match:{active:true}},
+    //   {$group:{_id:"$Cliente.firebase_id",pedidos:{$push:pedido}}}
+    // ])
+    let count = await Pedido.countDocuments({active:true});
+    let limit = parseInt(pedidoReq.query.limit);
+    let skip = parseInt(pedidoReq.query.skip);
+    let fecha = pedidoReq.body.fecha;
+    let options = fecha ? {active:true,fecha:{$gte: new Date(fecha.desde),$lt: new Date(fecha.hasta)}} : {active:true}
+    let pedidos = await Pedido.find(options).sort({"Cliente.firebase_id":1})
+    return {data: pedidos,isLast:limit + skip >= count ? true : false,isFirst: skip != 0 ? false : true,count: count};
   } catch (error) {
     console.error(`Error Svc Pedido : ${error.message}`);
   }
 }
 
+//GetFirstDate and LastDate
+let getFirstAndLastDatePedidosEntregado = async(pedidoReq) => {
+  try {
+    let finder = {active:true,estado:'entregado'}
+    let primerPedido = await Pedido.find(finder).limit(1).sort({fecha:1})
+    let ultimoPedido = await Pedido.find(finder).limit(1).sort({fecha:-1})
+    let fecha = {fechaInicio: primerPedido[0].fecha,fechaUltimo: ultimoPedido[0].fecha}
+    return fecha;
+  } catch (error) {
+    console.error(`Error Svc Pedido : ${error.message}`);
+  }
+}
+//Count Most Food
 let countMostFood = async(pedidoReq) => {
   try {
+    let limit = parseInt(pedidoReq.query.limit);
+    let skip = parseInt(pedidoReq.query.skip);
     let fecha = pedidoReq.body.fecha;
     let finder = fecha ? {active:true,createdAt:{$gte: new Date(fecha.desde),$lt: new Date(fecha.hasta)}} : {active:true}
     let comida = {};
     let pedidos = await Pedido
     .find(finder)
+    .skip(skip)
+    .limit(limit)
     .populate({
       path: "DetallePedido",
       populate: {
@@ -101,16 +123,22 @@ let countMostFood = async(pedidoReq) => {
 
 let entriesByPeriod = async(pedidoReq) => {
   try {
-    let mensual = pedidoReq.body.mensual;
-    let groupOptions = mensual ? {año:{$year:"$accepted"},mes:{$month:"$accepted"}} : {año:{$year:"$accepted"},mes:{$month:"$accepted"},dia:{$dayOfMonth:"$accepted"}}
-
+    let mensual = pedidoReq.query.mensual;
+    let skip = parseInt(pedidoReq.query.skip);
+    let limit = parseInt(pedidoReq.query.limit);
+    let count = await Pedido.countDocuments({active:true,estado:'entregado'});
+    let fecha = pedidoReq.body.fecha;
+    let match = fecha ? {estado:'entregado',accepted:{$gte: new Date(fecha.desde),$lt: new Date(fecha.hasta)}} : {estado:'entregado'};
+    let groupOptions = mensual == 'si' ? {anio:{$year:"$accepted"},mes:{$month:"$accepted"}} : {anio:{$year:"$accepted"},mes:{$month:"$accepted"},dia:{$dayOfMonth:"$accepted"}}
     let pedidos = await Pedido.aggregate([
-      {$match:{estado:"entregado"}},
+      {$match:match},
       {$group:{_id:groupOptions,
         ingreso:{$sum:"$total"}}},
-      {$sort:{"_id.año":1,"_id.mes":1,"_id.dia":1}}
-    ])
-    return pedidos
+      {$sort:{"_id.anio":1,"_id.mes":1,"_id.dia":1}},
+      {$skip: skip},
+      {$limit: limit}
+    ]);
+    return {data: pedidos,isLast:limit + skip >= count ? true : false,isFirst: skip != 0 ? false : true,count: count}
   } catch (error) {
     console.error(`Error Svc Pedido : ${error.message}`);
   }
@@ -316,6 +344,7 @@ const PedidoSvc = {
   findAllPedido,
   findAllByUser,
   findAllPedidoGroupByUser,
+  getFirstAndLastDatePedidosEntregado,
   entriesByPeriod,
   countMostFood,
   findOnePedido,

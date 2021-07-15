@@ -40,10 +40,19 @@ const gananciaPorPeriodo = async(req,res) => {
   }
 }
 
+const fechaInicioFechaLimite = async(req,res) => {
+  try {
+    let fecha = await PedidoSvc.getFirstAndLastDatePedidosEntregado(req);
+    res.status(200).json(fecha)
+  } catch (error) {
+    res.status(500).json({"Error Reporte Ctrl": error.message})
+  }
+}
+
 /**
 * Reporte Controller
 */
-const ReporteCtrl = { comidaMasPedida, pedidosAgrupadosporCliente, ingresosPorPeriodo, gananciaPorPeriodo };
+const ReporteCtrl = { comidaMasPedida, pedidosAgrupadosporCliente, ingresosPorPeriodo, gananciaPorPeriodo, fechaInicioFechaLimite};
 
 
 export default ReporteCtrl;
