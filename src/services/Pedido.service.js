@@ -4,7 +4,8 @@ import StatePedido from '../models/const/statePedido';
 
 import Inventario from "../inventario/inventario";
 import FacturaSvc from "./Factura.service";
-
+import admin from '../firebase';
+const db = admin.firestore()
 
 //Find All Pedido
 let findAllPedido = async () => {
@@ -46,23 +47,6 @@ let findAllByUser = async (pedidoReq) => {
 //FindAllAndGroupByUser
 let findAllPedidoGroupByUser = async(pedidoReq) =>{
   try {
-    // let pedido = {
-    //   _id: '$_id',
-    //   total:'$total',
-    //   horaEstimadaFin:'$horaEstimadaFin',
-    //   tipoEnvio:'$tipoEnvio',
-    //   total:'$total',
-    //   DetallePedido:'$DetallePedido',
-    //   Factura:'$Factura',
-    //   active:'$active',
-    //   createdAt:'$createdAt',
-    //   updatedAt:'$updatedAt',
-    //   MdoPago:'$MdoPago'
-    // };
-    // let pedidos = await Pedido.aggregate([
-    //   {$match:{active:true}},
-    //   {$group:{_id:"$Cliente.firebase_id",pedidos:{$push:pedido}}}
-    // ])
     let count = await Pedido.countDocuments({active:true});
     let limit = parseInt(pedidoReq.query.limit);
     let skip = parseInt(pedidoReq.query.skip);
@@ -159,6 +143,12 @@ let findOnePedido = async (pedidoReq) => {
 //Save Pedido
 let savePedido = async (pedidoReq) => {
   try {
+    const snapshot = await db.collection('clients').where('role', '==', 1).where('online','==',true).get();
+    let contadorCocineros = 1;
+    snapshot.forEach(doc => {
+      contadorCocineros++;
+    });
+    let horaFinal = pedidoReq.body.horaEstimadaFin/contadorCocineros;
     let {
       fecha,
       estado,
@@ -173,7 +163,7 @@ let savePedido = async (pedidoReq) => {
     let pedido = Pedido({
       fecha,
       estado,
-      horaEstimadaFin,
+      horaEstimadaFin:horaFinal,
       tipoEnvio,
       total,
       Cliente,
@@ -183,7 +173,7 @@ let savePedido = async (pedidoReq) => {
       active: true,
     });
     let pedidoSaved = await pedido.save();
-    return pedidoSaved;
+    return pedido;
   } catch (error) {
     console.error(`Error Svc Pedido : ${error}`);
   }
@@ -285,7 +275,7 @@ let acceptPedido = async(id,state)=>{
   let pedido = await Pedido.findOne({_id : id})
   //Si el estado actual del pedido es "en espera" lo aceptara para mandarlo a cocina
   if(state == StatePedido.ESPERA){
-    /*let stock = await Inventario.preValidate(pedido);
+    let stock = await Inventario.preValidate(pedido);
     if(stock.status){
       await Inventario.restarStock(pedido);
       pedido.estado = StatePedido.COCINA;
@@ -294,7 +284,7 @@ let acceptPedido = async(id,state)=>{
     }
     else{
       return {"message": "El pedido no se pudo procesar por falta de stock de insumos"}
-    }*/
+    }
     pedido.estado = StatePedido.COCINA
     pedido.accepted = Date.now()
     await pedido.save()
