@@ -10,19 +10,19 @@ const FacturaSchema = new Schema({
     totalVenta: Number,
     totalCosto: Number,
     //
-    DetalleFactura:  {
+    DetalleFactura:  [{
         cantidad: Number,
         subTotal: Number,
         ArtManufact: {
             type: Schema.Types.ObjectId,
             ref: 'ArtManuFact'
         },
-        ArticuloIsumo: {
+        ArticuloInsumo: {
             type: Schema.Types.ObjectId,
             ref: 'ArtInsumo'
         },
         _id: false
-    },
+    }],
     active: Boolean,
     delete: {
         type:{

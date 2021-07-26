@@ -61,7 +61,6 @@ let saveFactura = async (pedido) => {
   let user;
   const db = admin.firestore();
 
-  // console.log(pedido);
   let { totalCosto, totalVenta } = await Inventario.calcularCostos(DetallePedido);
 
   try {
@@ -70,17 +69,19 @@ let saveFactura = async (pedido) => {
 
     let linkFront = `http://localhost:4200/${user.uid}/pedidos/${pedido._id}`;
 
+    let numeroFactura = await Factura.countDocuments();
     let factura = Factura({
       _id,
       fecha: accepted,
       total,
       DetalleFactura: DetallePedido,
       totalVenta,
+      numero: numeroFactura+1,
       totalCosto,
       montoDecuento,
       active
     });
-
+    console.log(factura);
     await factura.save();
 
     const htmltext = `
