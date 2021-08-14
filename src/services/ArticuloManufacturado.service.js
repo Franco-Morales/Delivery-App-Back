@@ -33,7 +33,15 @@ let findOneArticuloManufacturado = async(artManFacsReq) => {
   let _id = artManFacsReq.params.id;
   let filter = { _id, active: true };
   try {
-    let artManFac = await ArtManufactModel.findOne(filter).populate('RubroGeneral');
+    let artManFac = await ArtManufactModel.findOne(filter)
+      .populate("RubroGeneral")
+      .populate({
+        path: "ArtManufactDet",
+        populate: {
+          path: "ArtInsumo",
+          model: "ArtInsumo"
+        }
+      });
     return artManFac;
   } catch (error) {
     console.error(`Error Svc ArtManufact: ${error}`);
