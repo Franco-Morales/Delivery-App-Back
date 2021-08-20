@@ -81,7 +81,7 @@ let saveFactura = async (pedido) => {
       montoDecuento,
       active
     });
-    console.log(factura);
+    // console.log(factura);
     await factura.save();
 
     const htmltext = `
@@ -96,7 +96,7 @@ let saveFactura = async (pedido) => {
       html: htmltext,
     });
 
-    console.log('email enviado');
+    // console.log('email enviado');
   } catch (error) {
     console.error(`Error Svc Factura : ${error}`);
   }

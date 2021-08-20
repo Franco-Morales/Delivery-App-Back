@@ -1,11 +1,15 @@
 import Pedido from "../models/pedido.model";
 import PedidoFilterDTO from "../models/dto/PedidoFilterDTO";
 import StatePedido from '../models/const/statePedido';
+import Roles from "../models/const/roleUser";
 
 import Inventario from "../inventario/inventario";
+
 import FacturaSvc from "./Factura.service";
+
 import admin from '../firebase';
 const db = admin.firestore()
+
 
 //Find All Pedido
 let findAllPedido = async () => {
@@ -143,16 +147,23 @@ let findOnePedido = async (pedidoReq) => {
 //Save Pedido
 let savePedido = async (pedidoReq) => {
   try {
-    const snapshot = await db.collection('clients').where('role', '==', 1).where('online','==',true).get();
-    let contadorCocineros = 1;
+    const snapshot = await db.collection('clients').where('role', '==', Roles.Cocinero).where('online','==',true).get();
+    let contadorCocineros = 3;
+
     snapshot.forEach(doc => {
       contadorCocineros++;
     });
-    let horaFinal = pedidoReq.body.horaEstimadaFin/contadorCocineros;
+
+    // let horaFinal = pedidoReq.body.horaEstimadaFin/contadorCocineros;
+    let cocinaDemora = await getPedidosByState(StatePedido.COCINA);
+    let tiempoCocinaDemora = cocinaDemora.reduce((acc,item) => item.tiempoFin+acc,0);
+    tiempoCocinaDemora = tiempoCocinaDemora? tiempoCocinaDemora:10;
+
+    let horaFinal = pedidoReq.body.horaEstimadaFin+(tiempoCocinaDemora/contadorCocineros);
+    
     let {
       fecha,
       estado,
-      horaEstimadaFin,
       tipoEnvio,
       total,
       Cliente,
@@ -160,10 +171,11 @@ let savePedido = async (pedidoReq) => {
       Factura,
       MdoPago,
     } = pedidoReq.body;
+
     let pedido = Pedido({
       fecha,
       estado,
-      horaEstimadaFin:horaFinal,
+      horaEstimadaFin: horaFinal,
       tipoEnvio,
       total,
       Cliente,
@@ -173,7 +185,7 @@ let savePedido = async (pedidoReq) => {
       active: true,
     });
     let pedidoSaved = await pedido.save();
-    return pedido;
+    return pedidoSaved;
   } catch (error) {
     console.error(`Error Svc Pedido : ${error}`);
   }
@@ -235,15 +247,27 @@ let activePedido = async (pedidoReq) => {
 
 //Pedido por estado
 let getPedidosByState = async (state) => {
-  let filtro = {}
-  if(state == StatePedido.COCINA){
-    filtro = {active:true,estado:{$in:[StatePedido.COCINA,StatePedido.DEMORADO]}}
-  } else if ( state == StatePedido.CANCELADO){
-    filtro = {active:true,estado:{$in:[StatePedido.ENTREGADO,StatePedido.CANCELADO]}}
+  let filtro = { };
+  if(state == StatePedido.COCINA) {
+    filtro = {  
+      active: true,
+      estado: { 
+        $in: [StatePedido.COCINA, StatePedido.DEMORADO]
+      } 
+    };
+  } else if ( state == StatePedido.CANCELADO) {
+    filtro = { 
+      active: true,
+      estado:{ 
+        $in:[StatePedido.ENTREGADO, StatePedido.CANCELADO] 
+      } 
+    };
+  } else if(state === "ALL") {
+    filtro = { active: true }
   } else {
-    filtro = {active:true,estado: state}
+    filtro = { active: true, estado: state }
   }
-
+  
   try {
     let pedidos = await Pedido.find(filtro)
       .populate({
@@ -261,10 +285,11 @@ let getPedidosByState = async (state) => {
         },
       });
     let pedidosDTO = [];
-    console.log("encontrados",pedidos.length)
-    pedidos.forEach((pedido) => {
-      pedidosDTO.push(new PedidoFilterDTO(pedido));
-    });
+
+    for (let pedido of pedidos) {
+      pedidosDTO.push( await PedidoFilterDTO.save(pedido));
+    }
+    
     return pedidosDTO;
   } catch (error) {
     console.error(`Error Svc Pedido : ${error}`);
@@ -279,16 +304,13 @@ let acceptPedido = async(id,state)=>{
     if(stock.status){
       await Inventario.restarStock(pedido);
       pedido.estado = StatePedido.COCINA;
+      pedido.accepted = Date.now();
       await pedido.save();
       return {"message": "El pedido fue procesado correctamente."}
     }
     else{
       return {"message": "El pedido no se pudo procesar por falta de stock de insumos"}
     }
-    pedido.estado = StatePedido.COCINA
-    pedido.accepted = Date.now()
-    await pedido.save()
-     return {"message":"El pedido fue procesado correctamente." }
   }
 
   //Si el estado actual es "en cocina" lo aceptara para marcarlo como finalizado y mandarlo a delivery
@@ -296,6 +318,7 @@ let acceptPedido = async(id,state)=>{
     pedido.estado = StatePedido.LISTO
     pedido.accepted = Date.now();
     await pedido.save();
+
     return {"message":"El pedido esta finalizado. Listo para entregar."}
   }
 
@@ -303,7 +326,18 @@ let acceptPedido = async(id,state)=>{
   if(state === StatePedido.LISTO){
     pedido.estado = StatePedido.ENTREGADO;
     pedido.accepted = Date.now();
+    await pedido.save();
+
+    return {"message":"El pedido ya fue entregado al cliente con éxito" }
+  }
+
+  //Si el estado actual es "entregado" lo marcará como facturado
+  if(state === StatePedido.ENTREGADO){
+    pedido.estado = StatePedido.FACTURADO;
+    pedido.accepted = Date.now();
+
     let pedidoEntregado = await pedido.save();
+
     await FacturaSvc.saveFactura(pedidoEntregado);
 
     return {"message":"El pedido ya fue entregado al cliente con éxito" }
@@ -314,19 +348,21 @@ let demorarPedido = async (id) =>{
   let pedido = await Pedido.findOne({_id : id})
   pedido.horaEstimadaFin += 10;
   pedido.estado = StatePedido.DEMORADO
-  await pedido.save()
+  await pedido.save();
+
   return {"message":"El pedido fue demorado 10 minutos."}
 }
 
 let cancelPedido = async (id, motivo) => {
   let pedido = await Pedido.findOne({_id: id})
-  pedido.canceled.fecha = Date.now()
-  pedido.canceled.motivo = motivo
-  pedido.estado = StatePedido.CANCELADO
-  await pedido.save()
-  return {"message": "El pedido fue cancelado exitosamente"}
+  pedido.canceled.fecha = Date.now();
+  pedido.canceled.motivo = motivo;
+  pedido.estado = StatePedido.CANCELADO;
+  await pedido.save();
 
+  return {"message": "El pedido fue cancelado exitosamente"}
 }
+
 /**
  * Pedido Service
  */
@@ -347,5 +383,6 @@ const PedidoSvc = {
   demorarPedido,
   cancelPedido
 };
+
 
 export default PedidoSvc;

@@ -8,6 +8,7 @@ import artInsRoutes from "./articuloInsumo.routes";
 import configRoutes from "./config.routes";
 import menuRoutes from "./menu.routes";
 import reporteRoutes from "./reporte.routes";
+import adminRoutes from "./admin.routes";
 
 const Routes = [
     rubGnlRoutes,
@@ -19,7 +20,8 @@ const Routes = [
     artInsRoutes,
     configRoutes,
     menuRoutes,
-    reporteRoutes
+    reporteRoutes,
+    adminRoutes
 ]
 
 

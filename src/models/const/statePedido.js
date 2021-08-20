@@ -4,7 +4,8 @@ const StatePedido =  {
     DEMORADO: "demorado",
     LISTO : "listo",
     ENTREGADO: "entregado",
+    FACTURADO: "facturado",
     CANCELADO: "cancelado"
 }
 
-module.exports = StatePedido
+export default StatePedido;

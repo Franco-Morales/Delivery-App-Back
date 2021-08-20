@@ -1,65 +1,75 @@
 import admin from "../../firebase";
 const db = admin.firestore();
 
-class PedidoFilterDTO {
-  constructor(pedido) {
-    this._id = pedido._id;
-    this.tiempoFin = pedido.horaEstimadaFin;
-    this.envio =
-      pedido.tipoEnvio == 1 ? "Envio a domicilio" : "Retiro en local";
-    this.horaE = this.getTime(pedido.fecha);
-    this.total = pedido.total;
-    this.DetallePedido = pedido.DetallePedido;
-    this.estado = pedido.estado;
-    this.nombre = async () => {
-      (await this.getUser(pedido.Cliente?.firebase_id)?.nombre) ||
-        "Desconocido";
+
+const PedidoFilterDTO = {
+  save: async pedido => {
+    let _id = pedido._id;
+    let tiempoFin = pedido.horaEstimadaFin;
+    let envio = ( pedido.tipoEnvio == 1) ? "Envio a domicilio" : "Retiro en local";
+    let horaE = getTime(pedido.fecha);
+    let total = pedido.total;
+    let DetallePedido = pedido.DetallePedido;
+    let estado = pedido.estado;
+    let cliente = await getUserByFID(pedido.Cliente?.firebase_id);
+
+    let domicilio = getDomicilio(pedido.Cliente);
+    let horaAccepted= (pedido.accepted)?getTime(pedido.accepted) : "00.00" 
+    let horaFin = (pedido.accepted)?getTimeEnd(pedido.accepted, tiempoFin):"Aun no aceptado";
+    let horaCancel = (pedido.canceled.fecha)?getTime(pedido.canceled.fecha):"No cancelado"
+    let motivoCancel = (pedido.canceled.motivo)?pedido.canceled.motivo:"";
+
+    return { 
+      _id, tiempoFin, envio, 
+      horaE, total, DetallePedido, 
+      estado, cliente, domicilio, 
+      horaAccepted, horaFin, horaCancel, 
+      motivoCancel 
     };
-    this.domicilio = this.getDomicilio(pedido.Cliente);
-    this.horaAccepted= (pedido.accepted)?this.getTime(pedido.accepted) : "00.00" 
-    this.horaFin = (pedido.accepted)?this.getTimeEnd(pedido.accepted):"Aun no aceptado";
-    this.horaCancel = (pedido.canceled.fecha)?this.getTime(pedido.canceled.fecha):"No cancelado"
-    this.motivoCancel = (pedido.canceled.motivo)?pedido.canceled.motivo:""
   }
+}
+// Metodos privados 
+let getTime = date => {
+  return formatTime(date.getHours())+":"+ formatTime(date.getMinutes());
+}
 
-  getTime(date) {
-    return this.formatTime(date.getHours())+":"+ this.formatTime(date.getMinutes());
-  }
+let getTimeEnd = ( date, tiempoFin ) => {
+  date.setTime(date.getTime()+(tiempoFin*60*1000)) //minutos*segundos*milisegundos
+  return formatTime(date.getHours())+":"+ formatTime(date.getMinutes());
+}
 
-  getTimeEnd(date){
-    date.setTime(date.getTime()+(this.tiempoFin*60*1000)) //minutos*segundos*milisegundos
-    return this.formatTime(date.getHours())+":"+ this.formatTime(date.getMinutes());
+let formatTime = n =>{
+  if(n<10){
+    return "0"+n.toString();
+  }else{
+    return n.toString();
   }
-  
-  formatTime(n){
-    if(n<10){
-      return "0"+n.toString();
-    }else{
-      return n.toString();
-    }
-  }
-  async getUser(uid) {
-    try {
-      const snapshot = await db
-        .collection("clients")
-        .where("uid", "==", uid)
-        .get();
-      let cliente = null;
-      snapshot.forEach((doc) => {
-        cliente = doc.data();
-      });
-      return cliente;
-    } catch (error) {
-      console.log("Err", error);
-    }
-  }
-  getDomicilio(cliente) {
-    if (cliente.domicilio) {
-      return cliente.domicilio?.calle + " " + cliente.domicilio?.numero;
-    } else {
-      return "Domicilio desconocido";
-    }
+}
+//Firebase ID = fid
+let getUserByFID =  async ( fid ) => { 
+  let cliente = null;
+  try {
+    const snapshot = await db
+      .collection("clients")
+      .where("uid", "==", fid)
+      .get();
+
+    snapshot.forEach((doc) => {
+      cliente = doc.data();
+    });
+    return cliente;
+  } catch (error) {
+    console.log("PedidoDTOFilter : ", error);
   }
 }
 
-module.exports = PedidoFilterDTO;
+let getDomicilio = cliente => {
+  if (cliente.domicilio) {
+    return `${cliente.domicilio?.calle} ${cliente.domicilio?.numero}`;
+  } else {
+    return "Domicilio desconocido";
+  }
+}
+
+
+export default PedidoFilterDTO;
