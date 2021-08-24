@@ -152,8 +152,8 @@ let savePedido = async (pedidoReq) => {
     let cocinaDemora = await cocinaDemoraTiempo();
     let horaFinal = pedidoReq.body.horaEstimadaFin+(cocinaDemora/contadorCocineros);
     
-    console.log('Cocineros activos : ', contadorCocineros, '| Demora en cocina : ', cocinaDemora, '| Pedido : ',pedidoReq.body.horaEstimadaFin);
-    console.log('Hora aprox. de finalización :', horaFinal);
+    // console.log('Cocineros activos : ', contadorCocineros, '| Demora en cocina : ', cocinaDemora, '| Pedido : ',pedidoReq.body.horaEstimadaFin);
+    // console.log('Hora aprox. de finalización :', horaFinal);
 
     let {
       fecha,
@@ -333,7 +333,6 @@ let acceptPedido = async(id,state) => {
         pedido.estado = StatePedido.COCINA;
         pedido.accepted = Date.now();
         await pedido.save();
-        // await ArticuloManufacturadoModel.stockValidation();
         return { status: 'success', message: "El pedido fue procesado correctamente." }
       }
       else{
