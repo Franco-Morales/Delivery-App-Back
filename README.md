@@ -25,6 +25,10 @@ En caso de _deploy_ escribir en la consola :
 npm run build 
 ```
 Revisar la carpeta 'dist' creada donde se encontrará el proyecto compilado.
+
+## Documentación
+[Docs](https://franco-morales.github.io/Delivery-App-Back/)
+
 ## Tecnologías
 * [Express.js](https://www.npmjs.com/package/express)
 * [Mongoose](https://www.npmjs.com/package/mongoose)
@@ -33,6 +37,8 @@ Revisar la carpeta 'dist' creada donde se encontrará el proyecto compilado.
 ## Autores 
 * [Alexander Castillo](https://github.com/AlexMarceloCastillo)
 * [Valentín Legizamon](https://github.com/valeguizamon)
+* [Daniel Tapia](https://github.com/danieltapia2019)
+* [Franco Morales](https://github.com/Franco-Morales)
 
 ### Links 
 * [App Frontend Client](https://github.com/AlexMarceloCastillo/Delivery-App-Front-Cliente)

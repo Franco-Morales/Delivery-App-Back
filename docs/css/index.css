@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+* {
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    background-color: ghostwhite;
+}
+
+aside {
+    width: 250px;
+    height: 100vh;
+    border-right: 1px solid rgba(128, 128, 128, 0.3);
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    overflow-x: hidden;
+}
+
+aside nav {
+    margin-top: 60px;
+}
+
+aside ul {
+    padding: unset;
+}
+
+aside ul li {
+    display: inline;
+}
+
+aside ul li a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    display: block;
+    color: black;
+}
+
+aside ul li a:hover {
+    color: teal;
+    border-left: 3px solid teal;
+}
+
+
+main {
+    margin-left: 250px;
+}
+
+/* Ref: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_sidenav_fixed */
+main div#landing {
+    margin: 3% auto;
+}
+
+main div#landing h2 {
+    margin-top: 2%;
+    font-size: 2rem;
+}
+
+main article {
+    margin-top: 5%;
+}
+
+main article:last-child {
+    margin-bottom: 5%;
+}
+
+main article h3 {
+    border-left: 3px solid teal;
+    padding-left: 2.5%;
+}
+
+main article h4 {
+    margin-top: 2%;
+    padding-left: 2.4%;
+}
+
+main article h6 {
+    margin-top: 1%;
+    padding-left: 2.4%;
+}

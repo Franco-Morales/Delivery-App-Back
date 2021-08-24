@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/index.css">´
+    <!--Fontawesome-->
+    <script src="https://kit.fontawesome.com/918d19c8b4.js" crossorigin="anonymous"></script>
+    <title>Documentación</title>
+</head>
+<body>
+    <aside>
+        <nav>
+            <ul>
+                <li>
+                    <a href="./index.html">Inicio</a>
+                </li>
+                <li>
+                    <a href="#proyect">Estructura</a>
+                </li>
+                <li>
+                    <a href="#herramienta">"Gaia"</a>
+                </li>
+                <li>
+                    <a href="#app-server">App</a>
+                </li>
+                <li>
+                    <a href="#routes">Rutas</a>
+                </li>
+                <li>
+                    <a href="#models">Modelos</a>
+                </li>
+                <li>
+                    <a href="#controllers">Controlador</a>
+                </li>
+                <li>
+                    <a href="#services">Servicio</a>
+                </li>
+                <li>
+                    <a href="#middleware">Middleware</a>
+                </li>
+                <li>
+                    <a href="#invModule">Inventario</a>
+                </li>
+                <li>
+                    <a href="#links">Bibliografía</a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    <main>
+        <div id="landing" class="text-center">
+            <h1 class="display-4">Documentación Backend</h1>
+            <h2 class="lead">Delivery App Backend</h2>
+        </div>
+        <section id="docs" class="container">
+            <article id="proyect">
+                <div class="row">
+                    <div class="col-12">
+                        <h3>Estructura del proyecto</h3>
+                        <hr>
+                    </div>
+                    <div class="col-12">
+                        <p>
+                            Dentro del directorio /src se encuentran 5 carpetas y 4 archivos importantes, los cuales son :
+                            <ul>
+                                <li>/controllers</li>
+                                <li>/inventario</li>
+                                <li>/middlewares</li>
+                                <li>/models</li>
+                                <li>/routes</li>
+                                <li>/service</li>
+                                <li>app.js</li>
+                                <li>database.js</li>
+                                <li>server.js</li>
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+            </article>
+            <article id="app-server">
+                <div class="row">
+                    <div class="col-12">
+                        <h3>App.js, Server.js, Database.js y Firebase.js</h3>
+                        <hr>
+                    </div>
+                    <div class="col-12">
+                        <p>
+                            El archivo <i>server.js</i> crea una instancia de <i>Express()</i> y la exporta para que el script <i>App.js</i> lo incialize mediante el metodo asíncrono <i>main()</i>.
+                        </p>
+                        <p>
+                            El archivo <i>database.js</i> contiene la conexión a MongoDB mendiante mongoose.
+                        </p>
+                        <p>El archivo <i>firebase.js</i> es donde se realiza la conexion y certificacion al SDK del proyecto de Firebase en cuestion. Exporta al administrador del SDK</p>
+                    </div>
+                </div>
+            </article>
+            <article id="routes">
+                <div class="row">
+                    <div class="col-12">
+                        <h3>Routes</h3>
+                        <hr>
+                    </div>
+                    <div class="col-12">
+                        <p>
+                            La carpeta <i>/routes</i> contiene todas las rutas disponibles de la [API], cada archivo correspone con una unica entidad. La URL básica para acceder a un recurso es mediante: <code>http://localhost:2021/api/v1/recurso</code>.
+                        </p>
+                        <p>
+                            El formato de un archivo routes es el siguiente:
+                            <code>
+                                <pre>
+                                    router.get(url,function);
+                                </pre>
+                            </code>
+                        </p>
+                        <p>
+                            Lista de vervos HTTP soportados :
+                            <ul>
+                                <li>DELETE</li>
+                                <li>GET</li>
+                                <li>POST</li>
+                                <li>PUT</li>
+                                <li>PATH</li>
+                            </ul>
+                        </p>
+                    </div>
+                    <div class="col-12">
+                        <h4>Peticiones</h4>
+                        <h6 class="subtitle">GET</h6>
+                        <p>
+                            El método [ GET ] tiene dos posibles intercaciones : <code>http://localhost:2021/api/v1/recurso</code> o <code>http://localhost:2021/api/v1/recurso/:id</code>.
+                        </p>
+                        <h6 class="subtitle">POST</h6>
+                        <p>
+                            El método [ POST ] tiene una posible intercacion : <code>http://localhost:2021/api/v1/recurso</code>.
+                        </p>
+                        <h6 class="subtitle">PUT</h6>
+                        <p>
+                            El método [ GET ] tiene una posible intercacion : <code>http://localhost:2021/api/v1/recurso/:id</code>.
+                        </p>
+                        <h6 class="subtitle">DELETE</h6>
+                        <p>
+                            El método [ DELETE ] tiene una posible intercacion : <code>http://localhost:2021/api/v1/recurso/:id</code>.
+                        </p>
+                        <h6 class="subtitle">PATCH</h6>
+                        <p>
+                            El método [ PATCH ] tiene una posible intercacion : <code>http://localhost:2021/api/v1/recurso/:id</code>.
+                        </p>
+                    </div>
+                </div>
+            </article>
+            <article id="models">
+                <div class="row">
+                    <div class="col-12">
+                        <h3>Models</h3>
+                        <hr>
+                    </div>
+                    <div class="col-12">
+                        <p>
+                            La carpeta <i>/models</i> contiene los modelos que corresponden con una unica entidad.
+                        </p>
+                        <p>
+                            Ejemplo básico de un modelo :
+                            <code>
+                                <pre>
+                                    import { Schema, model } from 'mongoose';
+
+                                    const schemaRecurso = new Schema({
+                                        propiedad1: String
+                                    });
+
+                                    export default model('recursoModel',schemaRecurso);
+                                </pre>
+                            </code>
+                            Los modelos utilizados tienen propiedades en común que son :
+                            <ul>
+                                <li><code>_id</code> creada automaticamente por mongoose</li>
+                                <li><code>active</code> creada automaticamente en modelo, no nativa de mongoose</li>
+                                <li><code>delete</code> creada automaticamente en modelo, no nativa de mongoose</li>
+                            </ul>
+                        </p>
+                        <p>Más información sobre <a href="https://mongoosejs.com/docs/guide.html#definition">Schema</a> y <a href="https://mongoosejs.com/docs/models.html">model</a></p>
+                    </div>
+                </div>
+            </article>
+            <article id="controllers">
+                <div class="row">
+                    <div class="col-12">
+                        <h3>Controllers</h3>
+                        <hr>
+                    </div>
+                    <div class="col-12">
+                        <p>
+                            La carpeta <i>/controllers</i> contiene los controladores para cada ruta disponibles de la [API], cada archivo corresponde con una unica entidad. La repsonsabilidad del controlador es unicamente gestionar las peticiones HTTP, por su parte cada método del controlador llama a una función del Servicio.
+                        </p>
+                        <p>
+                            El formato de un archivo controlador es el siguiente:
+                            <code>
+                                <pre>
+                                    import RecursoSvc from './root/services/recurso.service.js'
+
+                                    let getAll = async (req, res) => {
+                                        try {
+                                            let recurso = await recursoSvs.metodo(req);
+                                            res.status(200).json(recurso);
+                                        } catch (e) {
+                                            res.status(500).json({'error': error})
+                                        }
+                                    }
+                                    . . .
+                                    const RecursoCtrl = { getAllRecurso };
+                                    export default RecursoCtrl;
+                                </pre>
+                            </code>
+                        </p>
+                        <p>
+                            Cada controlador tiene cinco funciones básicas :
+                            <ul>
+                                <li>GetAll</li>
+                                <li>GetOne</li>
+                                <li>PostOne</li>
+                                <li>UpdateOne</li>
+                                <li>DeleteOne</li>
+                                <li>Active</li>
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+            </article>
+            <article id="services">
+                <div class="row">
+                    <div class="col-12">
+                        <h3>Services</h3>
+                        <hr>
+                    </div>
+                    <div class="col-12">
+                        <p>
+                            La carpeta <i>/services</i> contiene los servicios para cada controlador disponibles de la [API], cada archivo corresponde con una unica entidad. La repsonsabilidad del servicio es gestionar la lógica implícita, por su parte cada método del servicio llama a uno o varions <i>model</i>.
+                        </p>
+                        <p>
+                            El formato de un archivo service es el siguiente:
+                            <code>
+                                <pre>
+                                    import RecursoModel from './root/model/recurso.model.js'
+
+                                    let findAllRecurso = async (reqRecurso) => {
+                                        try {
+                                            let recurso = await RecursoModel.metodoMongoose(reqRecurso=null);
+                                            return recurso;
+                                        } catch (e) {
+                                            console.error(`Error Recurso Service : ${e}`);
+                                        }
+                                    }
+                                    . . .
+                                    const RecursoSvc = { findAllRecurso };
+                                    export default RecursoSvc;
+                                </pre>
+                            </code>
+                        </p>
+                    </div>
+                    <div class="col-12">
+                        <h4>Aclaraciones</h4>
+                        <p>
+                            Los metodos <code>findAllRecurso()</code> y <code>findOneRecurso()</code> retornar un arreglo o un objeto siempre y cuando este tenga la propiedad <code>active: true</code>
+                        </p>
+                        <p>
+                            La función <i>deleteOne[recurso]</i> solo realiza un "soft delete" (baja lógica), cuyo paramatro deben ser el <code>uid</code> del usuario, cambia la propiedad <i>delete</i> por un objeto <code>{user_uid: uid, deleteAt: Date}</code> y modifica el estado de <i>active</i> a <code>false</code>.
+                        </p>
+                        <p>
+                            El método <i>active</i> realiza todo lo contrario cambia la propiedad <i>delete</i> por un objeto vacio <code>{ }</code>, que es ignorado automaticamente por mongoose a la hora de realizar operaciones. Por último cambia el estado de <i>active</i> a <code>true</code>.
+                        </p>
+                        <p>
+                            La función <a href="https://mongoosejs.com/docs/populate.html">populate</a> realiza un <i>join</i> de subdocumentos, en vez de retornar un atributo <code>_id: id</code> devuelve el objeto en cuestion.
+                        </p>
+                    </div>
+                </div>
+            </article>
+            <article id="middleware">
+                <div class="row">
+                    <div class="col-12">
+                        <h3>Middleware</h3>
+                        <hr>
+                    </div>
+                    <div class="col-12">
+                        <p>La carpeta /middlewares contiene el unico middleware llamado user.middleware. Verifica si existe el usuario en una coleccion de firestore (base de datos del proyecto de Firebase) mediante un request.body.uid dejandolo continuar si existe, en cambio si no existe no puede continuar.</p>
+                        <p>El middleware crea una instancia de el archivo firebase.js para obtener el administrador.</p>
+                        <p>Utiliza el request body de la ruta para obtener el id del usuario.</p>
+                        <p>Es llamado antes de la ruta a utilizar.</p>
+                        <p>La funciones <code>existUser()</code> realiza una validacion de si el usuario existe , retorna un next() caso de encontrarlo , sino devuelve un status de 400. </p>
+                    </div>
+                </div>
+            </article>
+            <article id="invModule">
+                <div class="row">
+                    <div class="col-12">
+                        <h3>Inventario</h3>
+                        <hr>
+                    </div>
+                    <div class="col-12">
+                        <p>La carpeta /inventario contiene el módulo del control de stock llamado <code>inventario.js</code></p>
+                        <p>Las funciones que exporta el módulo son <code>restarStock()</code> y <code>preValidate()</code></p>
+                    </div>
+                    <div class="col-12">
+                        <h4>Función : restarStock()</h4>
+                        <p>La función recibe un objeto pedido previamente validado que itera sobre las propiedade <i>DetallePedido</i>, para llamar a dos funciones auxliares que gestionan independientemente el stock de <i>Artículo Insumo</i> y <i>Artículo Manufacturado</i> .</p>
+                    </div>
+                    <div class="col-12">
+                        <h4>Función : preValidate()</h4>
+                        <p>La función recibe un objeto pedido que itera sobre las propiedade <i>DetallePedido</i>, para verificar si se puede realizar el pedido pasado por parametro.</p>
+                        <p>Retorna un objeto que contiene un arreglo de ids y estados de stock para cada <i>Artículo Insumo</i> y <i>Artículo Manufacturado</i> respectivamente, junto a otra propiedad booleana llamada stock, que contiene el estado global del pedido.</p>
+                        <p>
+                            <pre>
+                                <code>
+                                    stock = { 
+                                        artInsumo: [
+                                            { _id: id, stockStatus: boolean}
+                                        ], 
+                                        artManufact: [
+                                            { _id: id, stockStatus: boolean}
+                                        ], 
+                                        status: boolean
+                                    };
+                                </code>
+                            </pre>
+                        </p>
+                    </div>
+                    <div class="col-12">
+                        <h4>Funciones auxiliares</h4>
+                        <p>Las funciones auxiliares se encuentran documentadas en el <a href="https://github.com/Franco-Morales/Delivery-App-Back/blob/desarrollo/src/inventario/inventario.js">código</a></p>
+                    </div>
+                </div>
+            </article>
+            <article id="herramienta">
+                <div class="row">
+                    <div class="col-12">
+                        <h3>Herramienta de desarrollo para la prueba el servidor</h3>
+                        <hr>
+                    </div>
+                    <div class="col-12">
+                        <h4>Módulo : Gaia</h4>
+                        <p>El archivo <code>Gaia.index.js</code> contiene un código hecho en js ES2016 para el seeding (<a href="https://en.wikipedia.org/wiki/Database_seeding">ver</a>) de la base de datos.</p>
+                        <p>Modo de uso : </p>
+                        <p>Llamar al archivo dentro de la función <code>main()</code> del archivo <code>App.js</code>, ejecutar el método <code>terraform()</code> introducir un parametro del tipo <code>string</code> . Los cuales pueden ser `create`, `update`, `drop`, `purge`. La función solo adminte un parametro </p>
+                        <p>Para más información <a href="https://github.com/Franco-Morales/Delivery-App-Back/tree/desarrollo/src/Seeding">ver</a> la documentación de cada archivo</p>
+                    </div>
+                    <div class="col-12">
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr>
+                                  <th scope="col">Parámetro</th>
+                                  <th scope="col">Descripción</th>
+                                  <th scope="col">Uso</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">'update'</th>
+                                    <td>Agrega los nuevos documentos en la base de datos. Las coleciones albergan a los documentos creados mediante <code>Gaia</code> y los creados mediante otros metodos</td>
+                                    <td>Usar una única vez</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">'create'</th>
+                                    <td>Borra los documentos si y solo sí fueron creados mediante <code>Gaia</code> mediante un mecanismo de rollback y luego agrega los nuevos documentos</td>
+                                    <td>Multiples veces</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">'drop'</th>
+                                    <td>Borra los documentos si y solo sí fueron creados mediante <code>Gaia</code> unicamente, en caso de existir otros documentos estos permanecen la base de datos</td>
+                                    <td>Multiples veces</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">'purge'</th>
+                                    <td>Borra los documentos de las coleciones sean creados mediante <code>Gaia</code> u otros medios, pero no borra las coleciones en si</td>
+                                    <td>Multiples veces</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-12">
+                        <h4>Información del Programa</h4>
+                        <table class="table table-bordered mt-4">
+                            <thead>
+                                <tr>
+                                  <th scope="col">Nombre</th>
+                                  <th scope="col">Objetivo</th>
+                                  <th scope="col">Versión</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row"> Gaia </th>
+                                    <td>Seeding automático de la BD uso exclusivo del desarrollo del servidor</td>
+                                    <td>Beta 2021.0.1</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p>Versionado usado [fase:año:major:minor]</p>
+                    </div>
+                </div>
+            </article>
+        </section>
+        <section id="links" class="container my-5">
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <h1>Bibliografía</h1>
+                </div>
+                <div class="col-12">
+                    <ul>
+                        <li>
+                            <a href="https://expressjs.com/es/">Express</a>
+                        </li>
+                        <li>
+                            <a href="https://mongoosejs.com/docs/guide.html">Mongoose</a>
+                        </li>
+                        <li>
+                            <a href="https://docs.mongodb.com/manual/">MongoDB</a>
+                        </li>
+                    </ul>
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+[
+    {
+        "_id": "60bc3aa0cabb522214ef4d63",
+        "denominacion": "Harinas",
+        "active": true
+    },
+    {
+        "_id": "60bc3aa0cabb522214ef4d64",
+        "denominacion": "Salsas",
+        "active": true
+    },
+    {
+        "_id": "60bc3aa0cabb522214ef4d65",
+        "denominacion": "Levaduras",
+        "active": true
+    },
+    {
+        "_id": "60bc3aa0cabb522214ef4d66",
+        "denominacion": "Queso",
+        "active": true
+    },
+    {
+        "_id": "60bc3aa0cabb522214ef4d67",
+        "denominacion": "Fiambres",
+        "active": true
+    },
+    {
+        "_id": "60c921fbbfc5cb1b409b559f",
+        "denominacion": "Panificados",
+        "active": true
+    },
+    {
+        "_id": "60c921fbbfc5cb1b409b559e",
+        "denominacion": "Verduras",
+        "active": true
+    },
+    {
+        "_id": "60bc3aa0cabb522214ef4d68",
+        "denominacion": "Otros",
+        "active": true
+    },
+    {
+        "_id": "60bc3aa0cabb522214ef4d69",
+        "denominacion": "Bebidas",
+        "active": true
+    },
+    {
+        "_id": "60bc3aa0cabb522214ef4d6a",
+        "denominacion":"Bebidas Gasificadas",
+        "active": true,
+        "RubArtPadre": {
+            "_id": "60bc3aa0cabb522214ef4d69"
+        }
+        
+    },
+    {
+        "_id": "60bc3aa0cabb522214ef4d6b",
+        "denominacion":"Bebidas Alcohólicas",
+        "active": true,
+        "RubArtPadre": {
+            "_id": "60bc3aa0cabb522214ef4d69"
+        }
+    }
+]
