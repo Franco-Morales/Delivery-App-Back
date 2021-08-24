@@ -84,8 +84,19 @@ let getPedidosByState = async (req, res) => {
 //aceptar pedido
 let acceptPedido = async (req, res) => {
   try {
-    let exito = await PedidoSvc.acceptPedido(req.params.id, req.body.status);
-    res.status(200).json(exito.message);
+    let pedidoStatus = await PedidoSvc.acceptPedido(req.params.id, req.body.status);
+    const statusHub = {
+      success: () => {
+        return res.status(200).json(pedidoStatus);
+      },
+      warning: () => {
+        return res.status(202).json(pedidoStatus);
+      },
+      error: () => {
+        return res.status(500).json(pedidoStatus);
+      }
+    };
+    statusHub[pedidoStatus.status]();
   } catch (error) {
     res.status(500).json({ error: error });
   }
@@ -96,7 +107,7 @@ let acceptPedido = async (req, res) => {
 let demorarPedido = async (req, res) => {
   try {
     let demora = await PedidoSvc.demorarPedido(req.params.id);
-    res.status(200).json(demora.message);
+    res.status(200).json(demora);
   } catch (error) {
     res.status(500).json({ error: error });
   }
@@ -107,7 +118,7 @@ let demorarPedido = async (req, res) => {
 let cancelPedido = async (req, res) => {
   try {
     let cancel = await PedidoSvc.cancelPedido(req.params.id, req.body.motivo);
-    res.status(200).json(cancel.message);
+    res.status(200).json(cancel);
   } catch (error) { 
     res.status(500).json({error : error})
   }

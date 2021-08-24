@@ -36,7 +36,7 @@ const ArtManufactSchema = new Schema({
 
 ArtManufactSchema.statics.stockValidation = async function(artManufactId) {
     let artManufactDetStock = [];
-
+    console.log('art manufact model static function ->', artManufactId);
     try {
         let artManufact = await this.findOne({_id:artManufactId}).populate('ArtManufactDet.ArtInsumo');
     

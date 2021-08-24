@@ -41,7 +41,7 @@ let artManufactStock = async (cantidadPedido, artManufactId) => {
         for (const el of artInsumoArray) {
             let artInsumoAux = await ArticuloInsumo.findOne({ _id: el._id });
 
-            artInsumoAux.stockActual-=el.cantidad;
+            artInsumoAux.stockActual = artInsumoAux.stockActual-el.cantidad;
             artInsumoAux.updateStock();
             await artInsumoAux.save();
         }

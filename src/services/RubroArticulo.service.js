@@ -52,6 +52,7 @@ let findOneRubroArticulo = async(rubArtReq) => {
 let saveRubroArticulo = async (rubArtReq) => {
   try {
     let { denominacion, RubArtPadre } = rubArtReq.body;
+    // console.log('r P : ',RubArtPadre);
     let rubArticulo = RubroArticulo({denominacion,RubArtPadre,active:true});
     let rubArtSaved = await rubArticulo.save();
     return rubArtSaved;

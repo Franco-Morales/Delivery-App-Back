@@ -6,7 +6,12 @@ import ServerRoutes from "./routes/index.routes";
 const server = Express();
 
 //Middlewares
-server.use(Cors());
+const corsOpt = {
+    origin: ['http://localhost:4200', 'http://localhost:5200'],
+    optionsSuccessStatus: 200
+}
+
+server.use(Cors(corsOpt));
 server.use(Express.json());
 server.use(Express.urlencoded({extended:false}));
 

@@ -93,7 +93,7 @@ let saveFactura = async (pedido) => {
       from: '"El Buen Sabor " <francomorales145@gmail.com>',
       to: user.email,
       subject: "El Buen Sabor [ Asunto ]",
-      html: htmltext,
+      html: htmltext
     });
 
     // console.log('email enviado');

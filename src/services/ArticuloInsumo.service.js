@@ -78,7 +78,15 @@ let filterArtInsumoByRubroArt = async (query,rubArtId) => {
 let saveArticuloInsumo = async (artInReq) => {
   try {
     let { denominacion, precioCompra, precioVenta, stockActual, stockMinimo, unidadMedida, esInsumo, RubArt } = artInReq.body;
-    let artIn = ArticuloInsumo({denominacion, precioCompra, precioVenta, stockActual, stockMinimo, unidadMedida, esInsumo, RubArt, active:true});
+
+    let aux = {denominacion, precioCompra, precioVenta, stockActual, stockMinimo, unidadMedida, esInsumo, RubArt, active:true};
+
+    if(!esInsumo) {
+      let { img } = artInReq.body;
+      aux.img = img;
+    }
+
+    let artIn = ArticuloInsumo(aux);
     let artInSaved = await artIn.save();
     return artInSaved;
   } catch (error) {

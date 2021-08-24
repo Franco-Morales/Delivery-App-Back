@@ -46,7 +46,7 @@ let formatTime = n =>{
   }
 }
 //Firebase ID = fid
-let getUserByFID =  async ( fid ) => { 
+let getUserByFID = async ( fid ) => { 
   let cliente = null;
   try {
     const snapshot = await db
